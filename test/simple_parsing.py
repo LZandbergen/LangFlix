@@ -4,7 +4,7 @@ import spacy
 import re
 from wordfreq import zipf_frequency
 import time
-# Grab Currrent Time Before Running the Code
+# Time when starting the run, to determine how long it took at the end
 start = time.time()
 
 en_nlp = spacy.load("en_core_web_sm")
@@ -18,17 +18,19 @@ noun_translations = []
 # Returns a word's zipf frequency in a certain langauge, as a number between 0 and 8
 # Returns 0.0 if there is no frequency for the word
 def get_word_frequency(word, language):
-    supported_languages = ['en' , 'es', 'fr', 'nl'] #see more at https://pypi.org/project/wordfreq/
+    supported_languages = ['en' , 'es', 'fr', 'nl', 'de'] #see more at https://pypi.org/project/wordfreq/
     if language not in supported_languages:
         raise ValueError("Given language {} isn't supported".format(language))
     word_freq = zipf_frequency(word, language, wordlist= 'best' , minimum = 0.0)
     return word_freq
 
+#Takes out the subtitles with spoken text
 for en_sub in en_subs[0:50]:
     expression = re.compile("[\(\<].*?[\)\>]")
     en_text = expression.sub("", en_sub.text)
     en_doc = en_nlp(en_text)
 
+    #Looks for English words that are nouns and creates data to work with 
     for en_word in en_doc:
         if en_word.pos_ == "NOUN":
             en_word_str = en_word.text.lower()
@@ -49,9 +51,7 @@ for en_sub in en_subs[0:50]:
 print("Dictionary with word frequencies\n", word_freq_dict)
 print("\nList of nouns and their translations\n", noun_translations)
 
-# Grab Currrent Time After Running the Code
+#Determine how long the script took to run
 end = time.time()
-
-#Subtract Start Time from The End Time
 total_time = end - start
 print("\n Time it took to run:"+ str(total_time))
