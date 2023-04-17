@@ -9,7 +9,7 @@ en_subs = srt.open(en_file)
 
 translator = tr.Translator(to_lang="es")
 
-for en_sub in en_subs[0:5]:
+for en_sub in en_subs[0:50]:
     expression = re.compile("[\(\<].*?[\)\>]")
     en_text = expression.sub("", en_sub.text)
     en_doc = en_nlp(en_text)
