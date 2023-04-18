@@ -1,5 +1,6 @@
 
 import PySide6.QtCore as QtCore
+import PySide6.QtGui as QtGui
 import PySide6.QtWidgets as QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
@@ -46,7 +47,10 @@ class MainWindow(QMainWindow):
         
         
         # create video window
+        #self.video_gui_window = QtGui.QWindow()
+        
         self.video = QtWidgets.QWidget()
+        self.video.setStyleSheet("""background-color: black;""")
         self.video_menuBar = QtWidgets.QHBoxLayout()
         
         # instantiate video player
@@ -62,23 +66,20 @@ class MainWindow(QMainWindow):
         #player.video_set_subtitle_file('/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt')
         
         self.video_layout = QtWidgets.QVBoxLayout()
-        #self.video_layout.setStyleSheet("""background-color: black;""")
         self.video_layout.addWidget(self.video)
-        play_button = QtWidgets.QPushButton('Play')
+        play_button = QtWidgets.QPushButton('Play/Pause')
         play_button.setCheckable(True)
         play_button.clicked.connect(self.play_video)
         play_button.setStyleSheet("""background-color: #A143A8; 
                                        color: #00D1FF;
                                        border-radius: 9px;
                                        border: 1px solid;""")
-                                       
+        """                               
         pause_button = QtWidgets.QPushButton('Pause')
         pause_button.setCheckable(True)
         pause_button.clicked.connect(lambda x: self.player.pause())
-        pause_button.setStyleSheet("""background-color: #A143A8; 
-                                       color: #00D1FF;
-                                       border-radius: 9px;
-                                       border: 1px solid;""")
+        pause_button.setStyleSheet(#background-color: #A143A8; color: #00D1FF; border-radius: 9px; border: 1px solid;)
+        """
                                        
         self.volume_slider = QtWidgets.QSlider()
         self.volume_slider.setMinimum(0)
@@ -96,11 +97,13 @@ class MainWindow(QMainWindow):
                                        border: 1px solid;""")
 
         
-        self.video_menuBar.addWidget(play_button, 2)
-        self.video_menuBar.addWidget(pause_button, 2)
-        self.video_menuBar.addWidget(volume_button, 2)
+        self.video_menuBar.addWidget(play_button, 3)
+        #self.video_menuBar.addWidget(pause_button, 2)
+        self.video_menuBar.addWidget(volume_button, 3)
         self.video_menuBar.addWidget(self.volume_slider, 4)
         self.video_layout.addLayout(self.video_menuBar)
+        
+        #self.video_gui_window.setVisible(True)
         
         self.video.installEventFilter(self)
 
@@ -185,21 +188,28 @@ class MainWindow(QMainWindow):
             self.volume_slider.show()
             
     def play_video(self):
-        self.player.play()
-        self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
+        if self.player.is_playing():
+            self.player.pause()
+        else:
+            self.player.play()
+            self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
                 
     def change_volume(self):
         self.player.audio_set_volume(self.volume_slider.value())
         
-    """    
+       
     def eventFilter(self, source, event):
         if source == self.video:
             if event.type() == QtCore.QEvent.Enter:
-                #self.showLayoutChildren(layout = self.video_menuBar, show = True)
+                self.video_layout.addItem(self.video_menuBar)
+                self.video_menuBar.setEnabled(True)
+                self.showLayoutChildren(layout = self.video_menuBar, show = True)
             elif event.type() == QtCore.QEvent.Leave:
-                #self.showLayoutChildren(layout = self.video_menuBar, show = False)
+                self.video_layout.removeItem(self.video_menuBar)
+                self.video_menuBar.setEnabled(False)
+                self.showLayoutChildren(layout = self.video_menuBar, show = False)
         return super().eventFilter(source, event)
-    """      
+         
             
     """
         if qApp.activePopupWidget() is None:
