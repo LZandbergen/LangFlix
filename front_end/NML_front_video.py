@@ -47,11 +47,15 @@ class MainWindow(QMainWindow):
         
         
         # create video window
-        #self.video_gui_window = QtGui.QWindow()
         
-        self.video = QtWidgets.QWidget()
+        self.video_window = QtWidgets.QWidget() # video screen + player button toolbar
+
+        self.video = QtWidgets.QWidget() # video screen
         self.video.setStyleSheet("""background-color: black;""")
+
+        #self.video_menu_wid = QtWidgets.QWidget()
         self.video_menuBar = QtWidgets.QHBoxLayout()
+        #self.video_menu_wid.setLayout(self.video_menuBar)
         
         # instantiate video player
         Instance = vlc.Instance()
@@ -62,15 +66,15 @@ class MainWindow(QMainWindow):
         #player.video_set_spu(2)
         
         self.player.set_nsobject(self.video.winId())  
-        #player.play()
+        #self.player.play()
         #player.video_set_subtitle_file('/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt')
         
         self.video_layout = QtWidgets.QVBoxLayout()
-        self.video_layout.addWidget(self.video)
-        play_button = QtWidgets.QPushButton('Play/Pause')
-        play_button.setCheckable(True)
-        play_button.clicked.connect(self.play_video)
-        play_button.setStyleSheet("""background-color: #A143A8; 
+        self.video_layout.addWidget(self.video, 9)
+        self.play_button = QtWidgets.QPushButton('Play/Pause')
+        self.play_button.setCheckable(True)
+        self.play_button.clicked.connect(self.play_video)
+        self.play_button.setStyleSheet("""background-color: #A143A8; 
                                        color: #00D1FF;
                                        border-radius: 9px;
                                        border: 1px solid;""")
@@ -97,15 +101,18 @@ class MainWindow(QMainWindow):
                                        border: 1px solid;""")
 
         
-        self.video_menuBar.addWidget(play_button, 3)
+        self.video_menuBar.addWidget(self.play_button, 3)
         #self.video_menuBar.addWidget(pause_button, 2)
         self.video_menuBar.addWidget(volume_button, 3)
         self.video_menuBar.addWidget(self.volume_slider, 4)
+        #self.video_layout.addWidget(self.video_menu_wid, 1)
         self.video_layout.addLayout(self.video_menuBar)
+        self.video_window.setLayout(self.video_layout)
         
         #self.video_gui_window.setVisible(True)
         
-        self.video.installEventFilter(self)
+        self.video_window.installEventFilter(self)
+        #self.video_menu_wid.installEventFilter(self)
 
 
 
@@ -164,7 +171,8 @@ class MainWindow(QMainWindow):
 
         # Main grid with all stuff (exercise layout, video, subtitles)
         grid = QtWidgets.QHBoxLayout()#QGridLayout()
-        grid.addLayout(self.video_layout, 8)#addWidget(self.video)#, 0, 0)
+        grid.addWidget(self.video_window, 8)
+        #grid.addLayout(self.video_layout, 8)#addWidget(self.video)#, 0, 0)
         grid.addLayout(exercise_layout, 2)#, 0, 1)
         #grid.addWidget(subtitles, 1, 0, 1, 2)
 
@@ -199,15 +207,25 @@ class MainWindow(QMainWindow):
         
        
     def eventFilter(self, source, event):
-        if source == self.video:
+        if source == self.video_window:
             if event.type() == QtCore.QEvent.Enter:
-                self.video_layout.addItem(self.video_menuBar)
-                self.video_menuBar.setEnabled(True)
-                self.showLayoutChildren(layout = self.video_menuBar, show = True)
+                if self.video_layout.count()==1:
+                    self.video_layout.addItem(self.video_menuBar)
+                    self.video_menuBar.setEnabled(True)
+                    self.showLayoutChildren(layout = self.video_menuBar, show = True)
             elif event.type() == QtCore.QEvent.Leave:
-                self.video_layout.removeItem(self.video_menuBar)
-                self.video_menuBar.setEnabled(False)
-                self.showLayoutChildren(layout = self.video_menuBar, show = False)
+                if self.video_layout.count()==2:
+                    self.video_layout.removeItem(self.video_menuBar)
+                    self.video_menuBar.setEnabled(False)
+                    self.showLayoutChildren(layout = self.video_menuBar, show = False)
+        """
+        if source == self.video_menu_wid:
+            if event.type() == QtCore.QEvent.Leave:
+                if self.video_layout.count()==2:
+                    self.video_layout.removeItem(self.video_menuBar)
+                    self.video_menuBar.setEnabled(False)
+                    self.showLayoutChildren(layout = self.video_menuBar, show = False)
+        """
         return super().eventFilter(source, event)
          
             
