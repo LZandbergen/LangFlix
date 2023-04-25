@@ -106,10 +106,13 @@ class MainWindow(QMainWindow):
 
     def showLayoutChildren(self, layout, show = True):
         for i in range(layout.count()):
-            if show:
-                layout.itemAt(i).widget().show()
+            if layout.itemAt(i).widget() is None:
+                    self.showLayoutChildren(layout.itemAt(i).layout(), show)
             else:
-                layout.itemAt(i).widget().hide()
+                if show:
+                    layout.itemAt(i).widget().show()
+                else:
+                    layout.itemAt(i).widget().hide()
        
     def eventFilter(self, source, event):
         if source == self.video:
