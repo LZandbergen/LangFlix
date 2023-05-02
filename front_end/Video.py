@@ -1,8 +1,63 @@
 import PySide6.QtWidgets as QtWidgets
 import PySide6.QtCore as QtCore
 import PySide6.QtGui as QtGui
+import PySide6.QtMultimediaWidgets as QtMultimediaWidgets
 import vlc
 import time
+
+slider_style = """
+QSlider::groove:horizontal {
+border: 1px solid #bbb;
+background: pale gray;
+height: 7px;
+border-radius: 6px;
+}
+
+QSlider::sub-page:horizontal {
+background: white;
+border: 1px solid #777;
+height: 7px;
+border-radius: 6px;
+}
+
+QSlider::add-page:horizontal {
+background: pale gray;
+border: 1px solid #777;
+height: 7px;
+border-radius: 6px;
+}
+
+QSlider::handle:horizontal {
+background: white;
+border: 1px solid #777;
+width: 5px;
+margin-top: -4px;
+margin-bottom: -4px;
+border-radius: 6px;
+}
+
+QSlider::handle:horizontal:hover {
+background: white;
+border: 1px solid #444;
+border-radius: 6px;
+}
+
+QSlider::sub-page:horizontal:disabled {
+background: #bbb;
+border-color: #999;
+}
+
+QSlider::add-page:horizontal:disabled {
+background: #eee;
+border-color: #999;
+}
+
+QSlider::handle:horizontal:disabled {
+background: #eee;
+border: 1px solid #aaa;
+border-radius: 6px;
+}
+"""
 
 class Video(QtWidgets.QWidget):
      def __init__(self):
@@ -12,8 +67,8 @@ class Video(QtWidgets.QWidget):
         self.isPaused = True
         self.isMuted = True
 
-        self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.timerEvent)
+        #self.timer = QtCore.QTimer()
+        #self.timer.timeout.connect(self.timerEvent)
 
         #self.buttonSizeHeight = self.size().height()/10 * 3
 
@@ -34,6 +89,7 @@ class Video(QtWidgets.QWidget):
         self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
         self.player.set_nsobject(self.video.winId())  
+        self.videoEventManager = self.player.event_manager()
 
         # make volume slider                               
         self.volume_slider = QtWidgets.QSlider()
@@ -69,10 +125,14 @@ class Video(QtWidgets.QWidget):
         #video time slider
         self.time_slider = QtWidgets.QSlider()
         self.time_slider.setMinimum(0)
-        self.time_slider.setMaximum(self.player.get_length())
-        self.time_slider.setSingleStep(1000)
+        self.time_slider.setMaximum(1000)
+        self.time_slider.setSingleStep(1)
         self.time_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.time_slider.valueChanged.connect(lambda x: self.player.set_time(self.time_slider.value()))
+        self.time_slider.sliderPressed.connect(self.player.pause)
+        self.time_slider.sliderMoved.connect(self.change_video_pos)
+        self.time_slider.sliderReleased.connect(self.player.play)
+        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.time_slider.setValue(self.player.get_position()*1000)) 
+        self.time_slider.setStyleSheet(slider_style)
         
         self.video_layout = QtWidgets.QVBoxLayout()
         self.video_layout.setSpacing(0)
@@ -108,17 +168,11 @@ class Video(QtWidgets.QWidget):
         if self.player.is_playing():
             self.player.pause()
             self.isPaused = True
-            self.timer.stop()
+            #self.timer.stop()
         else:
             self.player.play()
-            if self.time_slider.maximum() == -1:
-                #self.video_menuBar.insertWidget(0, self.time_slider)
-                #self.video_layout.removeItem(self.video_menuBar)
-                #self.video_layout.addLayout(self.video_menuBar)
-                #self.setLayout(self.video_layout)
-                self.time_slider.setMaximum(self.player.get_length())
             self.isPaused = False
-            self.timer.start(1000)
+            #self.timer.start(1000)
             self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
 
         self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
@@ -130,11 +184,15 @@ class Video(QtWidgets.QWidget):
         else:
             self.isMuted = False
         self.volume_button.setIcon(self.volumeButtonIcons[int(self.isMuted)])
-
-     def timerEvent(self):
-         self.time_slider.setValue(self.player.get_time())
-         self.timer.start(1000)
+        
+     def change_video_pos(self):
+         self.player.set_position(self.time_slider.value()/1000)
+        
      """
+     def timerEvent(self):
+         self.time_slider.setValue(self.player.get_position())
+         self.timer.start(1000)
+     
      def eventFilter(self, source, event):
         if event.type() == QtCore.QTimerEvent:
             self.time_slider.setValue(self.player.get_time())
