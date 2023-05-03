@@ -3,6 +3,7 @@ import PySide6.QtCore as QtCore
 import PySide6.QtGui as QtGui
 import PySide6.QtMultimediaWidgets as QtMultimediaWidgets
 import vlc
+import pysrt
 import time
 
 slider_style = """
@@ -29,7 +30,58 @@ border-radius: 6px;
 
 QSlider::handle:horizontal {
 background: white;
+width: 3px;
+margin-top: 0px;
+margin-bottom: 0px;
+border-radius: 6px;
+}
+
+QSlider::handle:horizontal:hover {
+background: white;
+border-radius: 6px;
+}
+
+QSlider::sub-page:horizontal:disabled {
+background: #bbb;
+border-color: #999;
+}
+
+QSlider::add-page:horizontal:disabled {
+background: #eee;
+border-color: #999;
+}
+
+QSlider::handle:horizontal:disabled {
+background: #eee;
+border: 1px solid #aaa;
+border-radius: 6px;
+}
+"""
+
+slider_style_hover = """
+QSlider::groove:horizontal {
+border: 1px solid #bbb;
+background: pale gray;
+height: 7px;
+border-radius: 6px;
+}
+
+QSlider::sub-page:horizontal {
+background: white;
 border: 1px solid #777;
+height: 7px;
+border-radius: 6px;
+}
+
+QSlider::add-page:horizontal {
+background: pale gray;
+border: 1px solid #777;
+height: 7px;
+border-radius: 6px;
+}
+
+QSlider::handle:horizontal {
+background: white;
 width: 5px;
 margin-top: -4px;
 margin-bottom: -4px;
@@ -38,7 +90,6 @@ border-radius: 6px;
 
 QSlider::handle:horizontal:hover {
 background: white;
-border: 1px solid #444;
 border-radius: 6px;
 }
 
@@ -66,6 +117,7 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
+        self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/front_end/La.casa.de.papel.S01E01.WEBRip.NetflixCopy.srt")
 
         #self.timer = QtCore.QTimer()
         #self.timer.timeout.connect(self.timerEvent)
@@ -88,7 +140,7 @@ class Video(QtWidgets.QWidget):
         self.player = Instance.media_player_new()
         self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
-        self.player.set_nsobject(self.video.winId())  
+        self.player.set_nsobject(self.video.winId())       
         self.videoEventManager = self.player.event_manager()
 
         # make volume slider                               
@@ -121,18 +173,21 @@ class Video(QtWidgets.QWidget):
         #self.play_button.setMinimumHeight(self.buttonSizeHeight)
         #self.volume_button.setMinimumWidth(self.base_width)
         self.play_button.setStyleSheet("""border-style: solid;""")
-
+        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPaused, lambda x: self.set_play_button_style()) 
+        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
+        
         #video time slider
         self.time_slider = QtWidgets.QSlider()
         self.time_slider.setMinimum(0)
         self.time_slider.setMaximum(1000)
         self.time_slider.setSingleStep(1)
         self.time_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.time_slider.sliderPressed.connect(self.player.pause)
+        self.time_slider.sliderPressed.connect(self.on_time_slider_pressed)
         self.time_slider.sliderMoved.connect(self.change_video_pos)
-        self.time_slider.sliderReleased.connect(self.player.play)
+        self.time_slider.sliderReleased.connect(self.on_time_slider_released)
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.time_slider.setValue(self.player.get_position()*1000)) 
         self.time_slider.setStyleSheet(slider_style)
+        self.time_slider.installEventFilter(self)
         
         self.video_layout = QtWidgets.QVBoxLayout()
         self.video_layout.setSpacing(0)
@@ -148,7 +203,7 @@ class Video(QtWidgets.QWidget):
         self.video_layout.addLayout(self.video_menuBar)
         self.setLayout(self.video_layout)
         
-        self.installEventFilter(self)
+        #self.installEventFilter(self)
      """
      def showLayoutChildren(self, layout, show = True):
         for i in range(layout.count()):
@@ -163,19 +218,23 @@ class Video(QtWidgets.QWidget):
             self.volume_slider.hide()
         else:
             self.volume_slider.show()
-            
+
+     def set_play_button_style(self):
+         self.isPaused = not self.player.is_playing()
+         if self.player.is_playing():
+             self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/front_end/La.casa.de.papel.S01E01.WEBRip.NetflixCopy.srt")
+         self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
+          
      def play_video(self):
         if self.player.is_playing():
             self.player.pause()
-            self.isPaused = True
+            #self.isPaused = True
             #self.timer.stop()
         else:
             self.player.play()
-            self.isPaused = False
+            #self.isPaused = False
             #self.timer.start(1000)
-            self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
-
-        self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
+            #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/front_end/La.casa.de.papel.S01E01.WEBRip.NetflixCopy.srt")
                 
      def change_volume(self):
         self.player.audio_set_volume(self.volume_slider.value())
@@ -187,16 +246,34 @@ class Video(QtWidgets.QWidget):
         
      def change_video_pos(self):
          self.player.set_position(self.time_slider.value()/1000)
-        
+
+     def on_time_slider_pressed(self):
+         self.time_slider.setStyleSheet(slider_style_hover)
+         self.player.pause()
+
+     def on_time_slider_released(self):
+         self.time_slider.setStyleSheet(slider_style)
+         self.player.play()
+
+     #how do we want to cue pausing? Should we use a dictionary with subtitle index to pause at, exercise type and the text to use for execise?
+     #how do i schedule video pause at given time?
+     """
+     def lines_to_pause_at(self, indices):
+         for ind in indices:
+             if self.subs[ind].start == 
+     """   
      """
      def timerEvent(self):
          self.time_slider.setValue(self.player.get_position())
          self.timer.start(1000)
-     
+    
      def eventFilter(self, source, event):
-        if event.type() == QtCore.QTimerEvent:
-            self.time_slider.setValue(self.player.get_time())
-            self.timer.start(1000)
+        if source == self.time_slider:
+            if event.type() == QtCore.QEvent.Enter:
+                self.time_slider.setStyleSheet(slider_style_hover)
+
+            elif event.type() == QtCore.QEvent.Leave:
+                self.time_slider.setStyleSheet(slider_style)
         
         return super().eventFilter(source, event)
-     """ 
+     """
