@@ -4,7 +4,8 @@ import PySide6.QtGui as QtGui
 import PySide6.QtMultimediaWidgets as QtMultimediaWidgets
 import vlc
 import pysrt
-import time
+#import time
+from datetime import timedelta
 
 slider_style = """
 QSlider::groove:horizontal {
@@ -118,7 +119,7 @@ class Video(QtWidgets.QWidget):
         self.isPaused = True
         self.isMuted = True
         self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/front_end/La.casa.de.papel.S01E01.WEBRip.NetflixCopy.srt")
-
+        self.sub_to_pause_at = [1, 3]
         #self.timer = QtCore.QTimer()
         #self.timer.timeout.connect(self.timerEvent)
 
@@ -185,7 +186,7 @@ class Video(QtWidgets.QWidget):
         self.time_slider.sliderPressed.connect(self.on_time_slider_pressed)
         self.time_slider.sliderMoved.connect(self.change_video_pos)
         self.time_slider.sliderReleased.connect(self.on_time_slider_released)
-        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.time_slider.setValue(self.player.get_position()*1000)) 
+        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.react_to_time_change(self.sub_to_pause_at)) 
         self.time_slider.setStyleSheet(slider_style)
         self.time_slider.installEventFilter(self)
         
@@ -257,11 +258,22 @@ class Video(QtWidgets.QWidget):
 
      #how do we want to cue pausing? Should we use a dictionary with subtitle index to pause at, exercise type and the text to use for execise?
      #how do i schedule video pause at given time?
-     """
-     def lines_to_pause_at(self, indices):
-         for ind in indices:
-             if self.subs[ind].start == 
-     """   
+     
+     # function that cues events related to video timing
+     def react_to_time_change(self, indices):
+         self.time_slider.setValue(self.player.get_position()*1000)
+         try:
+             ind = indices[0]
+         except:
+             return 
+         timestamp = self.subs[ind].start
+         sub_time = timedelta(hours=timestamp.hours, minutes=timestamp.minutes, 
+                             seconds=timestamp.seconds, microseconds=timestamp.milliseconds * 1000)   
+         video_time = timedelta(microseconds=self.player.get_time()*1000)
+         if video_time >= sub_time:
+             self.player.pause()
+             self.sub_to_pause_at.remove(ind)
+        
      """
      def timerEvent(self):
          self.time_slider.setValue(self.player.get_position())
