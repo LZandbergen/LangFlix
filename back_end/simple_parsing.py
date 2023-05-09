@@ -4,8 +4,7 @@ import spacy
 import re
 from wordfreq import zipf_frequency
 import time
-# Time when starting the run, to determine how long it took at the end
-start = time.time()
+
 
 
 def load_parser(target_language="es", native_language="en"):
@@ -66,41 +65,52 @@ def parse_subtitle_text(sub):
     expression = re.compile("[\(\<].*?[\)\>]")
     return expression.sub("", sub.text)
 
-nlp, translator = load_parser()
-sp_subs, en_subs = load_subtitles()
+def process_subtitles(x_subs, en_subs):
+    nlp, translator = load_parser()
+    for en_sub in en_subs:
+        en_text = parse_subtitle_text(en_sub)
+        en_doc = nlp(en_text)
 
-for en_sub in en_subs:
-    en_text = parse_subtitle_text(en_sub)
-    en_doc = nlp(en_text)
+        # Looks for English words that are nouns and creates data to work with
+        for en_word in en_doc:
+            # print(en_word)
+            if en_word.pos_ == "NOUN" and not en_word.text.isupper():
+                en_word_str = en_word.text.lower()
+                # returns string of translation of en word
+                sp_word = translator.translate(en_word.text).lower()
 
-    # Looks for English words that are nouns and creates data to work with
-    for en_word in en_doc:
-        # print(en_word)
-        if en_word.pos_ == "NOUN" and not en_word.text.isupper():
-            en_word_str = en_word.text.lower()
-            # returns string of translation of en word
-            sp_word = translator.translate(en_word.text).lower()
+                # Removes extra information in parentheses after the translation
+                if " (" in sp_word:
+                    sp_word = sp_word[0: sp_word.index(" (")]
 
-            # Removes extra information in parentheses after the translation
-            if " (" in sp_word:
-                sp_word = sp_word[0: sp_word.index(" (")]
-                print(" REMOVED (  ", sp_word)
+                # Search for subtitles in spanish file around that time
+                subs = x_subs.slice(starts_after=en_sub.start -
+                                    2000, ends_before=en_sub.end + 2000)
 
-            # Search for subtitles in spanish file around that time
-            subs = sp_subs.slice(starts_after=en_sub.start -
-                                 2000, ends_before=en_sub.end + 2000)
+                # Adds a word with its frequency to the dictionary if it is an actual translation
+                if (en_word_str != "unknown" and len(sp_word) > 1 and
+                        en_word_str != sp_word and " " not in sp_word and is_word_spoken(subs, sp_word)):
+                    word_frequency = get_word_frequency(sp_word, 'es')
+                    word_freq_dict[sp_word] = word_frequency
+                    noun_translations.append((sp_word, en_word))
+    print(" IN FUNCTION")
 
-            # Adds a word with its frequency to the dictionary if it is an actual translation
-            if (en_word_str != "unknown" and len(sp_word) > 1 and
-                    en_word_str != sp_word and " " not in sp_word and is_word_spoken(subs, sp_word)):
-                word_frequency = get_word_frequency(sp_word, 'es')
-                word_freq_dict[sp_word] = word_frequency
-                noun_translations.append((sp_word, en_word))
+    return word_freq_dict, noun_translations
+    
+def main():
+    # Time when starting the run, to determine how long it took at the end
+    start = time.time()
 
-print("Dictionary with word frequencies\n", word_freq_dict)
-print("\nList of nouns and their translations\n", noun_translations)
+    x_subs, en_subs = load_subtitles()
+    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs)
+    
+    print("Dictionary with word frequencies\n", word_freq_dict)
+    print("\nList of nouns and their translations\n", noun_translations)
 
-# Determine how long the script took to run
-end = time.time()
-total_time = end - start
-print("\n Time it took to run:" + str(total_time))
+    # Determine how long the script took to run
+    end = time.time()
+    total_time = end - start
+    print("\n Time it took to run:" + str(total_time))
+
+if __name__ == "__main__":
+    main()
