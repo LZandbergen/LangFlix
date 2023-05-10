@@ -149,14 +149,15 @@ class MainWindow(QMainWindow):
             elif event.type() == QtCore.QEvent.Leave:
                 self.video_menuBar.hide()
     """
-"""    
+    
 Instance = vlc.Instance()
 player = Instance.media_player_new()
-#Media = Instance.media_new("./Documents/NML/Exercise4_demo.mpg")
-Media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
+print(open("../Exercise4_demo.mp4"))
+Media = Instance.media_new("../Exercise4_demo.mp4")
+#Media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
 player.set_media(Media) 
 #player.video_set_spu(2)
-"""
+
 vlcApp = QtWidgets.QApplication([])
 vlcApp.setStyleSheet(global_style)
 

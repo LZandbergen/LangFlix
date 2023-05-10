@@ -83,7 +83,8 @@ class MainWindow(QMainWindow):
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
         #Media = Instance.media_new("./Documents/NML/Exercise4_demo.mpg")
-        Media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
+        # Media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
+        Media = Instance.media_new("/home/lzandbergen/Documents/NML/life.2017.1080p.web.dl.6ch.hevc.x265.rmteam.mkv")
         self.player.set_media(Media) 
         #player.video_set_spu(2)
         
