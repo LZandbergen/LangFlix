@@ -5,6 +5,7 @@ import PySide6.QtWidgets as QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
 import sys
+from Video import Video
 
 # Global style that is passed as an argument to the window somewhere below.
 # I used it to set a style for ALL radiobuttons, rather than do it for each
@@ -44,74 +45,13 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("""background-color: #4B4948;""")
         
-        
-        
         # create video window
-        #self.video_gui_window = QtGui.QWindow()
         
-        self.video = QtWidgets.QWidget()
-        self.video.setStyleSheet("""background-color: black;""")
-        self.video_menuBar = QtWidgets.QHBoxLayout()
-        
-        # instantiate video player
-        Instance = vlc.Instance()
-        self.player = Instance.media_player_new()
-        #Media = Instance.media_new("./Documents/NML/Exercise4_demo.mpg")
-        Media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
-        self.player.set_media(Media) 
-        #player.video_set_spu(2)
-        
-        self.player.set_nsobject(self.video.winId())  
-        #player.play()
-        #player.video_set_subtitle_file('/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt')
-        
-        self.video_layout = QtWidgets.QVBoxLayout()
-        self.video_layout.addWidget(self.video)
-        play_button = QtWidgets.QPushButton('Play/Pause')
-        play_button.setCheckable(True)
-        play_button.clicked.connect(self.play_video)
-        play_button.setStyleSheet("""background-color: #A143A8; 
-                                       color: #00D1FF;
-                                       border-radius: 9px;
-                                       border: 1px solid;""")
-        """                               
-        pause_button = QtWidgets.QPushButton('Pause')
-        pause_button.setCheckable(True)
-        pause_button.clicked.connect(lambda x: self.player.pause())
-        pause_button.setStyleSheet(#background-color: #A143A8; color: #00D1FF; border-radius: 9px; border: 1px solid;)
-        """
-                                       
-        self.volume_slider = QtWidgets.QSlider()
-        self.volume_slider.setMinimum(0)
-        self.volume_slider.setMaximum(100)
-        self.volume_slider.setSingleStep(1)
-        self.volume_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.volume_slider.valueChanged.connect(self.change_volume)
-                                       
-        volume_button = QtWidgets.QPushButton('Volume')
-        volume_button.setCheckable(True)
-        volume_button.clicked.connect(self.show_volume_slider)
-        volume_button.setStyleSheet("""background-color: #A143A8; 
-                                       color: #00D1FF;
-                                       border-radius: 9px;
-                                       border: 1px solid;""")
-
-        
-        self.video_menuBar.addWidget(play_button, 3)
-        #self.video_menuBar.addWidget(pause_button, 2)
-        self.video_menuBar.addWidget(volume_button, 3)
-        self.video_menuBar.addWidget(self.volume_slider, 4)
-        self.video_layout.addLayout(self.video_menuBar)
-        
-        #self.video_gui_window.setVisible(True)
-        
+        self.video = Video() # video screen + player button toolbar
         self.video.installEventFilter(self)
-
-
 
         # Styling Submit and Skip buttons
         submit_button = QtWidgets.QPushButton("Submit")
-        #submit_button.setGeometry(200, 150, 100, 100)
 
         submit_button.setStyleSheet("""background-color: #0043A8; 
                                        color: #00D1FF;
@@ -121,8 +61,6 @@ class MainWindow(QMainWindow):
                                                               
         
         skip_button = QtWidgets.QPushButton("Skip")
-        #skip_button.setGeometry(200, 150, 100, 100)
-        #skip_button.setStyleSheet("border-radius: 15 px; border: 2px solid black;")
         skip_button.setStyleSheet("""background-color: #0043A8; 
                                        color: #00D1FF;
                                        border-radius: 9px;
@@ -134,16 +72,7 @@ class MainWindow(QMainWindow):
         exercise_font.setPointSize(13)
         #exercise_font.setStyle("background-color: #D9D9D9;")
         exercise_text.setFont(exercise_font)
-        exercise_text.setStyleSheet('QLabel {color: white;}')
-
-        """
-         # Styling subtitles text
-        subtitles = QtWidgets.QLabel("Place for subtitles")
-        subtitles_font = subtitles.font()
-        subtitles_font.setPointSize(18)
-        subtitles.setFont(subtitles_font) 
-        subtitles.setAlignment(QtCore.Qt.AlignCenter) 
-        """        
+        exercise_text.setStyleSheet('QLabel {color: white;}')      
 
         # Create radiobuttons
         r_button1 = QtWidgets.QRadioButton("1")
@@ -164,7 +93,8 @@ class MainWindow(QMainWindow):
 
         # Main grid with all stuff (exercise layout, video, subtitles)
         grid = QtWidgets.QHBoxLayout()#QGridLayout()
-        grid.addLayout(self.video_layout, 8)#addWidget(self.video)#, 0, 0)
+        grid.addWidget(self.video, 8)
+        #grid.addLayout(self.video_layout, 8)#addWidget(self.video)#, 0, 0)
         grid.addLayout(exercise_layout, 2)#, 0, 1)
         #grid.addWidget(subtitles, 1, 0, 1, 2)
 
@@ -173,41 +103,30 @@ class MainWindow(QMainWindow):
         #container.setStyleSheet("background-color: #171717;")
         container.setLayout(grid)
         self.setCentralWidget(container)
-      
+
     def showLayoutChildren(self, layout, show = True):
         for i in range(layout.count()):
-            if show:
-                layout.itemAt(i).widget().show()
+            if layout.itemAt(i).widget() is None:
+                    self.showLayoutChildren(layout.itemAt(i).layout(), show)
             else:
-                layout.itemAt(i).widget().hide()
-                
-    def show_volume_slider(self):
-        if self.volume_slider.isVisible():
-            self.volume_slider.hide()
-        else:
-            self.volume_slider.show()
-            
-    def play_video(self):
-        if self.player.is_playing():
-            self.player.pause()
-        else:
-            self.player.play()
-            self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
-                
-    def change_volume(self):
-        self.player.audio_set_volume(self.volume_slider.value())
-        
+                if show:
+                    layout.itemAt(i).widget().show()
+                else:
+                    layout.itemAt(i).widget().hide()
        
     def eventFilter(self, source, event):
         if source == self.video:
             if event.type() == QtCore.QEvent.Enter:
-                self.video_layout.addItem(self.video_menuBar)
-                self.video_menuBar.setEnabled(True)
-                self.showLayoutChildren(layout = self.video_menuBar, show = True)
+                if self.video.video_layout.count()==1:
+                    self.video.video_layout.addItem(self.video.video_menuBar)
+                    self.video.video_menuBar.setEnabled(True)
+                    self.showLayoutChildren(layout = self.video.video_menuBar, show = True)
             elif event.type() == QtCore.QEvent.Leave:
-                self.video_layout.removeItem(self.video_menuBar)
-                self.video_menuBar.setEnabled(False)
-                self.showLayoutChildren(layout = self.video_menuBar, show = False)
+                if self.video.video_layout.count()==2:
+                    self.video.video_layout.removeItem(self.video.video_menuBar)
+                    self.video.video_menuBar.setEnabled(False)
+                    self.showLayoutChildren(layout = self.video.video_menuBar, show = False)
+        
         return super().eventFilter(source, event)
          
             
@@ -230,22 +149,19 @@ class MainWindow(QMainWindow):
             elif event.type() == QtCore.QEvent.Leave:
                 self.video_menuBar.hide()
     """
-"""    
+    
 Instance = vlc.Instance()
 player = Instance.media_player_new()
-#Media = Instance.media_new("./Documents/NML/Exercise4_demo.mpg")
-Media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
+print(open("../Exercise4_demo.mp4"))
+Media = Instance.media_new("../Exercise4_demo.mp4")
+#Media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
 player.set_media(Media) 
 #player.video_set_spu(2)
-"""
+
 vlcApp = QtWidgets.QApplication([])
 vlcApp.setStyleSheet(global_style)
 
 window = MainWindow()
 window.show()
-
-#player.set_nsobject(window.video.winId())  
-#player.play()
-#player.video_set_subtitle_file('/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt')
 
 vlcApp.exec()
