@@ -1,12 +1,9 @@
-import pysrt as srt
+import pysrt
 import translate as tr
 import spacy
 import re
 from wordfreq import zipf_frequency
 import time
-import pysrt
-
-
 
 def load_parser(target_language="es", native_language="en"):
     """ Loads NLP parser and translator object, input should be string of language code.
@@ -35,22 +32,6 @@ def load_subtitles(target_language_file="back_end\La.casa.de.papel.S01E01.WEBRip
     return target_subs, native_subs
 
 
-word_freq_dict = dict()
-noun_translations = []
-
-# Returns a word's zipf frequency in a certain langauge, as a number between 0 and 8
-# Returns 0.0 if there is no frequency for the word
-
-
-def get_word_frequency(word, language):
-    # see more at https://pypi.org/project/wordfreq/
-    supported_languages = ['en', 'es', 'fr', 'nl', 'de']
-    if language not in supported_languages:
-        raise ValueError("Given language {} isn't supported".format(language))
-    word_freq = zipf_frequency(word, language, wordlist='best', minimum=0.0)
-    return word_freq
-
-
 def is_word_spoken(subs, word):
     if len(subs) == 0:
         return False
@@ -68,6 +49,9 @@ def parse_subtitle_text(sub):
 
 def process_subtitles(x_subs, en_subs, language_abbreviation):
     nlp, translator = load_parser()
+    word_freq_dict = dict()
+    noun_translations = []
+
     for i, en_sub in enumerate(en_subs):
         en_text = parse_subtitle_text(en_sub)
         en_doc = nlp(en_text)
@@ -91,7 +75,10 @@ def process_subtitles(x_subs, en_subs, language_abbreviation):
                 # Adds a word with its frequency to the dictionary if it is an actual translation
                 if (en_word_str != "unknown" and len(x_word) > 1 and
                         en_word_str != x_word and " " not in x_word and is_word_spoken(subs, x_word)):
-                    word_frequency = get_word_frequency(x_word, language_abbreviation)
+                    
+                    #Zipf frequency is a number between 0 and 8 (0.0 if there is no frequency for the word)
+                    # See more at https://pypi.org/project/wordfreq/
+                    word_frequency = zipf_frequency(x_word, language_abbreviation, wordlist='best', minimum=0.0)
                     word_freq_dict[x_word] = word_frequency
                     noun_translations.append((x_word, en_word))
 
@@ -100,15 +87,15 @@ def process_subtitles(x_subs, en_subs, language_abbreviation):
     
     #Save modifications of added information to a new srt file
     en_subs.save('back_end\modified_moneyheist_s01e01.srt')
-              
     return word_freq_dict, noun_translations
     
 def main():
     # Time when starting the run, to determine how long it took at the end
     start = time.time()
 
+    foreign_language = 'es' #supported languages = 'en', 'es', 'fr', 'nl', 'de'
     x_subs, en_subs = load_subtitles() #x refers to the foreign language
-    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, 'es')
+    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language)
     
     print("Dictionary with word frequencies\n", word_freq_dict)
     print("\nList of nouns and their translations\n", noun_translations)
