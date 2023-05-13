@@ -4,7 +4,7 @@ import spacy
 import re
 from wordfreq import zipf_frequency
 import time
-#import pysubs2
+import pysrt
 
 
 
@@ -21,15 +21,13 @@ def load_subtitles(target_language_file="back_end\La.casa.de.papel.S01E01.WEBRip
     """ Inputs: paths to srt subtitle files for language parsing
      Output: Target subtitle file, Native subtitle file """
     try:
-        # with open(native_language_file, "r") as f:
-        #     with open()
-        native_subs = srt.open(native_language_file)
+        native_subs = pysrt.open(native_language_file)
     except:
         print("native language subtitle file does not exist")
         return 0
 
     try:
-        target_subs = srt.open(target_language_file)
+        target_subs = pysrt.open(target_language_file)
     except:
         print("target language subtitle file does not exist")
         return 0
@@ -70,7 +68,7 @@ def parse_subtitle_text(sub):
 
 def process_subtitles(x_subs, en_subs, language_abbreviation):
     nlp, translator = load_parser()
-    for en_sub in en_subs:
+    for i, en_sub in enumerate(en_subs):
         en_text = parse_subtitle_text(en_sub)
         en_doc = nlp(en_text)
 
@@ -96,22 +94,13 @@ def process_subtitles(x_subs, en_subs, language_abbreviation):
                     word_frequency = get_word_frequency(x_word, language_abbreviation)
                     word_freq_dict[x_word] = word_frequency
                     noun_translations.append((x_word, en_word))
-                    
 
-
-                    #en_subs[i].text = " TEEEESST"
-                    # Open the SubRip file for writing
-                    # with pysubs2.open('COPYMoney.Heist.S01E01.XviD-AFG-eng copy.srt.srt', encoding='utf-8') as subs:
-                    #     # Modify the contents of the subtitle file
-                        
-                    #     subs[i].text = f"New subtitle text for subtitle {i + 1}"
-                        
-                    #     # Write the modified subtitle file to disk
-                    #     subs.save('my_subtitles_updated.srt', encoding='utf-8')
-
-                    #     print(" IN FUNCTION")
-                
-
+                    #Adds information to the line in the srt file for processing
+                    en_subs[i].text = en_text + f"###{en_word}:{x_word}:{word_frequency}###"
+    
+    #Save modifications of added information to a new srt file
+    en_subs.save('back_end\modified_moneyheist_s01e01.srt')
+              
     return word_freq_dict, noun_translations
     
 def main():
