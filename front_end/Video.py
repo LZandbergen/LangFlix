@@ -4,6 +4,7 @@ import PySide6.QtGui as QtGui
 import PySide6.QtMultimediaWidgets as QtMultimediaWidgets
 import vlc
 import pysrt
+import re
 #import time
 from datetime import timedelta
 
@@ -118,11 +119,14 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
-        self.sub_to_pause_at = [1, 3]
+        self.subs_orig = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt")
+        self.subs_cur = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt")
+        
+        #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
+        self.sub_to_pause_at = [1, 12]
         #self.timer = QtCore.QTimer()
         #self.timer.timeout.connect(self.timerEvent)
-
+        self.prep_subs()
         #self.buttonSizeHeight = self.size().height()/10 * 3
 
         self.volumeButtonIcons = [QtGui.QIcon("/Users/mariiazamyrova/Downloads/icons8-speaker-50.png"),
@@ -139,7 +143,8 @@ class Video(QtWidgets.QWidget):
         # instantiate video player
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
-        self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
+        self.media = Instance.media_new("/Users/mariiazamyrova/Downloads/Exercise1_demo.mp4")
+        #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
         self.player.set_nsobject(self.video.winId())       
         self.videoEventManager = self.player.event_manager()
@@ -223,7 +228,8 @@ class Video(QtWidgets.QWidget):
      def set_play_button_style(self):
          self.isPaused = not self.player.is_playing()
          if self.player.is_playing():
-             self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
+             self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/front_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt")
+             #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
      def play_video(self):
@@ -261,15 +267,25 @@ class Video(QtWidgets.QWidget):
      
      # function that cues events related to video timing
      def react_to_time_change(self, indices):
+         #update slider position
          self.time_slider.setValue(self.player.get_position()*1000)
          try:
              ind = indices[0]
          except:
              return 
-         timestamp = self.subs[ind].start
+         timestamp = self.subs_cur[ind].start
          sub_time = timedelta(hours=timestamp.hours, minutes=timestamp.minutes, 
                              seconds=timestamp.seconds, microseconds=timestamp.milliseconds * 1000)   
-         video_time = timedelta(microseconds=self.player.get_time()*1000)
-         if video_time >= sub_time:
+         low_time_bound = timedelta(microseconds=self.player.get_time()*1000)
+         up_time_bound = sub_time + timedelta(microseconds=1000*1000)
+         if low_time_bound >= sub_time and low_time_bound < up_time_bound:
              self.player.pause()
              self.sub_to_pause_at.remove(ind)
+
+     def prep_subs(self):
+         for ind in self.sub_to_pause_at:
+             word= re.findall(r'##([\W\w]+):([\W\w]+):([\W\w]+)##', self.subs_orig[ind].text)
+             if word:
+                 self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750>'+word[0][1]+'</font>', self.subs_orig[ind].text)
+                 self.subs_cur[ind].text = re.sub(r'##[\W\w]+:[\W\w]+:[\W\w]+##', '', self.subs_cur[ind].text)
+         self.subs_cur.save('/Users/mariiazamyrova/Downloads/LangFlix/front_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt', encoding='utf-8')

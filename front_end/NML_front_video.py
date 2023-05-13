@@ -45,9 +45,9 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("""background-color: #171717;""")
         
-        id1 = QtGui.QFontDatabase.addApplicationFont("./Documents/GitHub/LangFlix/front_end/fonts/Quicksand-SemiBold.ttf")
-        id2 = QtGui.QFontDatabase.addApplicationFont("./Documents/GitHub/LangFlix/front_end/fonts/Quicksand-LightItalic.ttf")
-        id3 = QtGui.QFontDatabase.addApplicationFont("./Documents/GitHub/LangFlix/front_end/fonts/Quicksand-Medium.ttf")
+        id1 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-SemiBold.ttf")
+        id2 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-LightItalic.ttf")
+        id3 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-Medium.ttf")
         if id1 < 0 or id2 < 0 or id3 < 0: 
             print("Error with adding fond")
         families = []
@@ -60,14 +60,14 @@ class MainWindow(QMainWindow):
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said next?")
-        exercise_text.setFont(QtGui.QFont(families[0]))
+        #exercise_text.setFont(QtGui.QFont(families[0]))
         exercise_text.setStyleSheet('QLabel {padding-left: 16px; color: #CACACA; font-size: 16px; font-weight: 780; background-color: #1E1E1E;}')
 
         # Styling exercise sentence
         exercise_sentence = QtWidgets.QLabel("some test sentence")
-        exercise_font = QtGui.QFont(families[0])
-        exercise_font.setItalic(True)
-        exercise_sentence.setFont(exercise_font) 
+        #exercise_font = QtGui.QFont(families[0])
+        #exercise_font.setItalic(True)
+        #exercise_sentence.setFont(exercise_font) 
         exercise_sentence.setStyleSheet('QLabel {padding-left: 16px; color: #CACACA; font-size: 16px; font-weight: 750; background-color: #1E1E1E;}')
 
 
@@ -77,13 +77,13 @@ class MainWindow(QMainWindow):
                     QRadioButton::indicator::unchecked
                         {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                     QRadioButton::indicator::checked
-                        {image: url(Documents/GitHub/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                        {image: url(Downloads/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
                  '''
         r_button1 = QtWidgets.QRadioButton()
         r_button1.setStyleSheet(style)
         rb_text1 = QtWidgets.QLabel()
         rb_text1.setStyleSheet('QLabel {border: 0px; padding: 0px, 4px, 0px, 0px; color: #CACACA; font-size: 15px; font-weight: 700; background-color: #1E1E1E;}')
-        rb_text1.setFont(QtGui.QFont(families[0]))
+        #rb_text1.setFont(QtGui.QFont(families[0]))
         rb_layout1 = QtWidgets.QHBoxLayout()
         rb_layout1.setSpacing(0)
         rb_layout1.setAlignment(QtCore.Qt.AlignLeft)
@@ -93,7 +93,7 @@ class MainWindow(QMainWindow):
         r_button2.setStyleSheet(style)
         rb_text2 = QtWidgets.QLabel()
         rb_text2.setStyleSheet('QLabel {border: 0px; padding: 0px, 4px, 0px, 0px; color: #CACACA; font-size: 15px; font-weight: 700; background-color: #1E1E1E;}')
-        rb_text2.setFont(QtGui.QFont(families[0]))
+        #rb_text2.setFont(QtGui.QFont(families[0]))
         rb_layout2 = QtWidgets.QHBoxLayout()
         rb_layout2.setSpacing(0)
         rb_layout2.setAlignment(QtCore.Qt.AlignLeft)
@@ -103,7 +103,7 @@ class MainWindow(QMainWindow):
         r_button3.setStyleSheet(style)
         rb_text3 = QtWidgets.QLabel()
         rb_text3.setStyleSheet('QLabel {border: 0px; padding: 0px, 4px, 0px, 0px; color: #CACACA; font-size: 15px; font-weight: 700; background-color: #1E1E1E;}')
-        rb_text3.setFont(QtGui.QFont(families[0]))
+        #rb_text3.setFont(QtGui.QFont(families[0]))
         rb_layout3 = QtWidgets.QHBoxLayout()
         rb_layout3.setSpacing(0)
         rb_layout3.setAlignment(QtCore.Qt.AlignLeft)
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
 
         # Styling Submit button
         submit_button = QtWidgets.QPushButton("Submit")
-        submit_button.setFont(QtGui.QFont(families[0]))
+        #submit_button.setFont(QtGui.QFont(families[0]))
         submit_button.setStyleSheet("""QPushButton
                                       {background-color: #0043A8; 
                                        color: #00D1FF;
@@ -135,7 +135,7 @@ class MainWindow(QMainWindow):
         # Create correct/incorrect label
         cor_incor_text = QtWidgets.QLabel("")
         cor_incor_text.setStyleSheet('QLabel {color: #00D1FF; font-weight: 720; font-size: 15px; background-color: #1E1E1E;}')
-        cor_incor_text.setFont(QtGui.QFont(families[0]))
+        #cor_incor_text.setFont(QtGui.QFont(families[0]))
         cor_incor_icon = QtWidgets.QLabel()
         cor_incor_icon.setStyleSheet('QLabel {background-color: #1E1E1E;}')
         #QtGui.QIcon("./Documents/GitHub/LangFlix/front_end/tab_image.png")
@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
                     cur_checked = word.text()
                 if cur_checked == self.correct_word:
                     cor_incor_text.setText("Great, correct!")
-                    pixmap = QtGui.QPixmap("./Documents/GitHub/LangFlix/front_end/correct.png")
+                    pixmap = QtGui.QPixmap("./Downloads/LangFlix/front_end/correct.png")
                     cor_incor_icon.setPixmap(pixmap)
                     buttons_stackedLayout.setCurrentIndex(1)
                     rb.setStyleSheet('''QRadioButton 
@@ -161,12 +161,12 @@ class MainWindow(QMainWindow):
                                         QRadioButton::indicator::unchecked
                                             {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                                         QRadioButton::indicator::checked
-                                            {image: url(Documents/GitHub/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                                            {image: url(Downloads/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
                                     ''')
                     break
                 else: 
                     cor_incor_text.setText("Incorrect, try again")
-                    pixmap = QtGui.QPixmap("./Documents/GitHub/LangFlix/front_end/incorrect.png")
+                    pixmap = QtGui.QPixmap("./Downloads/LangFlix/front_end/incorrect.png")
                     cor_incor_icon.setPixmap(pixmap)
         submit_button.clicked.connect(checkAnswer)                             
 
@@ -174,7 +174,7 @@ class MainWindow(QMainWindow):
         self.num = 3 # Number of skips                                                      
         # Styling Skip button
         skip_button = QtWidgets.QPushButton("Skip (" + str(self.num) + ")")
-        skip_button.setFont(QtGui.QFont(families[0]))
+        #skip_button.setFont(QtGui.QFont(families[0]))
         skip_button.setStyleSheet("""QPushButton
                                        {background-color: #1E1E1E; 
                                        color: #CACACA;
@@ -199,7 +199,7 @@ class MainWindow(QMainWindow):
 
         # Styling Continue button
         continue_button = QtWidgets.QPushButton("Continue")
-        continue_button.setFont(QtGui.QFont(families[0]))
+        #continue_button.setFont(QtGui.QFont(families[0]))
         continue_button.setStyleSheet("""QPushButton
                                         {background-color: #0043A8; 
                                         color: #00D1FF;
@@ -244,23 +244,23 @@ class MainWindow(QMainWindow):
         # Functions for switching between tabs
         def switchToDict():
             stackedLayout.setCurrentIndex(1)
-            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Documents/GitHub/LangFlix/front_end/tab_image1.png"); text-align: center; background-position: center right;}')
+            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         def switchToExercise():
             stackedLayout.setCurrentIndex(0)
             exercise_tab.setVisible(True)
-            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Documents/GitHub/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
+            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
 
         # Create and connect tabs to switch between pages
         dictionary_tab = QtWidgets.QPushButton("  Dictionary")
-        dictionary_tab.setFont(QtGui.QFont(families[0]))
+        #dictionary_tab.setFont(QtGui.QFont(families[0]))
         dictionary_tab.setStyleSheet('''QPushButton 
                                         {border: 0px; 
                                         color: white; 
                                         font-weight: 800; 
                                         font-size: 16px; 
-                                        image: url("./Documents/GitHub/LangFlix/front_end/tab_image1.png"); 
+                                        image: url("./Downloads/LangFlix/front_end/tab_image1.png"); 
                                         text-align: center; 
                                         background-position: center right;}
                                         QPushButton::hover
@@ -270,13 +270,13 @@ class MainWindow(QMainWindow):
         dictionary_tab.setFixedSize(*size1)
         dictionary_tab.clicked.connect(switchToDict)     
         exercise_tab = QtWidgets.QPushButton("  Exercise")
-        exercise_tab.setFont(QtGui.QFont(families[0]))
+        #exercise_tab.setFont(QtGui.QFont(families[0]))
         exercise_tab.setStyleSheet('''QPushButton 
                                         {border: 0px; 
                                         color: white; 
                                         font-weight: 800; 
                                         font-size: 16px; 
-                                        image: url("./Documents/GitHub/LangFlix/front_end/tab_image2.png"); 
+                                        image: url("./Downloads/LangFlix/front_end/tab_image2.png"); 
                                         text-align: center; 
                                         background-position: center left;}
                                         QPushButton::hover
@@ -351,10 +351,10 @@ class MainWindow(QMainWindow):
         page2Layout.setAlignment(QtCore.Qt.AlignTop)
         spacer1 = QtWidgets.QSpacerItem(2, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         word_1 = QtWidgets.QLabel("word_1")
-        word_1.setFont(QtGui.QFont(families[0]))
+        #word_1.setFont(QtGui.QFont(families[0]))
         word_1.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
         word_2 = QtWidgets.QLabel("word_2")
-        word_2.setFont(QtGui.QFont(families[0]))
+        #word_2.setFont(QtGui.QFont(families[0]))
         word_2.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
         page2Layout.addItem(spacer1)
         page2Layout.setSpacing(2)
