@@ -4,6 +4,7 @@ import spacy
 import re
 from wordfreq import zipf_frequency
 import time
+#import pysubs2
 
 
 
@@ -16,10 +17,12 @@ def load_parser(target_language="es", native_language="en"):
     return nlp, translator
 
 
-def load_subtitles(target_language_file="La.casa.de.papel.S01E01.WEBRip.Netflix.srt", native_language_file="Money.Heist.S01E01.XviD-AFG-eng.srt"):
+def load_subtitles(target_language_file="back_end\La.casa.de.papel.S01E01.WEBRip.Netflix.srt", native_language_file="back_end\Money.Heist.S01E01.XviD-AFG-eng.srt"):
     """ Inputs: paths to srt subtitle files for language parsing
      Output: Target subtitle file, Native subtitle file """
     try:
+        # with open(native_language_file, "r") as f:
+        #     with open()
         native_subs = srt.open(native_language_file)
     except:
         print("native language subtitle file does not exist")
@@ -65,7 +68,7 @@ def parse_subtitle_text(sub):
     expression = re.compile("[\(\<].*?[\)\>]")
     return expression.sub("", sub.text)
 
-def process_subtitles(x_subs, en_subs):
+def process_subtitles(x_subs, en_subs, language_abbreviation):
     nlp, translator = load_parser()
     for en_sub in en_subs:
         en_text = parse_subtitle_text(en_sub)
@@ -76,24 +79,38 @@ def process_subtitles(x_subs, en_subs):
             # print(en_word)
             if en_word.pos_ == "NOUN" and not en_word.text.isupper():
                 en_word_str = en_word.text.lower()
-                # returns string of translation of en word
-                sp_word = translator.translate(en_word.text).lower()
+                # returns string of translation of en word in wanted foreign language x
+                x_word = translator.translate(en_word.text).lower()
 
                 # Removes extra information in parentheses after the translation
-                if " (" in sp_word:
-                    sp_word = sp_word[0: sp_word.index(" (")]
+                if " (" in x_word:
+                    x_word = x_word[0: x_word.index(" (")]
 
                 # Search for subtitles in spanish file around that time
                 subs = x_subs.slice(starts_after=en_sub.start -
                                     2000, ends_before=en_sub.end + 2000)
 
                 # Adds a word with its frequency to the dictionary if it is an actual translation
-                if (en_word_str != "unknown" and len(sp_word) > 1 and
-                        en_word_str != sp_word and " " not in sp_word and is_word_spoken(subs, sp_word)):
-                    word_frequency = get_word_frequency(sp_word, 'es')
-                    word_freq_dict[sp_word] = word_frequency
-                    noun_translations.append((sp_word, en_word))
-    print(" IN FUNCTION")
+                if (en_word_str != "unknown" and len(x_word) > 1 and
+                        en_word_str != x_word and " " not in x_word and is_word_spoken(subs, x_word)):
+                    word_frequency = get_word_frequency(x_word, language_abbreviation)
+                    word_freq_dict[x_word] = word_frequency
+                    noun_translations.append((x_word, en_word))
+                    
+
+
+                    #en_subs[i].text = " TEEEESST"
+                    # Open the SubRip file for writing
+                    # with pysubs2.open('COPYMoney.Heist.S01E01.XviD-AFG-eng copy.srt.srt', encoding='utf-8') as subs:
+                    #     # Modify the contents of the subtitle file
+                        
+                    #     subs[i].text = f"New subtitle text for subtitle {i + 1}"
+                        
+                    #     # Write the modified subtitle file to disk
+                    #     subs.save('my_subtitles_updated.srt', encoding='utf-8')
+
+                    #     print(" IN FUNCTION")
+                
 
     return word_freq_dict, noun_translations
     
@@ -101,8 +118,8 @@ def main():
     # Time when starting the run, to determine how long it took at the end
     start = time.time()
 
-    x_subs, en_subs = load_subtitles()
-    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs)
+    x_subs, en_subs = load_subtitles() #x refers to the foreign language
+    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, 'es')
     
     print("Dictionary with word frequencies\n", word_freq_dict)
     print("\nList of nouns and their translations\n", noun_translations)
