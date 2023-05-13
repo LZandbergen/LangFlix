@@ -51,7 +51,7 @@ but mixing love and work never works.
 13
 00:00:50,680 --> 00:00:54,440
 So, when the security guard shot,
-I had to change my <font color=#00D1FF weight=750>trabajo</font>.
+I had to change my <font color=#00D1FF weight=750><b>trabajo</b></font>.
 
 14
 00:00:56,080 --> 00:00:58,000

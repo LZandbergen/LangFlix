@@ -286,6 +286,6 @@ class Video(QtWidgets.QWidget):
          for ind in self.sub_to_pause_at:
              word= re.findall(r'##([\W\w]+):([\W\w]+):([\W\w]+)##', self.subs_orig[ind].text)
              if word:
-                 self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750>'+word[0][1]+'</font>', self.subs_orig[ind].text)
+                 self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750><b>'+word[0][1]+'</b></font>', self.subs_orig[ind].text)
                  self.subs_cur[ind].text = re.sub(r'##[\W\w]+:[\W\w]+:[\W\w]+##', '', self.subs_cur[ind].text)
          self.subs_cur.save('/Users/mariiazamyrova/Downloads/LangFlix/front_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt', encoding='utf-8')
