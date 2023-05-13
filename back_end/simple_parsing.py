@@ -4,6 +4,7 @@ import spacy
 import re
 from wordfreq import zipf_frequency
 import time
+from os import path
 
 def load_parser(target_language="es", native_language="en"):
     """ Loads NLP parser and translator object, input should be string of language code.
@@ -14,7 +15,7 @@ def load_parser(target_language="es", native_language="en"):
     return nlp, translator
 
 
-def load_subtitles(target_language_file="back_end\La.casa.de.papel.S01E01.WEBRip.Netflix.srt", native_language_file="back_end\Money.Heist.S01E01.XviD-AFG-eng.srt"):
+def load_subtitles(target_language_file=path.join("back_end","La.casa.de.papel.S01E01.WEBRip.Netflix.srt"), native_language_file=path.join("back_end", "Money.Heist.S01E01.XviD-AFG-eng.srt")):
     """ Inputs: paths to srt subtitle files for language parsing
      Output: Target subtitle file, Native subtitle file """
     try:
@@ -86,7 +87,7 @@ def process_subtitles(x_subs, en_subs, language_abbreviation):
                     en_subs[i].text = en_text + f"###{en_word}:{x_word}:{word_frequency}###"
     
     #Save modifications of added information to a new srt file
-    en_subs.save('back_end\modified_moneyheist_s01e01.srt')
+    en_subs.save(path.join('back_end', 'modified_moneyheist_s01e01.srt'))
     return word_freq_dict, noun_translations
     
 def main():
