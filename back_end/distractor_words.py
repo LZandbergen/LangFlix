@@ -37,10 +37,12 @@ def create_dictionary(language='es', filename="/home/lzandbergen/Documents/NML/L
         nlp = spacy.load("de_core_news_sm")
     elif language == 'fr':
         nlp = spacy.load("fr_core_news_sm")
+
+    expression = re.compile("[\(\<].*?[\)\>]")
     
     for sub in subs:
         # Extract the subtitle text and remove expressions within parentheses or angle brackets
-        text = parse_subtitle_text(sub)
+        text = expression.sub("", sub.text)
         # Process the subtitle text with spaCy
         doc = nlp(text)
         for word in doc:
