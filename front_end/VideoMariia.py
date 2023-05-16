@@ -8,7 +8,6 @@ import re
 #import time
 from datetime import timedelta
 from os import path
-#from back_end. import Class (Class has cefr to zip function)
 
 slider_style = """
 QSlider::groove:horizontal {
@@ -118,12 +117,6 @@ class Video(QtWidgets.QWidget):
      def __init__(self):
         super().__init__()
 
-        self.cefr_start = 'A2' #cefr
-        self.cefr_cur = 5.0 #zipf
-
-        self.time_between_ex = 60 * 10**6 #time intervals between exercises
-        self.ex_counter = 1 #counter for number of exercises so far
-
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
@@ -226,12 +219,7 @@ class Video(QtWidgets.QWidget):
             else:
                 layout.itemAt(i).widget().hide()
      """
-     def get_cefr(self):
-         return self.cefr_cur
-     
-     def set_cefr(self, new_cefr):
-         self.cefr_cur = new_cefr
-
+                
      def show_volume_slider(self):
         if self.volume_slider.isVisible():
             self.volume_slider.hide()
@@ -282,27 +270,23 @@ class Video(QtWidgets.QWidget):
      def react_to_time_change(self, indices):
          #update slider position
          self.time_slider.setValue(self.player.get_position()*1000)
-         '''
          try:
              ind = indices[0]
          except:
              return 
-         '''
-         #compute one exercise in advance
-         timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#self.subs_cur[ind].start
-         #sub_time = timedelta(hours=timestamp.hours, minutes=timestamp.minutes, 
-         #                    seconds=timestamp.seconds, microseconds=timestamp.milliseconds * 1000)   
-         low_time_bound = timestamp - timedelta(microseconds= 30*10**6)
-         player_time = timedelta(microseconds=self.player.get_time()*1000)
-         up_time_bound = timestamp + timedelta(microseconds=60 * 10**6)
-         if player_time >= low_time_bound and player_time <= up_time_bound:
+         timestamp = self.subs_cur[ind].start
+         sub_time = timedelta(hours=timestamp.hours, minutes=timestamp.minutes, 
+                             seconds=timestamp.seconds, microseconds=timestamp.milliseconds * 1000)   
+         low_time_bound = timedelta(microseconds=self.player.get_time()*1000)
+         up_time_bound = sub_time + timedelta(microseconds=1000*1000)
+         if low_time_bound >= sub_time and low_time_bound < up_time_bound:
              self.player.pause()
              self.sub_to_pause_at.remove(ind)
 
      def prep_subs(self):
          for ind in self.sub_to_pause_at:
-             word= re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
+             word= re.findall(r'##([\W\w]+):([\W\w]+):([\W\w]+)##', self.subs_orig[ind].text)
              if word:
                  self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750><b>'+word[0][1]+'</b></font>', self.subs_orig[ind].text)
-                 self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text)
+                 self.subs_cur[ind].text = re.sub(r'##[\W\w]+:[\W\w]+:[\W\w]+##', '', self.subs_cur[ind].text)
          self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')

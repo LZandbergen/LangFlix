@@ -5,7 +5,7 @@ import PySide6.QtWidgets as QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
 import sys
-from Video import Video
+from VideoMariia import Video
 
 # Global style that is passed as an argument to the window somewhere below.
 # I used it to set a style for ALL radiobuttons, rather than do it for each
