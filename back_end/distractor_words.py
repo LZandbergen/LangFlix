@@ -33,6 +33,10 @@ def create_dictionary(language='es', filename="/home/lzandbergen/Documents/NML/L
     if language == "es":
         # Load the Spanish language model for spaCy
         nlp = spacy.load("es_core_news_sm")
+    elif language == 'de':
+        nlp = spacy.load("de_core_news_sm")
+    elif language == 'fr':
+        nlp = spacy.load("fr_core_news_sm")
     
     for sub in subs:
         # Extract the subtitle text and remove expressions within parentheses or angle brackets
