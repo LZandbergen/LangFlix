@@ -5,6 +5,7 @@ import PySide6.QtMultimediaWidgets as QtMultimediaWidgets
 import vlc
 import pysrt
 import re
+import sys
 #import time
 from datetime import timedelta
 
@@ -146,7 +147,15 @@ class Video(QtWidgets.QWidget):
         self.media = Instance.media_new("/home/lzandbergen/Documents/NML/LangFlix/Exercise4_demo.mp4")
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
-        self.player.set_nsobject(self.video.winId())       
+        self.media.parse()
+        if sys.platform.startswith('linux'): # for Linux using the X Server
+            print("hiero")
+            self.player.set_xwindow(self.video.winId())
+        elif sys.platform == "win32": # for Windows
+            self.player.set_hwnd(self.video.winId())
+        else:
+            print("daaro")
+            self.player.set_nsobject(self.video.winId())       
         self.videoEventManager = self.player.event_manager()
 
         # make volume slider                               
