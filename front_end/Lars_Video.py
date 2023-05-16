@@ -144,7 +144,7 @@ class Video(QtWidgets.QWidget):
         # instantiate video player
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
-        self.media = Instance.media_new("/home/lzandbergen/Documents/NML/LangFlix/Exercise4_demo.mp4")
+        self.media = Instance.media_new("shows/French/FRENCH_Détox.Off_The_Hook.S01E02.mkv")
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
         self.media.parse()
