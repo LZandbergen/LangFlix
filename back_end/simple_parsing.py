@@ -48,7 +48,7 @@ def parse_subtitle_text(sub):
     expression = re.compile("[\(\<].*?[\)\>]")
     return expression.sub("", sub.text)
 
-def process_subtitles(x_subs, en_subs, language_abbreviation):
+def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modified_moneyheist_s01e01.srt"):
     nlp, translator = load_parser()
     word_freq_dict = dict()
     noun_translations = []
@@ -87,24 +87,32 @@ def process_subtitles(x_subs, en_subs, language_abbreviation):
                     en_subs[i].text = en_text + f"###{en_word}:{x_word}:{word_frequency}###"
     
     #Save modifications of added information to a new srt file
-    en_subs.save(path.join('back_end', 'modified_moneyheist_s01e01.srt'))
+    # en_subs.save(path.join('back_end', save_file))
+    en_subs.save(save_file)
     return word_freq_dict, noun_translations
     
 def main():
     # Time when starting the run, to determine how long it took at the end
     start = time.time()
 
-    foreign_language = 'es' #supported languages = 'en', 'es', 'fr', 'nl', 'de'
-    x_subs, en_subs = load_subtitles() #x refers to the foreign language
-    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language)
-    
-    print("Dictionary with word frequencies\n", word_freq_dict)
-    print("\nList of nouns and their translations\n", noun_translations)
 
-    # Determine how long the script took to run
-    end = time.time()
-    total_time = end - start
-    print("\n Time it took to run:" + str(total_time))
+    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr"],
+     ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de"],
+     ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es"],]
+    
+    for x_location, en_location, foreign_language in files_list:
+        
+        # foreign_language = 'es' #supported languages = 'en', 'es', 'fr', 'nl', 'de'
+        x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
+        word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, save_file=f"subtitles/{foreign_language}_modified.srt")
+        
+        print("Dictionary with word frequencies\n", word_freq_dict)
+        print("\nList of nouns and their translations\n", noun_translations)
+
+        # Determine how long the script took to run
+        end = time.time()
+        total_time = end - start
+        print("\n Time it took to run:" + str(total_time))
 
 if __name__ == "__main__":
     main()
