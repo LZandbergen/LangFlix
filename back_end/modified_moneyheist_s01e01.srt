@@ -2305,7 +2305,7 @@ Berlin, ready to open the doors.###doors:puertas:4.72###
 528
 00:40:57,320 --> 00:41:01,720
 Hostages, for your security,
-all of you three steps back!
+all of you three steps back!###steps:pasos:4.65###
 
 529
 00:41:02,600 --> 00:41:05,080
