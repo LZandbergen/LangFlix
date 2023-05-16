@@ -7,6 +7,7 @@ import pysrt
 import re
 #import time
 from datetime import timedelta
+from os import path
 
 slider_style = """
 QSlider::groove:horizontal {
@@ -119,8 +120,8 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt")
-        self.subs_cur = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt")
+        self.subs_orig = pysrt.open(path.join("back_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt"))
+        self.subs_cur = pysrt.open(path.join("back_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt"))
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
         self.sub_to_pause_at = [1, 12]
@@ -129,11 +130,11 @@ class Video(QtWidgets.QWidget):
         self.prep_subs()
         #self.buttonSizeHeight = self.size().height()/10 * 3
 
-        self.volumeButtonIcons = [QtGui.QIcon("/Users/mariiazamyrova/Downloads/icons8-speaker-50.png"),
-                                QtGui.QIcon("/Users/mariiazamyrova/Downloads/icons8-no-speaker-50.png")]
+        self.volumeButtonIcons = [QtGui.QIcon(path.join("front_end", "icons8-speaker-50.png")),
+                                QtGui.QIcon(path.join("front_end", "icons8-no-speaker-50.png"))]
 
-        self.playButtonIcons = [QtGui.QIcon("/Users/mariiazamyrova/Downloads/icons8-pause-50.png"),
-                                QtGui.QIcon("/Users/mariiazamyrova/Downloads/icons8-play-50.png")]
+        self.playButtonIcons = [QtGui.QIcon(path.join("front_end", "icons8-pause-50.png")),
+                                QtGui.QIcon(path.join("front_end", "icons8-play-50.png"))]
         # create video window
         self.video = QtWidgets.QFrame()#QWidget() # video screen
         self.video.setStyleSheet("""background-color: black; border-bottom-color: white;""")
@@ -143,7 +144,7 @@ class Video(QtWidgets.QWidget):
         # instantiate video player
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
-        self.media = Instance.media_new("/Users/mariiazamyrova/Downloads/Exercise1_demo.mp4")
+        self.media = Instance.media_new(path.join("shows", "French","S01E01 Are We Shtty.mkv"))
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
         self.player.set_nsobject(self.video.winId())       
@@ -228,7 +229,7 @@ class Video(QtWidgets.QWidget):
      def set_play_button_style(self):
          self.isPaused = not self.player.is_playing()
          if self.player.is_playing():
-             self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/front_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt")
+             self.player.video_set_subtitle_file(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"))
              #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
@@ -288,4 +289,4 @@ class Video(QtWidgets.QWidget):
              if word:
                  self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750><b>'+word[0][1]+'</b></font>', self.subs_orig[ind].text)
                  self.subs_cur[ind].text = re.sub(r'##[\W\w]+:[\W\w]+:[\W\w]+##', '', self.subs_cur[ind].text)
-         self.subs_cur.save('/Users/mariiazamyrova/Downloads/LangFlix/front_end/MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt', encoding='utf-8')
+         self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')
