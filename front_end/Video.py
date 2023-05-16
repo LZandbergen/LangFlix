@@ -5,6 +5,7 @@ import PySide6.QtMultimediaWidgets as QtMultimediaWidgets
 import vlc
 import pysrt
 import re
+import sys
 #import time
 from datetime import timedelta
 from os import path
@@ -147,7 +148,13 @@ class Video(QtWidgets.QWidget):
         self.media = Instance.media_new(path.join("shows", "French","S01E01 Are We Shtty.mkv"))
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
-        self.player.set_nsobject(self.video.winId())       
+        
+        # Connect video player to window: https://github.com/devos50/vlc-pyqt5-example
+        if sys.platform == "win32": # for Windows
+            self.player.set_hwnd(self.video.winId())
+        else:
+            self.player.set_nsobject(self.video.winId())  
+               
         self.videoEventManager = self.player.event_manager()
 
         # make volume slider                               
