@@ -49,7 +49,7 @@ def parse_subtitle_text(sub):
     return expression.sub("", sub.text)
 
 def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modified_moneyheist_s01e01.srt"):
-    nlp, translator = load_parser()
+    nlp, translator = load_parser(target_language=language_abbreviation)
     word_freq_dict = dict()
     noun_translations = []
 
