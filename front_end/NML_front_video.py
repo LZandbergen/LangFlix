@@ -5,7 +5,7 @@ import PySide6.QtWidgets as QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
 import sys
-#from VideoMariia import Video
+from VideoMariia import Video
 
 
 class MainWindow(QMainWindow):
@@ -25,9 +25,9 @@ class MainWindow(QMainWindow):
         for id in [id1, id2, id3]: families.append(QtGui.QFontDatabase.applicationFontFamilies(id)) 
 
         # create video window   
-        self.video = QtWidgets.QWidget()
-        #self.video = Video() # video screen + player button toolbar
-        #self.video.installEventFilter(self)
+        #self.video = QtWidgets.QWidget()
+        self.video = Video() # video screen + player button toolbar
+        self.video.installEventFilter(self)
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")

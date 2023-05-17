@@ -125,6 +125,8 @@ class Video(QtWidgets.QWidget):
         self.time_between_ex = 60 * 10**6 #time intervals between exercises
         self.ex_counter = 1 #counter for number of exercises so far
 
+        self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
+
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
@@ -296,20 +298,26 @@ class Video(QtWidgets.QWidget):
              return 
          '''
          #compute one exercise in advance
-         timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#self.subs_cur[ind].start
-         #sub_time = timedelta(hours=timestamp.hours, minutes=timestamp.minutes, 
-         #                    seconds=timestamp.seconds, microseconds=timestamp.milliseconds * 1000)   
+         timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#
+         sub_start = self.subs_cur[self.player.video_get_spu()].start
+         sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
+                             seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
          low_time_bound = timestamp - timedelta(microseconds= 30*10**6)
          player_time = timedelta(microseconds=self.player.get_time()*1000)
          up_time_bound = timestamp + timedelta(microseconds=60 * 10**6)
          if player_time >= low_time_bound and player_time <= up_time_bound:
+             print(self.subs_orig[self.subs_orig.start > tim])
              self.player.pause()
-             self.sub_to_pause_at.remove(ind)
+             #self.sub_to_pause_at.remove(ind)
 
      def prep_subs(self):
+         for ind in len(self.subs_orig):
+             
+         '''
          for ind in self.sub_to_pause_at:
              word= re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
              if word:
                  self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750><b>'+word[0][1]+'</b></font>', self.subs_orig[ind].text)
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text)
          self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')
+         '''
