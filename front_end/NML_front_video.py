@@ -5,37 +5,8 @@ import PySide6.QtWidgets as QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
 import sys
-from VideoMariia import Video
+#from VideoMariia import Video
 
-# Global style that is passed as an argument to the window somewhere below.
-# I used it to set a style for ALL radiobuttons, rather than do it for each
-# individual radiobutton
-global_style = '''QtWidgets.QRadioButton {
-                  color: red;
-                  background-color: red;
-               }
-               QtWidgets.QRadioButton::indicator {
-                  width: 11px;
-                  height: 11px;
-                  border-radius: 5px;
-               }
-               QtWidgets.QRadioButton::indicator::checked {
-                  border: 3px solid;
-                  border-radius: 6px;
-                  border-color: red;
-                  background-color: red;
-                  width: 7px;
-                  height: 7px;
-               }
-               QtWidgets.QRadioButton::indicator::unchecked {
-                  border: 1px solid;
-                  border-radius: 5px;
-                  border-color: #00D1FF;
-                  background-color: #00D1FF;
-                  width: 11px;
-                  height: 11px;
-               }
-               '''
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -49,17 +20,17 @@ class MainWindow(QMainWindow):
         id2 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-LightItalic.ttf")
         id3 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-Medium.ttf")
         if id1 < 0 or id2 < 0 or id3 < 0: 
-            print("Error with adding fond")
+            print("Error with adding font")
         families = []
         for id in [id1, id2, id3]: families.append(QtGui.QFontDatabase.applicationFontFamilies(id)) 
 
-        # create video window
-        
-        self.video = Video() # video screen + player button toolbar
-        self.video.installEventFilter(self)
+        # create video window   
+        self.video = QtWidgets.QWidget()
+        #self.video = Video() # video screen + player button toolbar
+        #self.video.installEventFilter(self)
 
         # Styling exercise text
-        exercise_text = QtWidgets.QLabel("What do you think is going to be said next?")
+        exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
         #exercise_text.setFont(QtGui.QFont(families[0]))
         exercise_text.setStyleSheet('QLabel {padding-left: 16px; color: #CACACA; font-size: 16px; font-weight: 780; background-color: #1E1E1E;}')
 
@@ -292,11 +263,12 @@ class MainWindow(QMainWindow):
         tabs_layout.setContentsMargins(0,0,0,0)
         tabs_layout.setSpacing(0)
 
-        # Create a top-level layout
+        # Create side-menu layout that will contain tabs and stackedLayout
         side_layout = QtWidgets.QVBoxLayout()
-        # Create the stacked layout
+        # Create stacked layout to switch between tabs
         stackedLayout = QtWidgets.QStackedLayout()
         
+        # Function to generate a new exercise
         def generateExercise(sentence, word1, word2, word3, cor_word):
             exercise_sentence.setText('"' + sentence + '"')
             rb_text1.setText(word1)
@@ -307,6 +279,7 @@ class MainWindow(QMainWindow):
 
         # Create the exercise page       
         page1 = QtWidgets.QWidget()
+        page1.setFixedWidth(350)
         page1.setObjectName("page1")
         page1.setStyleSheet('#page1 {border: 2px solid; border-color: #121212; border-radius: 3px; background-color: #1E1E1E;}')   
         page1Layout = QtWidgets.QVBoxLayout()
@@ -326,6 +299,7 @@ class MainWindow(QMainWindow):
         # Generate text for the exercise
         generateExercise("Sentence with 'quotation' marks.", "word1", "word2", "word3", "word1")
         
+        # Function to add a new word to dictionary
         def addWordToDict(word, translation):
             row = QtWidgets.QHBoxLayout()
             row.setAlignment(QtCore.Qt.AlignLeft)
@@ -345,6 +319,7 @@ class MainWindow(QMainWindow):
 
         # Create the dictionary page
         page2 = QtWidgets.QWidget()
+        page2.setFixedWidth(350)
         page2.setObjectName("page2")
         page2.setStyleSheet('#page2 {border: 2px solid; border-color: #121212; border-radius: 3px; background-color: #1E1E1E;}')
         page2Layout = QtWidgets.QVBoxLayout()
@@ -362,28 +337,155 @@ class MainWindow(QMainWindow):
         page2Layout.addWidget(word_2)
         addWordToDict("word3","trans")
         addWordToDict("word4word4word4","tran")
-
-        trigger_button = QtWidgets.QPushButton("Trigger exercise")            
-        #trigger_button.clicked.connect(generateExercise("I'll buy you ## to come visit me.","un billete","un barco","un coche","un billete"))    
-        page2Layout.addWidget(trigger_button)
-
         page2.setLayout(page2Layout)
         stackedLayout.addWidget(page2)
 
-        # Add the tabs and the stacked layout to the top-level layout
+        # Add the tabs and the stacked layout to the side layout
         side_layout.addLayout(tabs_layout)
         side_layout.addLayout(stackedLayout)
         side_layout.setSpacing(0)
         
-        # Main grid with all stuff (exercise layout, video, subtitles)
+        # Main grid with all stuff (side layout, video, subtitles)
         grid = QtWidgets.QHBoxLayout()#QGridLayout()
         grid.addWidget(self.video, 8)#addWidget(self.video)#, 0, 0)
         grid.addLayout(side_layout, 2)#, 0, 1)
         #grid.addWidget(subtitles, 1, 0, 1, 2)
 
-        # Put grid in the window
+        # Put the grid in a container
+        vidWindow = QtWidgets.QWidget()
+        vidWindow.setLayout(grid)
+
+        # Create choosing CEFR level window
+        levelsWindow = QtWidgets.QWidget()
+        levelsWindow.setStyleSheet("""background-color: #171717;""")
+        levelsLayout = QtWidgets.QVBoxLayout()
+        levelsLayout.setAlignment(QtCore.Qt.AlignCenter)
+        levelsWidget = QtWidgets.QWidget()
+        levelsWidget.width = 350
+        levelsWidget.setSizePolicy( QtWidgets.QSizePolicy.Policy.Fixed,  QtWidgets.QSizePolicy.Policy.Expanding)
+        levelsWidget.setLayout(levelsLayout)
+        final_levelsLayout = QtWidgets.QVBoxLayout()
+        final_levelsLayout.setAlignment(QtCore.Qt.AlignCenter)
+        final_levelsLayout.addWidget(levelsWidget)
+
+        levelsText = QtWidgets.QLabel("Choose your current language level:")
+        #levelsText.setFont(QtGui.QFont(families[0]))
+        levelsText.setStyleSheet('QLabel {color: #CACACA; font-size: 16px; font-weight: 780; background-color: #171717;}')
+
+        # Language level buttons
+        a1 = QtWidgets.QPushButton("A1")
+        a2 = QtWidgets.QPushButton("A2")
+        b1 = QtWidgets.QPushButton("B1")
+        b2 = QtWidgets.QPushButton("B2")
+        c1 = QtWidgets.QPushButton("C1")
+        c2 = QtWidgets.QPushButton("C2")
+        btn_grp = QtWidgets.QButtonGroup()
+        btn_grp.setExclusive(True)
+        
+        # Function for changing level buttons color when pressed
+        def toggle():
+            for btn in btn_grp.buttons(): 
+                btn.setStyleSheet('''QPushButton 
+                                        {border: 0px;
+                                        border-radius: 6px; 
+                                        color: 171717; 
+                                        background-color: #CACACA;
+                                        font-weight: 800; 
+                                        font-size: 16px; 
+                                        height: 32px; 
+                                        text-align: center;} 
+                                    QPushButton::hover
+                                       {background-color: #76E6FF;}
+                                    QPushButton::pressed
+                                       {color: white;
+                                        background-color: #0045AD;
+                                    }''')
+                btn.setChecked(False)
+            btn_grp.checkedButton().setStyleSheet('''QPushButton 
+                                                        {border: 0px;
+                                                        border-radius: 6px; 
+                                                        color: white; 
+                                                        background-color: #0045AD;
+                                                        font-weight: 800; 
+                                                        font-size: 16px; 
+                                                        height: 32px; 
+                                                        text-align: center;
+                                                    }''')
+        # Styling level buttons
+        for level in [a1,a2,b1,b2,c1,c2]:
+            btn_grp.addButton(level)
+            level.setStyleSheet('''QPushButton 
+                                        {border: 0px;
+                                        border-radius: 6px; 
+                                        color: 171717; 
+                                        background-color: #CACACA;
+                                        font-weight: 800; 
+                                        font-size: 16px; 
+                                        height: 32px; 
+                                        text-align: center;} 
+                                    QPushButton::hover
+                                       {background-color: #76E6FF;}
+                                    QPushButton::pressed
+                                       {color: white;
+                                        background-color: #0045AD;
+                                    }''')
+            level.clicked.connect(toggle)
+            level.setCheckable(True)
+            #level.setSizePolicy( QtWidgets.QSizePolicy.Policy.Minimum,  QtWidgets.QSizePolicy.Policy.Fixed)
+
+        # Button for proceeding to the video
+        setLevel_button = QtWidgets.QPushButton("Apply")
+        setLevel_button.setStyleSheet("""QPushButton
+                                      {background-color: #0043A8; 
+                                       color: #00D1FF;
+                                       border-radius: 13px;
+                                       border: 1px solid;
+                                       border-color: #0043A8;
+                                       height: 25px;
+                                       width: 84px;
+                                       font-weight: 750;}
+                                       QPushButton::hover
+                                       {background-color: #003585;
+                                        border-color: #003585;
+                                    }""")
+        setLevel_button.setSizePolicy( QtWidgets.QSizePolicy.Policy.Fixed,  QtWidgets.QSizePolicy.Policy.Minimum)
+        self.CEFRlevel = '' # variable to store the current user's level
+        def switchToMain():
+            levelsToMain_stackedLayout.setCurrentIndex(1)
+            self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
+            print(self.CEFRlevel)
+        setLevel_button.clicked.connect(switchToMain)
+
+        # Wrapping the levels page in layouts
+        a_layout = QtWidgets.QHBoxLayout()
+        b_layout = QtWidgets.QHBoxLayout()
+        c_layout = QtWidgets.QHBoxLayout()
+        a_layout.addWidget(a1)
+        a_layout.addWidget(a2)
+        a_layout.setContentsMargins(89,0,89,0)
+        b_layout.addWidget(b1)
+        b_layout.addWidget(b2)
+        b_layout.setContentsMargins(89,0,89,0)
+        c_layout.addWidget(c1)
+        c_layout.addWidget(c2)
+        c_layout.setContentsMargins(89,0,89,0)
+        levelsLayout.addWidget(levelsText)
+        levelsLayout.addItem(QtWidgets.QSpacerItem(2, 25, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        levelsLayout.addLayout(a_layout)
+        levelsLayout.addItem(QtWidgets.QSpacerItem(2, 6, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        levelsLayout.addLayout(b_layout)
+        levelsLayout.addItem(QtWidgets.QSpacerItem(2, 6, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        levelsLayout.addLayout(c_layout)
+        levelsLayout.addItem(QtWidgets.QSpacerItem(2, 60, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        levelsLayout.addWidget(setLevel_button, alignment=QtCore.Qt.AlignCenter)
+
+        # Put levels page and video page in a container 
+        levelsWindow.setLayout(final_levelsLayout)     
+        levelsToMain_stackedLayout = QtWidgets.QStackedLayout()
+        levelsToMain_stackedLayout.addWidget(levelsWindow)
+        levelsToMain_stackedLayout.addWidget(vidWindow)
         container = QtWidgets.QWidget()
-        container.setLayout(grid)
+        container.setLayout(levelsToMain_stackedLayout)
         self.setCentralWidget(container)
 
     def showLayoutChildren(self, layout, show = True):
@@ -435,7 +537,6 @@ class MainWindow(QMainWindow):
 
 
 vlcApp = QtWidgets.QApplication([])
-vlcApp.setStyleSheet(global_style)
 
 window = MainWindow()
 window.show()
