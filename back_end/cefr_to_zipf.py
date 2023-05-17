@@ -11,10 +11,10 @@ def cefr_to_zipf_func(cefr):
         return 4.5 #mean of 4.0 and 5.0
     if cefr == " C2":
         return 2.0 # mean of 0 and 4
-    return 0.0
 
 
 #initialize in front_end trial (& maybe create __init__.py files in back + front end folders)
 # cefr = "A2"
 # zipf = cefr_to_zipf_func(cefr)
 # print(zipf)
+#from ..back_end.cefr_to_zipf import cefr_to_zipf_func
