@@ -9,6 +9,7 @@ import sys
 #import time
 from datetime import timedelta
 from os import path
+import numpy as np
 #from back_end. import Class (Class has cefr to zip function)
 
 slider_style = """
@@ -122,8 +123,10 @@ class Video(QtWidgets.QWidget):
         self.cefr_start = 'A2' #cefr
         self.cefr_cur = 5.0 #zipf
 
-        self.time_between_ex = 60 * 10**6 #time intervals between exercises
-        self.ex_counter = 1 #counter for number of exercises so far
+        #self.time_between_ex = 60 * 10**6 #time intervals between exercises
+        #self.ex_counter = 1 #counter for number of exercises so far
+
+        self.num_exercises = 10 # number of exercises per video
 
         self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
 
@@ -311,7 +314,20 @@ class Video(QtWidgets.QWidget):
              #self.sub_to_pause_at.remove(ind)
 
      def prep_subs(self):
+         break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start)
+         ex_counter = 1
+         low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
+         up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
          for ind in len(self.subs_orig):
+             if self.subs_orig[ind] >= low_time_bound and self.subs_orig[ind] <= up_time_bound:
+                 word= re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
+                 if word:
+                     self.sub_ind_for_ex[ex_counter - 1].append(ind)
+             elif self.subs_orig[ind] > up_time_bound:
+                 ex_counter+=1
+                 low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
+                 up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
+             
              
          '''
          for ind in self.sub_to_pause_at:
@@ -321,3 +337,7 @@ class Video(QtWidgets.QWidget):
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text)
          self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')
          '''
+
+     def sub_time_to_timedelta(self, time):
+         return timedelta(hours=time.hours, minutes=time.minutes, 
+                             seconds=time.seconds, microseconds=time.milliseconds * 1000) 
