@@ -32,21 +32,18 @@ def load_subtitles(target_language_file=path.join("back_end","La.casa.de.papel.S
 
     return target_subs, native_subs
 
-
 def is_word_spoken(subs, word):
     if len(subs) == 0:
         return False
     else:
         strings = [sub.text for sub in subs]
-    if any(word in text for text in strings) != any(word in sub.text for sub in subs):
-        print(f"word: {word}", strings)
-        print(any(word in text for text in strings))
-        print(any(word in sub.text for sub in subs))
-    return any(word in text for text in strings)
+    lowered_word = word.casefold()
+    return any(lowered_word in text.casefold() for text in strings)
 
 def parse_subtitle_text(sub):
     expression = re.compile("[\(\<].*?[\)\>]")
-    return expression.sub("", sub.text)
+    new = expression.sub("", sub.text)
+    return new
 
 def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modified_moneyheist_s01e01.srt"):
     nlp, translator = load_parser(target_language=language_abbreviation)
@@ -69,9 +66,12 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modif
                 if " (" in x_word:
                     x_word = x_word[0: x_word.index(" (")]
 
-                # Search for subtitles in spanish file around that time
+                # Search for subtitles in foreign file around that time
                 subs = x_subs.slice(starts_after=en_sub.start -
                                     2000, ends_before=en_sub.end + 2000)
+                
+                if not is_word_spoken(subs, x_word):
+                    print(f"word:{en_word_str}, translation:{x_word}, x_subs_index: {[item.index for item in subs]}")
 
                 # Adds a word with its frequency to the dictionary if it is an actual translation
                 if (en_word_str != "unknown" and len(x_word) > 1 and
@@ -95,24 +95,27 @@ def main():
     # Time when starting the run, to determine how long it took at the end
     start = time.time()
 
+    x_location = "subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"
+    en_location = "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt"
+    foreign_language = "de"
 
-    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr"],
-     ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de"],
-     ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es"],]
+    # files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr"],
+    #  ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de"],
+    #  ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es"],]
     
-    for x_location, en_location, foreign_language in files_list:
+    # for x_location, en_location, foreign_language in files_list:
         
         # foreign_language = 'es' #supported languages = 'en', 'es', 'fr', 'nl', 'de'
-        x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
-        word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, save_file=f"subtitles/{foreign_language}_modified.srt")
-        
-        print("Dictionary with word frequencies\n", word_freq_dict)
-        print("\nList of nouns and their translations\n", noun_translations)
+    x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
+    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, save_file=f"subtitles/{foreign_language}_modified.srt")
+    
+    print("Dictionary with word frequencies\n", word_freq_dict)
+    print("\nList of nouns and their translations\n", noun_translations)
 
-        # Determine how long the script took to run
-        end = time.time()
-        total_time = end - start
-        print("\n Time it took to run:" + str(total_time))
+    # Determine how long the script took to run
+    end = time.time()
+    total_time = end - start
+    print("\n Time it took to run:" + str(total_time))
 
 if __name__ == "__main__":
     main()
