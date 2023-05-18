@@ -171,6 +171,8 @@ class MainWindow(QMainWindow):
                 skip_button.setText("Skip (" + str(self.num) + ")")
                 switchToDict()
                 exercise_tab.setHidden(True)
+                self.video.play_button.setEnabled(True)
+                self.video.player.play()
         skip_button.clicked.connect(skip) 
 
         # Styling Continue button
@@ -194,6 +196,8 @@ class MainWindow(QMainWindow):
         def Continue():
             switchToDict()
             exercise_tab.setHidden(True)
+            self.video.play_button.setEnabled(True)
+            self.video.player.play()
         continue_button.clicked.connect(Continue)
 
         # Create stacked layout for Submit/Skip and Continue buttons
@@ -524,6 +528,7 @@ class MainWindow(QMainWindow):
             #switch to exercise
             if player_time >= sub_time and player_time <= up_time_bound:
                 self.video.player.pause()
+                self.video.play_button.setEnabled(False)
                 target_word_data = self.video.get_word_data_from_sub(ind+1)[0]
                 sentence = re.sub(target_word_data[0], '_____', self.video.subs_cur[ind+1])
                 words = [target_word_data[1]] #list of answer options

@@ -130,7 +130,7 @@ class Video(QtWidgets.QWidget):
 
         self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
 
-        self.ind_to_stop_at_stack = [] # stack to store next subtitle to pause at
+        self.ind_to_stop_at_stack = [5] # stack to store next subtitle to pause at
         
         self.cur_ex_ind = 0 # current exercise index
 
