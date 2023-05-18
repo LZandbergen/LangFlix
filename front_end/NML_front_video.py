@@ -494,6 +494,10 @@ class MainWindow(QMainWindow):
         container.setLayout(levelsToMain_stackedLayout)
         self.setCentralWidget(container)
 
+        #state of interface at start of the app
+        switchToDict()
+        exercise_tab.setHidden(True)
+
         # function for triggering events connected to video time
         def react_to_time_change(indices):
             #update slider position
