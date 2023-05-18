@@ -8,6 +8,8 @@ import sys
 from datetime import timedelta
 from os import path
 from Video import Video
+import re
+import random
 
 
 class MainWindow(QMainWindow):
@@ -30,7 +32,7 @@ class MainWindow(QMainWindow):
         #self.video = QtWidgets.QWidget()
         self.video = Video() # video screen + player button toolbar
         self.video.installEventFilter(self)
-        self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.react_to_time_change(self.video.ind_to_stop_at_stack)) 
+        self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
@@ -492,29 +494,35 @@ class MainWindow(QMainWindow):
         container.setLayout(levelsToMain_stackedLayout)
         self.setCentralWidget(container)
 
-    # function for triggering events connected to video time
-    def react_to_time_change(self, indices):
-         #update slider position
-         self.video.time_slider.setValue(self.video.player.get_position()*1000)
-         total_time = str(timedelta(microseconds = self.video.player.get_length()*1000)).split('.')[0]
-         cur_time = str(timedelta(microseconds = self.video.player.get_time()*1000)).split('.')[0]
-         self.video.time_text.setText(f'{cur_time}/{total_time}')
-         try:
-             ind = indices[0]
-         except:
-             return 
-         #pause video at target subtitle
-         sub_start = self.video.subs_cur[ind].start
-         sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
-                             seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
-         player_time = timedelta(microseconds=self.video.player.get_time()*1000)
-         up_time_bound = sub_time + timedelta(microseconds= 10**6)
-         if player_time >= sub_time and player_time <= up_time_bound:
-             self.video.player.pause()
-             self.video.cur_ex_ind+=1
-             #compute one exercise in advance
-             self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
-             self.video.ind_to_stop_at_stack.pop(0)
+        # function for triggering events connected to video time
+        def react_to_time_change(indices):
+            #update slider position
+            self.video.time_slider.setValue(self.video.player.get_position()*1000)
+            total_time = str(timedelta(microseconds = self.video.player.get_length()*1000)).split('.')[0]
+            cur_time = str(timedelta(microseconds = self.video.player.get_time()*1000)).split('.')[0]
+            self.video.time_text.setText(f'{cur_time}/{total_time}')
+            try:
+                ind = indices[0]-1 #pause one scene prior to target to ask question about the future
+            except:
+                return 
+            #pause video at target subtitle
+            sub_start = self.video.subs_cur[ind].start
+            sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
+                                seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
+            player_time = timedelta(microseconds=self.video.player.get_time()*1000)
+            up_time_bound = sub_time + timedelta(microseconds= 10**6)
+            #switch to exercise
+            if player_time >= sub_time and player_time <= up_time_bound:
+                self.video.player.pause()
+                target_word_data = self.video.get_word_data_from_sub(ind+1)[0]
+                sentence = re.sub(target_word_data[0], '_____', self.video.subs_cur[ind+1])
+                words = [target_word_data[0][1]] #list of answer options
+                random.shuffle(words) # shuffle word order
+                generateExercise(sentence, words[0], words[1], words[2], target_word_data[0][1])
+                self.video.cur_ex_ind+=1
+                #compute one exercise in advance
+                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+                self.video.ind_to_stop_at_stack.pop(0)
 
     # function for showing and hiding screen elements
     def showLayoutChildren(self, layout, show = True):
