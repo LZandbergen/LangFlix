@@ -56,4 +56,9 @@ def create_dictionary(language='es', filename="/home/lzandbergen/Documents/NML/L
     with open("nouns_dict.json", 'w') as file:
         json.dump(noun_dict, file)
 
+files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr", "FRENCH_Detox_S01E01_Dict.json"],
+              ["subtitles/FRENCH_Détox_Off.the.Hook.English.S01E02.srt", "fr", "FRENCH_Detox_S01E02_Dict.json"],
+     ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de"],
+     ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es"],]
+
 print(get_alternate_words())
