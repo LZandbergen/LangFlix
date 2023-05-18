@@ -205,6 +205,9 @@ class Video(QtWidgets.QWidget):
         self.play_button.setStyleSheet("""border-style: solid;""")
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPaused, lambda x: self.set_play_button_style()) 
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
+
+        #time value
+        self.time_text = QtWidgets.QLabel()
         
         #video time slider
         self.time_slider = QtWidgets.QSlider()
@@ -222,9 +225,10 @@ class Video(QtWidgets.QWidget):
         self.video_layout.setSpacing(0)
         self.video_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.video_buttons.addWidget(self.play_button, 3)
-        self.video_buttons.addWidget(self.volume_button, 3)
-        self.video_buttons.addWidget(self.volume_slider, 4)
+        self.video_buttons.addWidget(self.play_button, 2)
+        self.video_buttons.addWidget(self.volume_button, 2)
+        self.video_buttons.addWidget(self.volume_slider, 3)
+        self.video_buttons.addWidget(self.time_text, 3)
         self.video_menuBar.addWidget(self.time_slider)
         self.video_menuBar.addLayout(self.video_buttons)
 
