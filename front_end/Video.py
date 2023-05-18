@@ -137,8 +137,8 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(path.join("subtitles", "fr_modified.srt"))
-        self.subs_cur = pysrt.open(path.join("subtitles", "fr_modified.srt"))
+        self.subs_orig = pysrt.open(path.join("subtitles", "FRENCH_Détox_Off.the.Hook.English.S01E01.srt"))
+        self.subs_cur = pysrt.open(path.join("subtitles", "FRENCH_Détox_Off.the.Hook.English.S01E01.srt"))
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
         #self.sub_to_pause_at = [1, 12]
@@ -207,7 +207,12 @@ class Video(QtWidgets.QWidget):
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
 
         #time value
-        self.time_text = QtWidgets.QLabel()
+        self.time_text = QtWidgets.QLineEdit()
+        self.time_text.setReadOnly(True)
+        self.time_text.setStyleSheet("""color: white;
+                                       border-radius: 0px;
+                                       font-weight: 750;""")
+        self.time_text.setText("00:00:00/--:--:--")
         
         #video time slider
         self.time_slider = QtWidgets.QSlider()
@@ -285,6 +290,9 @@ class Video(QtWidgets.QWidget):
         
      def change_video_pos(self):
          self.player.set_position(self.time_slider.value()/1000)
+         total_time = str(timedelta(microseconds = self.player.get_length()*1000)).split('.')[0]
+         cur_time = str(timedelta(microseconds = self.player.get_time()*1000)).split('.')[0]
+         self.time_text.setText(f'{cur_time}/{total_time}')
 
      def on_time_slider_pressed(self):
          self.time_slider.setStyleSheet(slider_style_hover)

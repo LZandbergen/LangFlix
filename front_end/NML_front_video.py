@@ -496,9 +496,9 @@ class MainWindow(QMainWindow):
     def react_to_time_change(self, indices):
          #update slider position
          self.video.time_slider.setValue(self.video.player.get_position()*1000)
-         total_time = str(timedelta(microseconds = self.video.player.get_length()*1000))
-         cur_time = str(timedelta(microseconds = self.video.player.get_time()*1000))
-         self.video.time_text = f'{cur_time}/{total_time}'
+         total_time = str(timedelta(microseconds = self.video.player.get_length()*1000)).split('.')[0]
+         cur_time = str(timedelta(microseconds = self.video.player.get_time()*1000)).split('.')[0]
+         self.video.time_text.setText(f'{cur_time}/{total_time}')
          try:
              ind = indices[0]
          except:
