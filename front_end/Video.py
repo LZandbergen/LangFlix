@@ -299,7 +299,7 @@ class Video(QtWidgets.QWidget):
          #update slider position
          self.time_slider.setValue(self.player.get_position()*1000)
          try:
-             ind = indices.pop(0)
+             ind = indices[0]
          except:
              return 
          #compute one exercise in advance
@@ -314,10 +314,11 @@ class Video(QtWidgets.QWidget):
              self.player.pause()
              self.cur_ex_ind+=1
              self.choose_ex_ind(self.sub_ind_for_ex[self.cur_ex_ind])
-             #self.sub_to_pause_at.remove(ind)
+             self.ind_to_stop_at_stack.pop(0)
 
      def prep_subs(self):
          break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start) # get interval between exercises
+         if break_time > timedelta(minutes = 3): break_time = timedelta(minutes = 3)
          ex_counter = 1
          low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6) # lower search frame bound by 30 seconds
          up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6) # upper search frame bound by 60 seconds
@@ -337,8 +338,8 @@ class Video(QtWidgets.QWidget):
                  up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
          self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
          print(self.sub_ind_for_ex)
+         self.num_exercises = len(self.sub_ind_for_ex) # update number of exercises to the number of possible exercises
          self.choose_ex_ind(self.sub_ind_for_ex[0])
-         print(self.ind_to_stop_at_stack)
              
              
          '''
