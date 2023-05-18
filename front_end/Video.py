@@ -9,7 +9,6 @@ import sys
 #import time
 from datetime import timedelta
 from os import path
-import numpy as np
 #from back_end. import Class (Class has cefr to zip function)
 
 slider_style = """
@@ -123,25 +122,17 @@ class Video(QtWidgets.QWidget):
         self.cefr_start = 'A2' #cefr
         self.cefr_cur = 5.0 #zipf
 
-        #self.time_between_ex = 60 * 10**6 #time intervals between exercises
-        #self.ex_counter = 1 #counter for number of exercises so far
-
-        self.num_exercises = 10 # number of exercises per video
-
-        self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
-
-        self.ind_to_stop_at_stack = [] # stack to store next subtitle to pause at
-        
-        self.cur_ex_ind = 0 # current exercise index
+        self.time_between_ex = 60 * 10**6 #time intervals between exercises
+        self.ex_counter = 1 #counter for number of exercises so far
 
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(path.join("subtitles", "fr_modified.srt"))
-        self.subs_cur = pysrt.open(path.join("subtitles", "fr_modified.srt"))
+        self.subs_orig = pysrt.open(path.join("back_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt"))
+        self.subs_cur = pysrt.open(path.join("back_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt"))
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
-        #self.sub_to_pause_at = [1, 12]
+        self.sub_to_pause_at = [1, 12]
         #self.timer = QtCore.QTimer()
         #self.timer.timeout.connect(self.timerEvent)
         self.prep_subs()
@@ -215,6 +206,7 @@ class Video(QtWidgets.QWidget):
         self.time_slider.sliderPressed.connect(self.on_time_slider_pressed)
         self.time_slider.sliderMoved.connect(self.change_video_pos)
         self.time_slider.sliderReleased.connect(self.on_time_slider_released)
+        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.react_to_time_change(self.sub_to_pause_at)) 
         self.time_slider.setStyleSheet(slider_style)
         self.time_slider.installEventFilter(self)
         
@@ -256,7 +248,7 @@ class Video(QtWidgets.QWidget):
      def set_play_button_style(self):
          self.isPaused = not self.player.is_playing()
          if self.player.is_playing():
-             self.player.video_set_subtitle_file(path.join("front_end", "fr_cleaned.srt"))
+             self.player.video_set_subtitle_file(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"))
              #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
@@ -292,72 +284,32 @@ class Video(QtWidgets.QWidget):
 
      #how do we want to cue pausing? Should we use a dictionary with subtitle index to pause at, exercise type and the text to use for execise?
      #how do i schedule video pause at given time?
-     '''
+     
      # function that cues events related to video timing
      def react_to_time_change(self, indices):
          #update slider position
          self.time_slider.setValue(self.player.get_position()*1000)
+         '''
          try:
              ind = indices[0]
          except:
              return 
+         '''
          #compute one exercise in advance
-         #timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#
-         sub_start = self.subs_cur[ind].start
-         sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
-                             seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
-         #low_time_bound = sub_time - timedelta(microseconds= 10**6)
+         timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#self.subs_cur[ind].start
+         #sub_time = timedelta(hours=timestamp.hours, minutes=timestamp.minutes, 
+         #                    seconds=timestamp.seconds, microseconds=timestamp.milliseconds * 1000)   
+         low_time_bound = timestamp - timedelta(microseconds= 30*10**6)
          player_time = timedelta(microseconds=self.player.get_time()*1000)
-         up_time_bound = sub_time + timedelta(microseconds= 10**6)
-         if player_time >= sub_time and player_time <= up_time_bound:
+         up_time_bound = timestamp + timedelta(microseconds=60 * 10**6)
+         if player_time >= low_time_bound and player_time <= up_time_bound:
              self.player.pause()
-             self.cur_ex_ind+=1
-             self.choose_ex_ind(self.sub_ind_for_ex[self.cur_ex_ind])
-             self.ind_to_stop_at_stack.pop(0)
-     '''
+             self.sub_to_pause_at.remove(ind)
 
      def prep_subs(self):
-         break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start) # get interval between exercises
-         if break_time > timedelta(minutes = 3): break_time = timedelta(minutes = 3)
-         ex_counter = 1
-         low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6) # lower search frame bound by 30 seconds
-         up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6) # upper search frame bound by 60 seconds
-         sub_ind_list = []
-         for ind in range(len(self.subs_orig)):
-             sub_time = self.sub_time_to_timedelta(self.subs_orig[ind].start)
-             word= self.get_word_data_from_sub(ind)
-             if word: # if subtitle contains a word of interest
-                 self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text) # clean subtitle for later displaying
-                 if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
-                     sub_ind_list.append(ind)
-             elif sub_time > up_time_bound and ex_counter < self.num_exercises:
-                 self.sub_ind_for_ex.append(sub_ind_list.copy())
-                 sub_ind_list = []
-                 ex_counter+=1
-                 low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
-                 up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
-         self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
-         print(self.sub_ind_for_ex)
-         self.num_exercises = len(self.sub_ind_for_ex) # update number of exercises to the number of possible exercises
-         self.choose_ex_ind(self.sub_ind_for_ex[0])
-             
-             
-         '''
          for ind in self.sub_to_pause_at:
              word= re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
              if word:
                  self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750><b>'+word[0][1]+'</b></font>', self.subs_orig[ind].text)
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text)
          self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')
-         '''
-     def choose_ex_ind(self, ind_list):
-         try:
-            self.ind_to_stop_at_stack.append(min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2]))))
-         except: return
-
-     def get_word_data_from_sub(self, ind):
-         return re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
-         
-     def sub_time_to_timedelta(self, time):
-         return timedelta(hours=time.hours, minutes=time.minutes, 
-                             seconds=time.seconds, microseconds=time.milliseconds * 1000) 

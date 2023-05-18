@@ -37,6 +37,8 @@ def is_word_spoken(subs, word):
         return False
     else:
         strings = [sub.text for sub in subs]
+
+    # Casefold lowers the word, but also changes certain letters to give more results
     lowered_word = word.casefold()
     return any(lowered_word in text.casefold() for text in strings)
 
@@ -92,30 +94,29 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modif
     return word_freq_dict, noun_translations
     
 def main():
-    # Time when starting the run, to determine how long it took at the end
-    start = time.time()
+    # x_location = "subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"
+    # en_location = "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt"
+    # foreign_language = "de"
 
-    x_location = "subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"
-    en_location = "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt"
-    foreign_language = "de"
-
-    # files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr"],
-    #  ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de"],
-    #  ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es"],]
+    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr"],
+     ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de"],
+     ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es"],]
     
-    # for x_location, en_location, foreign_language in files_list:
+    for x_location, en_location, foreign_language in files_list:
+        # Time when starting the run, to determine how long it took at the end
+        start = time.time()
+
+        # foreign_language = 'es'
+        x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
+        word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, save_file=f"subtitles/{foreign_language}_modified.srt")
         
-        # foreign_language = 'es' #supported languages = 'en', 'es', 'fr', 'nl', 'de'
-    x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
-    word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, save_file=f"subtitles/{foreign_language}_modified.srt")
-    
-    print("Dictionary with word frequencies\n", word_freq_dict)
-    print("\nList of nouns and their translations\n", noun_translations)
+        print("Dictionary with word frequencies\n", word_freq_dict)
+        print("\nList of nouns and their translations\n", noun_translations)
 
-    # Determine how long the script took to run
-    end = time.time()
-    total_time = end - start
-    print("\n Time it took to run:" + str(total_time))
+        # Determine how long the script took to run
+        end = time.time()
+        total_time = end - start
+        print("\n Time it took to run:" + str(total_time))
 
 if __name__ == "__main__":
     main()
