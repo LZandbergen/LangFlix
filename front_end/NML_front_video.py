@@ -5,7 +5,7 @@ import PySide6.QtWidgets as QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
 import sys
-from VideoMariia import Video
+from Video import Video
 
 
 class MainWindow(QMainWindow):

@@ -130,6 +130,10 @@ class Video(QtWidgets.QWidget):
 
         self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
 
+        self.ind_to_stop_at_stack = [] # stack to store next subtitle to pause at
+        
+        self.cur_ex_ind = 0 # current exercise index
+
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
@@ -137,7 +141,7 @@ class Video(QtWidgets.QWidget):
         self.subs_cur = pysrt.open(path.join("back_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt"))
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
-        self.sub_to_pause_at = [1, 12]
+        #self.sub_to_pause_at = [1, 12]
         #self.timer = QtCore.QTimer()
         #self.timer.timeout.connect(self.timerEvent)
         self.prep_subs()
@@ -211,7 +215,7 @@ class Video(QtWidgets.QWidget):
         self.time_slider.sliderPressed.connect(self.on_time_slider_pressed)
         self.time_slider.sliderMoved.connect(self.change_video_pos)
         self.time_slider.sliderReleased.connect(self.on_time_slider_released)
-        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.react_to_time_change(self.sub_to_pause_at)) 
+        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.react_to_time_change(self.ind_to_stop_at_stack)) 
         self.time_slider.setStyleSheet(slider_style)
         self.time_slider.installEventFilter(self)
         
@@ -294,39 +298,44 @@ class Video(QtWidgets.QWidget):
      def react_to_time_change(self, indices):
          #update slider position
          self.time_slider.setValue(self.player.get_position()*1000)
-         '''
          try:
-             ind = indices[0]
+             ind = indices.pop(0)
          except:
              return 
-         '''
          #compute one exercise in advance
-         timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#
-         sub_start = self.subs_cur[self.player.video_get_spu()].start
+         #timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#
+         sub_start = self.subs_cur[ind].start
          sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
                              seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
-         low_time_bound = timestamp - timedelta(microseconds= 30*10**6)
+         #low_time_bound = sub_time - timedelta(microseconds= 10**6)
          player_time = timedelta(microseconds=self.player.get_time()*1000)
-         up_time_bound = timestamp + timedelta(microseconds=60 * 10**6)
-         if player_time >= low_time_bound and player_time <= up_time_bound:
-             print(self.subs_orig[self.subs_orig.start > tim])
+         up_time_bound = sub_time + timedelta(microseconds= 10**6)
+         if player_time >= sub_time and player_time <= up_time_bound:
              self.player.pause()
+             self.cur_ex_ind+=1
+             self.choose_ex_ind(self.sub_ind_for_ex[self.cur_ex_ind])
              #self.sub_to_pause_at.remove(ind)
 
      def prep_subs(self):
-         break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start)
+         break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start) # get interval between exercises
          ex_counter = 1
-         low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
-         up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
-         for ind in len(self.subs_orig):
-             if self.subs_orig[ind] >= low_time_bound and self.subs_orig[ind] <= up_time_bound:
-                 word= re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
-                 if word:
-                     self.sub_ind_for_ex[ex_counter - 1].append(ind)
-             elif self.subs_orig[ind] > up_time_bound:
+         low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6) # lower search frame bound by 30 seconds
+         up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6) # upper search frame bound by 60 seconds
+         sub_ind_list = []
+         for ind in range(len(self.subs_orig)):
+             sub_time = self.sub_time_to_timedelta(self.subs_orig[ind].start)
+             if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
+                 word= self.get_word_data_from_sub(ind)#re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
+                 if word: # if subtitle contains a word of interest
+                     sub_ind_list.append(ind)
+             elif sub_time > up_time_bound and ex_counter < self.num_exercises:
+                 self.sub_ind_for_ex.append(sub_ind_list.copy())
+                 sub_ind_list = []
                  ex_counter+=1
                  low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
                  up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
+         print(self.sub_ind_for_ex)
+         self.choose_ex_ind(self.sub_ind_for_ex[0])
              
              
          '''
@@ -337,7 +346,12 @@ class Video(QtWidgets.QWidget):
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text)
          self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')
          '''
+     def choose_ex_ind(self, ind_list):
+         self.ind_to_stop_at_stack.append(min(ind_list, key = lambda x: abs(self.cefr_cur - self.get_word_data_from_sub(x)[2])))
 
+     def get_word_data_from_sub(self, ind):
+         return re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
+         
      def sub_time_to_timedelta(self, time):
          return timedelta(hours=time.hours, minutes=time.minutes, 
                              seconds=time.seconds, microseconds=time.milliseconds * 1000) 
