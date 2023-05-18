@@ -215,7 +215,6 @@ class Video(QtWidgets.QWidget):
         self.time_slider.sliderPressed.connect(self.on_time_slider_pressed)
         self.time_slider.sliderMoved.connect(self.change_video_pos)
         self.time_slider.sliderReleased.connect(self.on_time_slider_released)
-        self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.react_to_time_change(self.ind_to_stop_at_stack)) 
         self.time_slider.setStyleSheet(slider_style)
         self.time_slider.installEventFilter(self)
         
@@ -293,7 +292,7 @@ class Video(QtWidgets.QWidget):
 
      #how do we want to cue pausing? Should we use a dictionary with subtitle index to pause at, exercise type and the text to use for execise?
      #how do i schedule video pause at given time?
-     
+     '''
      # function that cues events related to video timing
      def react_to_time_change(self, indices):
          #update slider position
@@ -315,6 +314,7 @@ class Video(QtWidgets.QWidget):
              self.cur_ex_ind+=1
              self.choose_ex_ind(self.sub_ind_for_ex[self.cur_ex_ind])
              self.ind_to_stop_at_stack.pop(0)
+     '''
 
      def prep_subs(self):
          break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start) # get interval between exercises

@@ -5,6 +5,8 @@ import PySide6.QtWidgets as QtWidgets
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
 import sys
+from datetime import timedelta
+from os import path
 from Video import Video
 
 
@@ -16,9 +18,9 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("""background-color: #171717;""")
         
-        id1 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-SemiBold.ttf")
-        id2 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-LightItalic.ttf")
-        id3 = QtGui.QFontDatabase.addApplicationFont("./Downloads/LangFlix/front_end/fonts/Quicksand-Medium.ttf")
+        id1 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "fonts", "Quicksand-SemiBold.ttf"))
+        id2 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "fonts", "Quicksand-LightItalic.ttf"))
+        id3 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "fonts", "Quicksand-Medium.ttf"))
         if id1 < 0 or id2 < 0 or id3 < 0: 
             print("Error with adding font")
         families = []
@@ -28,6 +30,7 @@ class MainWindow(QMainWindow):
         #self.video = QtWidgets.QWidget()
         self.video = Video() # video screen + player button toolbar
         self.video.installEventFilter(self)
+        self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
@@ -109,7 +112,7 @@ class MainWindow(QMainWindow):
         #cor_incor_text.setFont(QtGui.QFont(families[0]))
         cor_incor_icon = QtWidgets.QLabel()
         cor_incor_icon.setStyleSheet('QLabel {background-color: #1E1E1E;}')
-        #QtGui.QIcon("./Documents/GitHub/LangFlix/front_end/tab_image.png")
+        QtGui.QIcon(path.join("front_end", "tab_image.png"))
         cor_incor_layout = QtWidgets.QHBoxLayout()
         cor_incor_layout.setAlignment(QtCore.Qt.AlignCenter)
         cor_incor_layout.addWidget(cor_incor_icon)
@@ -124,7 +127,7 @@ class MainWindow(QMainWindow):
                     cur_checked = word.text()
                 if cur_checked == self.correct_word:
                     cor_incor_text.setText("Great, correct!")
-                    pixmap = QtGui.QPixmap("./Downloads/LangFlix/front_end/correct.png")
+                    pixmap = QtGui.QPixmap(path.join("front_end", "correct.png"))
                     cor_incor_icon.setPixmap(pixmap)
                     buttons_stackedLayout.setCurrentIndex(1)
                     rb.setStyleSheet('''QRadioButton 
@@ -137,7 +140,7 @@ class MainWindow(QMainWindow):
                     break
                 else: 
                     cor_incor_text.setText("Incorrect, try again")
-                    pixmap = QtGui.QPixmap("./Downloads/LangFlix/front_end/incorrect.png")
+                    pixmap = QtGui.QPixmap(path.join("front_end", "incorrect.png"))
                     cor_incor_icon.setPixmap(pixmap)
         submit_button.clicked.connect(checkAnswer)                             
 
@@ -488,6 +491,28 @@ class MainWindow(QMainWindow):
         container.setLayout(levelsToMain_stackedLayout)
         self.setCentralWidget(container)
 
+    # function for triggering events connected to video time
+    def react_to_time_change(self, indices):
+         #update slider position
+         self.video.time_slider.setValue(self.video.player.get_position()*1000)
+         try:
+             ind = indices[0]
+         except:
+             return 
+         #pause video at target subtitle
+         sub_start = self.video.subs_cur[ind].start
+         sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
+                             seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
+         player_time = timedelta(microseconds=self.video.player.get_time()*1000)
+         up_time_bound = sub_time + timedelta(microseconds= 10**6)
+         if player_time >= sub_time and player_time <= up_time_bound:
+             self.video.player.pause()
+             self.video.cur_ex_ind+=1
+             #compute one exercise in advance
+             self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+             self.video.ind_to_stop_at_stack.pop(0)
+
+    # function for showing and hiding screen elements
     def showLayoutChildren(self, layout, show = True):
         for i in range(layout.count()):
             if layout.itemAt(i).widget() is None:
@@ -497,7 +522,8 @@ class MainWindow(QMainWindow):
                     layout.itemAt(i).widget().show()
                 else:
                     layout.itemAt(i).widget().hide()
-       
+
+    # function for triggering interface events 
     def eventFilter(self, source, event):
         if source == self.video:
             if event.type() == QtCore.QEvent.Enter:
