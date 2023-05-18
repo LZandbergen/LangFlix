@@ -274,8 +274,13 @@ class MainWindow(QMainWindow):
         stackedLayout = QtWidgets.QStackedLayout()
         
         # Function to generate a new exercise
-        def generateExercise(sentence, word1, word2, word3, cor_word):
-            exercise_sentence.setText('"' + sentence + '"')
+        def generateExercise(sentence, word1, word2, word3, cor_word, ex_type = 3):
+            if ex_type == 3:
+                exercise_text.setText("What do you think is going to be said \nnext?")
+                exercise_sentence.setText('"' + sentence + '"')
+            elif ex_type ==1:
+                exercise_text.setText("What does the highlighted word mean?")
+                exercise_sentence.setText("")
             rb_text1.setText(word1)
             rb_text2.setText(word2)
             rb_text3.setText(word3)
@@ -506,7 +511,8 @@ class MainWindow(QMainWindow):
             cur_time = str(timedelta(microseconds = self.video.player.get_time()*1000)).split('.')[0]
             self.video.time_text.setText(f'{cur_time}/{total_time}')
             try:
-                ind = indices[0]-1 #pause one scene prior to target to ask question about the future
+                ind = indices[0]
+                if self.video.cur_ex_ind % 3 != 0: ind -= 1 #pause one scene prior to target to ask question about the future if exercise is type 3
             except:
                 return 
             #pause video at target subtitle
@@ -520,9 +526,9 @@ class MainWindow(QMainWindow):
                 self.video.player.pause()
                 target_word_data = self.video.get_word_data_from_sub(ind+1)[0]
                 sentence = re.sub(target_word_data[0], '_____', self.video.subs_cur[ind+1])
-                words = [target_word_data[0][1]] #list of answer options
+                words = [target_word_data[1]] #list of answer options
                 random.shuffle(words) # shuffle word order
-                generateExercise(sentence, words[0], words[1], words[2], target_word_data[0][1])
+                generateExercise(sentence, words[0], words[1], words[2], target_word_data[1])
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
                 self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])

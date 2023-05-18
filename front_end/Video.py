@@ -134,6 +134,8 @@ class Video(QtWidgets.QWidget):
         
         self.cur_ex_ind = 0 # current exercise index
 
+        self.old_volume = 0 # volume prior to mute button being pressed
+
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
@@ -164,6 +166,7 @@ class Video(QtWidgets.QWidget):
         self.media = Instance.media_new(path.join("shows", "French","S01E01 Are We Shtty.mkv"))
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
+        self.player.audio_set_volume(0)
         
         # Connect video player to window: https://github.com/devos50/vlc-pyqt5-example
         if sys.platform == "win32": # for Windows
@@ -187,7 +190,7 @@ class Video(QtWidgets.QWidget):
         self.volume_button = QtWidgets.QPushButton()
         self.base_width = self.volume_button.size().width()
         self.volume_button.setCheckable(True)
-        self.volume_button.clicked.connect(self.show_volume_slider)
+        self.volume_button.clicked.connect(self.volume_mute)
         self.volume_button.setIcon(self.volumeButtonIcons[int(self.isMuted)])
         #self.volume_button.size().setHeight(self.buttonSizeHeight)
         #self.volume_button.setMinimumHeight(self.buttonSizeHeight)
@@ -256,11 +259,22 @@ class Video(QtWidgets.QWidget):
      def set_cefr(self, new_cefr):
          self.cefr_cur = new_cefr
 
-     def show_volume_slider(self):
+     def volume_mute(self):#show_volume_slider(self):
+        if self.volume_slider.value() != 0:
+            self.old_volume = self.volume_slider.value()
+            #self.player.audio_set_volume(0)
+            self.volume_slider.setValue(0)
+            self.isMuted = True
+        else:
+            self.volume_slider.setValue(self.old_volume)
+            self.isMuted = False
+        self.volume_button.setIcon(self.volumeButtonIcons[int(self.isMuted)])
+        '''
         if self.volume_slider.isVisible():
             self.volume_slider.hide()
         else:
             self.volume_slider.show()
+        '''
 
      def set_play_button_style(self):
          self.isPaused = not self.player.is_playing()
@@ -364,7 +378,12 @@ class Video(QtWidgets.QWidget):
          '''
      def choose_ex_ind(self, ind_list):
          try:
-            self.ind_to_stop_at_stack.append(min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2]))))
+            ind = min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2])))
+            self.ind_to_stop_at_stack.append(ind)
+            if self.cur_ex_ind % 3 == 0: # ddo exercise type 1 every 3 exercises
+                word_data = self.get_word_data_from_sub(ind)[0]
+                self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[1]+'</b></font>', self.subs_orig[ind].text)
+                self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
          except: return
 
      def get_word_data_from_sub(self, ind):
