@@ -137,8 +137,8 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(path.join("back_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt"))
-        self.subs_cur = pysrt.open(path.join("back_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng copy.srt"))
+        self.subs_orig = pysrt.open(path.join("subtitles", "fr_modified.srt"))
+        self.subs_cur = pysrt.open(path.join("subtitles", "fr_modified.srt"))
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
         #self.sub_to_pause_at = [1, 12]
@@ -257,7 +257,7 @@ class Video(QtWidgets.QWidget):
      def set_play_button_style(self):
          self.isPaused = not self.player.is_playing()
          if self.player.is_playing():
-             self.player.video_set_subtitle_file(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"))
+             self.player.video_set_subtitle_file(path.join("front_end", "fr_cleaned.srt"))
              #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
@@ -324,9 +324,10 @@ class Video(QtWidgets.QWidget):
          sub_ind_list = []
          for ind in range(len(self.subs_orig)):
              sub_time = self.sub_time_to_timedelta(self.subs_orig[ind].start)
-             if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
-                 word= self.get_word_data_from_sub(ind)#re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
-                 if word: # if subtitle contains a word of interest
+             word= self.get_word_data_from_sub(ind)
+             if word: # if subtitle contains a word of interest
+                 self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text) # clean subtitle for later displaying
+                 if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
                      sub_ind_list.append(ind)
              elif sub_time > up_time_bound and ex_counter < self.num_exercises:
                  self.sub_ind_for_ex.append(sub_ind_list.copy())
@@ -334,8 +335,10 @@ class Video(QtWidgets.QWidget):
                  ex_counter+=1
                  low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
                  up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
+         self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
          print(self.sub_ind_for_ex)
          self.choose_ex_ind(self.sub_ind_for_ex[0])
+         print(self.ind_to_stop_at_stack)
              
              
          '''
@@ -347,7 +350,9 @@ class Video(QtWidgets.QWidget):
          self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')
          '''
      def choose_ex_ind(self, ind_list):
-         self.ind_to_stop_at_stack.append(min(ind_list, key = lambda x: abs(self.cefr_cur - self.get_word_data_from_sub(x)[2])))
+         try:
+            self.ind_to_stop_at_stack.append(min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2]))))
+         except: return
 
      def get_word_data_from_sub(self, ind):
          return re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
