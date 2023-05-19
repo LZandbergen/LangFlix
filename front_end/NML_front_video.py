@@ -34,6 +34,18 @@ class MainWindow(QMainWindow):
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
+        def switchAppOff():
+            if self.video.appOnToggle.isChecked():
+                self.video.appOnToggle.setStyleSheet("background-color : lightblue")
+                self.video.videoEventManager.event_detach(vlc.EventType.MediaPlayerPositionChanged)
+                self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
+            else:
+                self.video.appOnToggle.setStyleSheet("background-color : lightgrey")
+                self.video.videoEventManager.event_detach(vlc.EventType.MediaPlayerPositionChanged)
+                self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.video.update_time_slider()) 
+
+        self.video.appOnToggle.clicked.connect(switchAppOff)
+
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
         #exercise_text.setFont(QtGui.QFont(families[0]))
@@ -511,6 +523,7 @@ class MainWindow(QMainWindow):
         def react_to_time_change(indices):
             #update slider position
             self.video.time_slider.setValue(self.video.player.get_position()*1000)
+            # update time text
             total_time = str(timedelta(microseconds = self.video.player.get_length()*1000)).split('.')[0]
             cur_time = str(timedelta(microseconds = self.video.player.get_time()*1000)).split('.')[0]
             self.video.time_text.setText(f'{cur_time}/{total_time}')

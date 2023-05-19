@@ -209,6 +209,11 @@ class Video(QtWidgets.QWidget):
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPaused, lambda x: self.set_play_button_style()) 
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
 
+        # add turn LangFlix on/off toggle to the video window
+        self.appOnToggle = QtWidgets.QPushButton("Toggle")
+        self.appOnToggle.setCheckable(True)
+        self.appOnToggle.setStyleSheet("background-color : lightgrey")
+
         #time value
         self.time_text = QtWidgets.QLineEdit()
         self.time_text.setReadOnly(True)
@@ -233,10 +238,12 @@ class Video(QtWidgets.QWidget):
         self.video_layout.setSpacing(0)
         self.video_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.video_buttons.addWidget(self.play_button, 2)
-        self.video_buttons.addWidget(self.volume_button, 2)
+        self.video_buttons.addWidget(self.play_button, 1)
+        self.video_buttons.addWidget(self.appOnToggle, 2)
+        self.video_buttons.addWidget(self.volume_button, 1)
         self.video_buttons.addWidget(self.volume_slider, 3)
         self.video_buttons.addWidget(self.time_text, 3)
+
         self.video_menuBar.addWidget(self.time_slider)
         self.video_menuBar.addLayout(self.video_buttons)
 
@@ -315,6 +322,12 @@ class Video(QtWidgets.QWidget):
      def on_time_slider_released(self):
          self.time_slider.setStyleSheet(slider_style)
          self.player.play()
+
+     def update_time_slider(self):
+         self.time_slider.setValue(self.player.get_position()*1000)
+         total_time = str(timedelta(microseconds = self.player.get_length()*1000)).split('.')[0]
+         cur_time = str(timedelta(microseconds = self.player.get_time()*1000)).split('.')[0]
+         self.time_text.setText(f'{cur_time}/{total_time}')
 
      #how do we want to cue pausing? Should we use a dictionary with subtitle index to pause at, exercise type and the text to use for execise?
      #how do i schedule video pause at given time?
