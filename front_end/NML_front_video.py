@@ -36,11 +36,23 @@ class MainWindow(QMainWindow):
 
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
-                self.video.appOnToggle.setStyleSheet("background-color : lightblue")
+                self.video.appOnToggle.setStyleSheet("""QPushButton
+                                      {background-color: lightblue; 
+                                       color: white;
+                                       border-radius: 6px;
+                                       border: 1px solid;
+                                       border-style: solid;
+                                       font-weight: 750;}""")
                 self.video.videoEventManager.event_detach(vlc.EventType.MediaPlayerPositionChanged)
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
             else:
-                self.video.appOnToggle.setStyleSheet("background-color : lightgrey")
+                self.video.appOnToggle.setStyleSheet("""QPushButton
+                                      {background-color: grey; 
+                                       color: white;
+                                       border-radius: 6px;
+                                       border: 1px solid;
+                                       border-style: solid;
+                                       font-weight: 750;}""")
                 self.video.videoEventManager.event_detach(vlc.EventType.MediaPlayerPositionChanged)
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.video.update_time_slider()) 
 

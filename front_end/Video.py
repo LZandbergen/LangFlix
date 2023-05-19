@@ -210,9 +210,15 @@ class Video(QtWidgets.QWidget):
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
 
         # add turn LangFlix on/off toggle to the video window
-        self.appOnToggle = QtWidgets.QPushButton("Toggle")
+        self.appOnToggle = QtWidgets.QPushButton("LangFlix")
         self.appOnToggle.setCheckable(True)
-        self.appOnToggle.setStyleSheet("background-color : lightgrey")
+        self.appOnToggle.setStyleSheet("""QPushButton
+                                      {background-color: grey; 
+                                       color: white;
+                                       border-radius: 6px;
+                                       border: 1px solid;
+                                       border-style: solid;
+                                       font-weight: 750;}""")
 
         #time value
         self.time_text = QtWidgets.QLineEdit()
