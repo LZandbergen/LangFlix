@@ -130,7 +130,7 @@ class Video(QtWidgets.QWidget):
 
         self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
 
-        self.ind_to_stop_at_stack = [5] # stack to store next subtitle to pause at
+        self.ind_to_stop_at_stack = [] # stack to store next subtitle to pause at
         
         self.cur_ex_ind = 0 # current exercise index
 
@@ -139,8 +139,8 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(path.join("subtitles", "FRENCH_Détox_Off.the.Hook.English.S01E01.srt"))
-        self.subs_cur = pysrt.open(path.join("subtitles", "FRENCH_Détox_Off.the.Hook.English.S01E01.srt"))
+        self.subs_orig = pysrt.open(path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
+        self.subs_cur = pysrt.open(path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
         #self.sub_to_pause_at = [1, 12]
@@ -372,7 +372,7 @@ class Video(QtWidgets.QWidget):
              sub_time = self.sub_time_to_timedelta(self.subs_orig[ind].start)
              word= self.get_word_data_from_sub(ind)
              if word: # if subtitle contains a word of interest
-                 self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text) # clean subtitle for later displaying
+                 self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text) # clean subtitle for later displaying
                  if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
                      sub_ind_list.append(ind)
              elif sub_time > up_time_bound and ex_counter < self.num_exercises:
@@ -399,14 +399,14 @@ class Video(QtWidgets.QWidget):
          try:
             ind = min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2])))
             self.ind_to_stop_at_stack.append(ind)
-            if self.cur_ex_ind % 3 == 0: # ddo exercise type 1 every 3 exercises
+            if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
-                self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[1]+'</b></font>', self.subs_orig[ind].text)
+                self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[1]+'</b></font>', self.subs_cur[ind].text)
                 self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
          except: return
 
      def get_word_data_from_sub(self, ind):
-         return re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
+         return re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
          
      def sub_time_to_timedelta(self, time):
          return timedelta(hours=time.hours, minutes=time.minutes, 

@@ -252,6 +252,7 @@ class MainWindow(QMainWindow):
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         def switchToExercise():
             stackedLayout.setCurrentIndex(0)
+            exercise_tab.setHidden(False)
             exercise_tab.setVisible(True)
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
@@ -554,11 +555,18 @@ class MainWindow(QMainWindow):
             if player_time >= sub_time and player_time <= up_time_bound:
                 self.video.player.pause()
                 self.video.play_button.setEnabled(False)
-                target_word_data = self.video.get_word_data_from_sub(ind+1)[0]
-                sentence = re.sub(target_word_data[0], '_____', self.video.subs_cur[ind+1])
-                words = [target_word_data[1]] #list of answer options
-                random.shuffle(words) # shuffle word order
-                generateExercise(sentence, words[0], words[1], words[2], target_word_data[1])
+                ex_type = 1
+                if self.video.cur_ex_ind % 3 != 0: 
+                    ind += 1 # if it is exercise type 3 increment the index to target the future subtitle
+                    ex_type = 3
+                target_word_data = self.video.get_word_data_from_sub(ind)[0]
+                word_options = target_word_data[3][1:-1].split(', ') #list of answer options
+                if len(word_options) == 1: word_options.append('')
+                sentence = re.sub(target_word_data[0], '_____', self.video.subs_cur[ind])
+                #words = [target_word_data[1]] 
+                word_options.append(target_word_data[1])
+                random.shuffle(word_options) # shuffle word order
+                generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
                 self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])

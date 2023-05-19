@@ -115,12 +115,12 @@ No.
 
 28
 00:02:25,400 --> 00:02:27,000
-- <i>How are you, darling?</i>
+- How are you, darling?
 - Fine.
 
 29
 00:02:27,080 --> 00:02:29,520
-- <i>Aren't you at the hotel?</i>
+- Aren't you at the hotel?
 - No, I'm off today.
 
 30
@@ -140,8 +140,8 @@ on your iPhone?</i>
 
 33
 00:02:35,320 --> 00:02:38,120
-<i>Otherwise, your phone won't be performing
-to its maximum ability.</i>
+Otherwise, your <font color=#00D1FF weight=750><b>téléphone</b></font> won't be performing
+to its maximum ability.
 
 34
 00:02:38,200 --> 00:02:39,240
@@ -149,7 +149,7 @@ Really?
 
 35
 00:02:39,320 --> 00:02:42,040
-- <i>Ah! I'm back on. Take care, darling.</i>
+- Ah! I'm back on. Take care, darling.
 - Okay.
 
 36
@@ -159,18 +159,18 @@ the latest update on his vision.</i>
 
 37
 00:02:46,560 --> 00:02:49,400
-<i>I had a new haircut two days ago
-and he still hasn't noticed.</i>
+I had a new haircut two days ago
+and he still hasn't noticed.
 
 38
 00:02:49,480 --> 00:02:51,600
 - Mm-hm.
-- <i>Anyway, the reason for my call is to talk</i>
+- Anyway, the reason for my call is to talk
 
 39
 00:02:51,680 --> 00:02:53,840
-<i>to you about a dating app
-that sounds great.</i>
+to you about a dating app
+that sounds great.
 
 40
 00:02:53,920 --> 00:02:55,080
@@ -456,12 +456,12 @@ LOL HER SONG SUCKS
 
 101
 00:05:14,240 --> 00:05:16,840
-<i>♪ In the hood, get into the circle
-Let's do this freestyle ♪</i>
+♪ In the hood, get into the circle
+Let's do this freestyle ♪
 
 102
 00:05:16,920 --> 00:05:18,760
-- <i>♪ Yes, so much courage ♪</i>
+- ♪ Yes, so much courage ♪
 - [sighs]
 
 103
@@ -479,8 +479,8 @@ As long as it pays ♪</i>
 
 106
 00:05:26,280 --> 00:05:29,000
-<i>♪ Artist of a system
-That dares the worst ♪</i>
+♪ Artist of a system
+That dares the worst ♪
 
 107
 00:05:29,080 --> 00:05:32,440
@@ -550,7 +550,7 @@ See you later.
 121
 00:06:18,920 --> 00:06:20,480
 [in French]
-<i>♪ I hear your name ♪</i>
+♪ I hear your name ♪
 
 122
 00:06:20,960 --> 00:06:23,040
@@ -562,7 +562,7 @@ See you later.
 
 124
 00:06:26,200 --> 00:06:27,960
-<i>♪ In your world ♪</i>
+♪ In your world ♪
 
 125
 00:06:28,520 --> 00:06:30,600
@@ -570,7 +570,7 @@ See you later.
 
 126
 00:06:30,680 --> 00:06:32,640
-<i>♪ There's a problem ♪</i>
+♪ There's a problem ♪
 
 127
 00:06:33,320 --> 00:06:37,040
@@ -975,8 +975,8 @@ would end badly.</i>
 
 217
 00:10:35,880 --> 00:10:38,560
-<i>Tell me when you wanna come home
-to Corsica. I'll buy your ticket.</i>
+Tell me when you wanna come home
+to Corsica. I'll buy your ticket.
 
 218
 00:10:38,640 --> 00:10:41,120
@@ -1809,8 +1809,8 @@ Whoo!
 
 400
 00:17:59,920 --> 00:18:02,336
-[man on PA] <i>Ladies and gentlemen,
-due to an accident on the line,</i>
+[man on PA] Ladies and gentlemen,
+due to an accident on the line,
 
 401
 00:18:02,360 --> 00:18:03,440
@@ -2871,7 +2871,7 @@ a giant notification,
 635
 00:27:57,400 --> 00:27:59,920
 you pop up without warning
-even when no one asked you a thing.
+even when no one asked you a thing.###one:une:7.0###
 
 636
 00:28:00,000 --> 00:28:01,920
