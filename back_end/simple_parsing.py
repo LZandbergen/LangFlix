@@ -5,6 +5,7 @@ import re
 from wordfreq import zipf_frequency
 import time
 from os import path
+from distractor_words import get_alternate_words
 
 def load_parser(target_language="es", native_language="en"):
     """ Loads NLP parser and translator object, input should be string of language code.
@@ -47,7 +48,7 @@ def parse_subtitle_text(sub):
     new = expression.sub("", sub.text)
     return new
 
-def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modified_moneyheist_s01e01.srt"):
+def process_subtitles(x_subs, en_subs, language_abbreviation, distractor_file=False, save_file = "modified_moneyheist_s01e01.srt"):
     nlp, translator = load_parser(target_language=language_abbreviation)
     word_freq_dict = dict()
     noun_translations = []
@@ -72,8 +73,8 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modif
                 subs = x_subs.slice(starts_after=en_sub.start -
                                     2000, ends_before=en_sub.end + 2000)
                 
-                if not is_word_spoken(subs, x_word):
-                    print(f"word:{en_word_str}, translation:{x_word}, x_subs_index: {[item.index for item in subs]}")
+                # if not is_word_spoken(subs, x_word):
+                #     print(f"word:{en_word_str}, translation:{x_word}, x_subs_index: {[item.index for item in subs]}")
 
                 # Adds a word with its frequency to the dictionary if it is an actual translation
                 if (en_word_str != "unknown" and len(x_word) > 1 and
@@ -85,8 +86,16 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, save_file = "modif
                     word_freq_dict[x_word] = word_frequency
                     noun_translations.append((x_word, en_word))
 
-                    #Adds information to the line in the srt file for processing
-                    en_subs[i].text = en_text + f"###{en_word}:{x_word}:{word_frequency}###"
+                    # Find distractor words to use for exercises
+                    if distractor_file != False:
+                        try:
+                            distractors = get_alternate_words(frequency=word_frequency, sample_size=2, filename=distractor_file)
+                            en_subs[i].text = en_text + f"###{en_word}:{x_word}:{word_frequency}:[{', '.join(distractors)}]###"
+                        except:
+                            en_subs[i].text = en_text + f"###{en_word}:{x_word}:{word_frequency}###"    
+                    else:
+                        #Adds information to the line in the srt file for processing
+                        en_subs[i].text = en_text + f"###{en_word}:{x_word}:{word_frequency}###"    
     
     #Save modifications of added information to a new srt file
     # en_subs.save(path.join('back_end', save_file))
@@ -98,17 +107,22 @@ def main():
     # en_location = "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt"
     # foreign_language = "de"
 
-    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr"],
-     ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de"],
-     ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es"],]
+    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr", "FRENCH_Detox_S01E01_Dict.json"],
+        ["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E02.srt", "fr", "FRENCH_Detox_S01E02_Dict.json"],
+        ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de", "GERMAN_Drugs_Online_S01E01_Dict.json"],
+        ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E02.English.srt", "de", "GERMAN_Drugs_Online_S01E02_Dict.json"],
+        ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es", "SPANISH_Machos_Alpha_S01E01_Dict.json"],
+        ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E02.srt", "es", "SPANISH_Machos_Alpha_S01E02_Dict.json"]]
     
-    for x_location, en_location, foreign_language in files_list:
+    for x_location, en_location, foreign_language, distractor_file in files_list:
         # Time when starting the run, to determine how long it took at the end
         start = time.time()
 
+        save_location = x_location.split("/")[1]
+
         # foreign_language = 'es'
         x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
-        word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, save_file=f"subtitles/{foreign_language}_modified.srt")
+        word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, distractor_file=distractor_file, save_file=f"subtitles/MODIFIED_{save_location}")
         
         print("Dictionary with word frequencies\n", word_freq_dict)
         print("\nList of nouns and their translations\n", noun_translations)

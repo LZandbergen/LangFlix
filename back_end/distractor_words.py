@@ -71,4 +71,5 @@ files_list = [["fr", "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "
               ["es", "subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "SPANISH_Machos_Alpha_S01E02_Dict.json"]]
 
 # for language, file_name, save_name in files_list:
-create_dictionary("es", "subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "SPANISH_Machos_Alpha_S01E02_Dict.json")
+if __name__ == "__main__":
+    create_dictionary("es", "subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "SPANISH_Machos_Alpha_S01E02_Dict.json")
