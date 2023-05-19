@@ -247,13 +247,19 @@ class MainWindow(QMainWindow):
 
         # Functions for switching between tabs
         def switchToDict():
+            dictionary_tab.moveToThread(tabs_layout.thread())
             stackedLayout.setCurrentIndex(1)
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         def switchToExercise():
+            stackedLayout.moveToThread(self.thread())
+            print(1)
             stackedLayout.setCurrentIndex(0)
+            print(2)
             exercise_tab.setHidden(False)
+            print(3)
             exercise_tab.setVisible(True)
+            print(4)
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
 
@@ -335,9 +341,10 @@ class MainWindow(QMainWindow):
         page1Layout.addLayout(buttons_stackedLayout)
         page1.setLayout(page1Layout)
         stackedLayout.addWidget(page1)
+        '''
         # Generate text for the exercise
         generateExercise("Sentence with 'quotation' marks.", "word1", "word2", "word3", "word1")
-        
+        '''
         # Function to add a new word to dictionary
         def addWordToDict(word, translation):
             row = QtWidgets.QHBoxLayout()
@@ -562,15 +569,15 @@ class MainWindow(QMainWindow):
                 target_word_data = self.video.get_word_data_from_sub(ind)[0]
                 word_options = target_word_data[3][1:-1].split(', ') #list of answer options
                 if len(word_options) == 1: word_options.append('')
-                sentence = re.sub(target_word_data[0], '_____', self.video.subs_cur[ind])
+                sentence = re.sub(r''+target_word_data[0], '_____', self.video.subs_cur[ind].text)
                 #words = [target_word_data[1]] 
                 word_options.append(target_word_data[1])
                 random.shuffle(word_options) # shuffle word order
-                generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
-                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
                 self.video.ind_to_stop_at_stack.pop(0)
+                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+                generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
 
     # function for showing and hiding screen elements
     def showLayoutChildren(self, layout, show = True):
