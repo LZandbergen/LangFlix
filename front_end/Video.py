@@ -404,7 +404,7 @@ class Video(QtWidgets.QWidget):
             self.ind_to_stop_at_stack.append(ind)
             if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
-                self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[1]+'</b></font>', self.subs_cur[ind].text)
+                self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[0]+'</b></font>', self.subs_cur[ind].text)
                 self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
          except: return
 

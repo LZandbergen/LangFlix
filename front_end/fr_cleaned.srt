@@ -140,7 +140,7 @@ on your iPhone?</i>
 
 33
 00:02:35,320 --> 00:02:38,120
-Otherwise, your <font color=#00D1FF weight=750><b>téléphone</b></font> won't be performing
+Otherwise, your <font color=#00D1FF weight=750><b>phone</b></font> won't be performing
 to its maximum ability.
 
 34

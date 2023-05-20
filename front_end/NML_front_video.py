@@ -158,6 +158,7 @@ class MainWindow(QMainWindow):
                     pixmap = QtGui.QPixmap(path.join("front_end", "correct.png"))
                     cor_incor_icon.setPixmap(pixmap)
                     buttons_stackedLayout.setCurrentIndex(1)
+                    addWordToDict(self.correct_word, "translation")
                     rb.setStyleSheet('''QRadioButton 
                                             {padding-left: 40px; color: #00D1FF; font-weight: 700; font-size: 15px; background-color: #1E1E1E;}
                                         QRadioButton::indicator::unchecked
@@ -196,6 +197,7 @@ class MainWindow(QMainWindow):
                 self.num -= 1
                 skip_button.setText("Skip (" + str(self.num) + ")")
                 switchToDict()
+                buttons_stackedLayout.setCurrentIndex(0)
                 exercise_tab.setHidden(True)
                 self.video.play_button.setEnabled(True)
                 self.video.player.play()
@@ -221,6 +223,8 @@ class MainWindow(QMainWindow):
         # Function to finish exercise and resume video  
         def Continue():
             switchToDict()
+            cor_incor_text.setText("") #hide (in)correct message
+            buttons_stackedLayout.setCurrentIndex(0)
             exercise_tab.setHidden(True)
             self.video.play_button.setEnabled(True)
             self.video.player.play()
@@ -254,14 +258,10 @@ class MainWindow(QMainWindow):
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         def switchToExercise():
-            stackedLayout.moveToThread(self.thread())
-            print(1)
+            #stackedLayout.moveToThread(self.thread())
             stackedLayout.setCurrentIndex(0)
-            print(2)
             exercise_tab.setHidden(False)
-            print(3)
             exercise_tab.setVisible(True)
-            print(4)
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
 
@@ -323,7 +323,7 @@ class MainWindow(QMainWindow):
             rb_text3.setText(word3)
             self.correct_word = cor_word
             #switchToExercise()
-
+        # connect the cue exercise signal to the switchToExercise function, because they happen in different threads
         self.video.cue_ex_sig.connect(switchToExercise)
 
         # Create the exercise page       
