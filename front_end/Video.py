@@ -117,6 +117,9 @@ border-radius: 6px;
 """
 
 class Video(QtWidgets.QWidget):
+     
+     cue_ex_sig = QtCore.Signal()
+
      def __init__(self):
         super().__init__()
 
@@ -411,3 +414,5 @@ class Video(QtWidgets.QWidget):
      def sub_time_to_timedelta(self, time):
          return timedelta(hours=time.hours, minutes=time.minutes, 
                              seconds=time.seconds, microseconds=time.milliseconds * 1000) 
+     
+     

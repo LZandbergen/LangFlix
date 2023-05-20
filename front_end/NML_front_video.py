@@ -34,6 +34,8 @@ class MainWindow(QMainWindow):
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
+        #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
+
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
                 self.video.appOnToggle.setStyleSheet("""QPushButton
@@ -320,7 +322,9 @@ class MainWindow(QMainWindow):
             rb_text2.setText(word2)
             rb_text3.setText(word3)
             self.correct_word = cor_word
-            switchToExercise()
+            #switchToExercise()
+
+        self.video.cue_ex_sig.connect(switchToExercise)
 
         # Create the exercise page       
         page1 = QtWidgets.QWidget()
@@ -578,6 +582,7 @@ class MainWindow(QMainWindow):
                 self.video.ind_to_stop_at_stack.pop(0)
                 self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
                 generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
+                self.video.cue_ex_sig.emit()
 
     # function for showing and hiding screen elements
     def showLayoutChildren(self, layout, show = True):
