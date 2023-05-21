@@ -122,9 +122,11 @@ class Video(QtWidgets.QWidget):
      def __init__(self):
         super().__init__()
 
-        self.cefr_start = 'A2' #cefr
-        self.zipf = -1
-        self.cefr_cur = 5.0 #zipf
+        #self.cefr_start = 'A2' #cefr
+        #self.cefr_cur = 5.0 #zipf
+
+        self.zipf_start = -1
+        self.zipf_cur = self.zipf_start
 
         #self.time_between_ex = 60 * 10**6 #time intervals between exercises
         #self.ex_counter = 1 #counter for number of exercises so far
@@ -269,14 +271,17 @@ class Video(QtWidgets.QWidget):
             else:
                 layout.itemAt(i).widget().hide()
      """
-     def get_cefr(self):
-         return self.cefr_cur
+    #  def get_cefr(self):
+    #      return self.cefr_cur
      
-     def set_cefr(self, new_cefr):
-         self.cefr_cur = new_cefr
+    #  def set_cefr(self, new_cefr):
+    #      self.cefr_cur = new_cefr
 
+     def get_current_zipf(self):
+         return self.zipf_cur
+     
      def set_zipf(self, new_zipf):
-         self.zipf = new_zipf
+         self.zipf_start = new_zipf
 
      def volume_mute(self):#show_volume_slider(self):
         if self.volume_slider.value() != 0:
@@ -376,11 +381,12 @@ class Video(QtWidgets.QWidget):
          sub_ind_list = []
          for ind in range(len(self.subs_orig)):
              sub_time = self.sub_time_to_timedelta(self.subs_orig[ind].start)
-             word= self.get_word_data_from_sub(ind)
+             word = self.get_word_data_from_sub(ind)
              if word: # if subtitle contains a word of interest
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text) # clean subtitle for later displaying
                  if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
                      sub_ind_list.append(ind)
+
              elif sub_time > up_time_bound and ex_counter < self.num_exercises:
                  self.sub_ind_for_ex.append(sub_ind_list.copy())
                  sub_ind_list = []
@@ -403,7 +409,7 @@ class Video(QtWidgets.QWidget):
          '''
      def choose_ex_ind(self, ind_list):
          try:
-            ind = min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2])))
+            ind = min(ind_list, key = lambda x: abs(self.zipf_cur - float(self.get_word_data_from_sub(x)[0][2])))
             self.ind_to_stop_at_stack.append(ind)
             if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
