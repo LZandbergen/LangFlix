@@ -10,7 +10,6 @@ import sys
 from datetime import timedelta
 from os import path
 import numpy as np
-#from back_end. import Class (Class has cefr to zip function)
 
 slider_style = """
 QSlider::groove:horizontal {
@@ -124,6 +123,7 @@ class Video(QtWidgets.QWidget):
         super().__init__()
 
         self.cefr_start = 'A2' #cefr
+        self.zipf = -1
         self.cefr_cur = 5.0 #zipf
 
         #self.time_between_ex = 60 * 10**6 #time intervals between exercises
@@ -274,6 +274,9 @@ class Video(QtWidgets.QWidget):
      
      def set_cefr(self, new_cefr):
          self.cefr_cur = new_cefr
+
+     def set_zipf(self, new_zipf):
+         self.zipf = new_zipf
 
      def volume_mute(self):#show_volume_slider(self):
         if self.volume_slider.value() != 0:

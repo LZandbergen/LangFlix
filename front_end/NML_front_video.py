@@ -505,19 +505,11 @@ class MainWindow(QMainWindow):
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
             self.video.cefr_start = self.CEFRlevel # set cefr variable of the video object
-            print("in func - CEFR LEVEL=",self.CEFRlevel)
-            print("in func - TYPE =", type(self.CEFRlevel))
-            self.zipflevel = cefr_to_zipf_func(self.CEFRlevel)
-            
+            self.video.set_zipf(cefr_to_zipf_func(self.CEFRlevel[0]))
             
         setLevel_button.clicked.connect(switchToMain)
-        print("df", self.zipflevel)
-        # print("CEFR LEVEL TYPE = ", type(self.CEFRlevel))
-        # print("REAL LEVEL =", self.CEFRlevel)
-        # zipf_level = cefr_to_zipf_func(self.CEFRlevel)
-        # print("ZIPF LEVEL + ", zipf_level)
         
-
+    
         # Wrapping the levels page in layouts
         a_layout = QtWidgets.QHBoxLayout()
         b_layout = QtWidgets.QHBoxLayout()
