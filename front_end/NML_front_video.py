@@ -10,6 +10,7 @@ from os import path
 from Video import Video
 import re
 import random
+from cefr_to_zipf import cefr_to_zipf_func
 
 
 class MainWindow(QMainWindow):
@@ -513,9 +514,11 @@ class MainWindow(QMainWindow):
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
             self.video.cefr_start = self.CEFRlevel # set cefr variable of the video object
-            print(self.CEFRlevel)
+            self.video.set_zipf(cefr_to_zipf_func(self.CEFRlevel[0]))
+            
         setLevel_button.clicked.connect(switchToMain)
-
+        
+    
         # Wrapping the levels page in layouts
         a_layout = QtWidgets.QHBoxLayout()
         b_layout = QtWidgets.QHBoxLayout()

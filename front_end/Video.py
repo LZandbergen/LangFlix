@@ -10,7 +10,6 @@ import sys
 from datetime import timedelta
 from os import path
 import numpy as np
-#from back_end. import Class (Class has cefr to zip function)
 
 slider_style = """
 QSlider::groove:horizontal {
@@ -120,19 +119,19 @@ class Video(QtWidgets.QWidget):
      
      cue_ex_sig = QtCore.Signal()
 
-     def __init__(self, video_file, sub_file_l1, sub_file_l2):
+     def __init__(self):
         super().__init__()
 
-        self.cefr_start = 'A2' #cefr
-        self.cefr_cur = 5.0 #zipf
+        #self.cefr_start = 'A2' #cefr
+        #self.cefr_cur = 5.0 #zipf
 
-        self.subs_are_dual = False
+        self.zipf_start = -1
+        self.zipf_cur = self.zipf_start
 
         #self.time_between_ex = 60 * 10**6 #time intervals between exercises
         #self.ex_counter = 1 #counter for number of exercises so far
 
         self.num_exercises = 10 # number of exercises per video
-        self.num_correct_ex = []
 
         self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
 
@@ -145,17 +144,14 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(sub_file_l1)#path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
-        self.subs_cur = pysrt.open(sub_file_l1)#path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
-
-        self.subs_l2 = pysrt.open(sub_file_l2)
+        self.subs_orig = pysrt.open(path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
+        self.subs_cur = pysrt.open(path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
         #self.sub_to_pause_at = [1, 12]
         #self.timer = QtCore.QTimer()
         #self.timer.timeout.connect(self.timerEvent)
         self.prep_subs()
-        self.make_dual_subs()
         #self.buttonSizeHeight = self.size().height()/10 * 3
 
         self.volumeButtonIcons = [QtGui.QIcon(path.join("front_end", "icons8-speaker-50.png")),
@@ -172,11 +168,8 @@ class Video(QtWidgets.QWidget):
         # instantiate video player
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
-        self.media = Instance.media_new(video_file)#path.join("shows", "French","S01E01 Are We Shtty.mkv"))
+        self.media = Instance.media_new(path.join("shows", "French","S01E01 Are We Shtty.mkv"))
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
-        #self.player.add_slave(0, path.join("front_end", "subs_cleaned.srt"), True)
-        #self.player.add_slave(0, path.join("front_end", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), True)
-
         self.player.set_media(self.media) 
         self.player.audio_set_volume(0)
         
@@ -278,11 +271,17 @@ class Video(QtWidgets.QWidget):
             else:
                 layout.itemAt(i).widget().hide()
      """
-     def get_cefr(self):
-         return self.cefr_cur
+    #  def get_cefr(self):
+    #      return self.cefr_cur
      
-     def set_cefr(self, new_cefr):
-         self.cefr_cur = new_cefr
+    #  def set_cefr(self, new_cefr):
+    #      self.cefr_cur = new_cefr
+
+     def get_current_zipf(self):
+         return self.zipf_cur
+     
+     def set_zipf(self, new_zipf):
+         self.zipf_start = new_zipf
 
      def volume_mute(self):#show_volume_slider(self):
         if self.volume_slider.value() != 0:
@@ -304,12 +303,8 @@ class Video(QtWidgets.QWidget):
      def set_play_button_style(self):
          self.isPaused = not self.player.is_playing()
          if self.player.is_playing():
-             if self.subs_are_dual:
-                 self.player.video_set_subtitle_file(path.join("front_end", "subs_cleaned_dual.srt"))
-             else:
-                 self.player.video_set_subtitle_file(path.join("front_end", "subs_cleaned.srt"))
-             #self.player.add_slave(path.join("front_end", "fr_cleaned.srt"), 'sub1', True)
-             #self.player.add_slave(path.join("front_end", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), 'sub2', True)
+             self.player.video_set_subtitle_file(path.join("front_end", "fr_cleaned.srt"))
+             #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
      def play_video(self):
@@ -378,27 +373,27 @@ class Video(QtWidgets.QWidget):
      '''
 
      def prep_subs(self):
-         #break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start) # get interval between exercises
-         #if break_time > timedelta(minutes = 3): 
-         break_time = timedelta(minutes = 3)
+         break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start) # get interval between exercises
+         if break_time > timedelta(minutes = 3): break_time = timedelta(minutes = 3)
          ex_counter = 1
          low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6) # lower search frame bound by 30 seconds
          up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6) # upper search frame bound by 60 seconds
          sub_ind_list = []
          for ind in range(len(self.subs_orig)):
              sub_time = self.sub_time_to_timedelta(self.subs_orig[ind].start)
-             word= self.get_word_data_from_sub(ind)
+             word = self.get_word_data_from_sub(ind)
              if word: # if subtitle contains a word of interest
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text) # clean subtitle for later displaying
                  if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
                      sub_ind_list.append(ind)
+
              elif sub_time > up_time_bound and ex_counter < self.num_exercises:
                  self.sub_ind_for_ex.append(sub_ind_list.copy())
                  sub_ind_list = []
                  ex_counter+=1
                  low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
                  up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
-         self.subs_cur.save(path.join("front_end", "subs_cleaned.srt"), encoding='utf-8')
+         self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
          print(self.sub_ind_for_ex)
          self.num_exercises = len(self.sub_ind_for_ex) # update number of exercises to the number of possible exercises
          self.choose_ex_ind(self.sub_ind_for_ex[0])
@@ -414,13 +409,12 @@ class Video(QtWidgets.QWidget):
          '''
      def choose_ex_ind(self, ind_list):
          try:
-            ind = min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2])))
-            print(self.get_word_data_from_sub(ind)[0][2])
+            ind = min(ind_list, key = lambda x: abs(self.zipf_cur - float(self.get_word_data_from_sub(x)[0][2])))
             self.ind_to_stop_at_stack.append(ind)
             if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
                 self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[0]+'</b></font>', self.subs_cur[ind].text)
-                self.subs_cur.save(path.join("front_end", "subs_cleaned.srt"), encoding='utf-8')
+                self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
          except: return
 
      def get_word_data_from_sub(self, ind):
@@ -429,33 +423,5 @@ class Video(QtWidgets.QWidget):
      def sub_time_to_timedelta(self, time):
          return timedelta(hours=time.hours, minutes=time.minutes, 
                              seconds=time.seconds, microseconds=time.milliseconds * 1000) 
-     
-     def make_dual_subs(self):
-         for ind in range(len(self.subs_l2)):
-             self.subs_l2[ind].text = '<font color=#F3E73C>'+self.subs_l2[ind].text+'</font>'
-         rsubs = self.subs_cur + self.subs_l2
-         rsubs.sort()
-         rsubs.clean_indexes()
-         rsubs.save (path.join("front_end", "subs_cleaned_dual.srt"), encoding='utf-8')
-
-     def adjust_difficulty(self):
-         print(self.num_correct_ex)
-         print(self.cefr_cur)
-         if len(self.num_correct_ex) == 3: # reevaluate the langauge level every 3 exercises
-             if sum(self.num_correct_ex) == 3: #if got 3 correct in a row increase level
-                 self.cefr_cur += 1
-             elif sum(self.num_correct_ex) == 1: #if got only 1 out of 3 correct in a row decrease level
-                 self.cefr_cur -= 1
-             while True: # remove the sequence of correct exercises preceding the wrong one
-                 try:
-                    ex = self.num_correct_ex.pop(0)
-                 except: break
-                 if ex == 0:
-                     break
-         print(self.num_correct_ex)
-         print(self.cefr_cur)
-             
-
-     
      
      
