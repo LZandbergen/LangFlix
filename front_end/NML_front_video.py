@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
 
         # create video window   
         #self.video = QtWidgets.QWidget()
-        self.video = Video() # video screen + player button toolbar
+        self.video = Video(path.join("shows", "French","S01E01 Are We Shtty.mkv"), path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.join("subtitles", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
@@ -150,13 +150,16 @@ class MainWindow(QMainWindow):
         # Function to check if the answer is correct
         def checkAnswer():
             cur_checked = '_'
+            is_correct = 0
             for rb, word in [[r_button1,rb_text1], [r_button2,rb_text2], [r_button3,rb_text3]]:
                 if rb.isChecked():
                     cur_checked = word.text()
                 if cur_checked == self.correct_word:
+                    is_correct = 1
                     cor_incor_text.setText("Great, correct!")
                     pixmap = QtGui.QPixmap(path.join("front_end", "correct.png"))
                     cor_incor_icon.setPixmap(pixmap)
+                    cor_incor_icon.setHidden(False)
                     buttons_stackedLayout.setCurrentIndex(1)
                     addWordToDict(self.correct_word, "translation")
                     rb.setStyleSheet('''QRadioButton 
@@ -168,15 +171,20 @@ class MainWindow(QMainWindow):
                                     ''')
                     break
                 else: 
-                    cor_incor_text.setText("Incorrect, try again")
+                    is_correct = 0
+                    cor_incor_text.setText("Incorrect, sorry")
                     pixmap = QtGui.QPixmap(path.join("front_end", "incorrect.png"))
                     cor_incor_icon.setPixmap(pixmap)
+                    cor_incor_icon.setHidden(False)
+            buttons_stackedLayout.setCurrentIndex(1)
+            self.video.num_correct_ex.append(is_correct)
+            self.video.adjust_difficulty()
         submit_button.clicked.connect(checkAnswer)                             
 
 
-        self.num = 3 # Number of skips                                                      
+        self.skip_num = 3 # Number of skips                                                      
         # Styling Skip button
-        skip_button = QtWidgets.QPushButton("Skip (" + str(self.num) + ")")
+        skip_button = QtWidgets.QPushButton("Skip (" + str(self.skip_num) + ")")
         #skip_button.setFont(QtGui.QFont(families[0]))
         skip_button.setStyleSheet("""QPushButton
                                        {background-color: #1E1E1E; 
@@ -193,9 +201,9 @@ class MainWindow(QMainWindow):
                
         # Function to skip exercise
         def skip():
-            if self.num:
-                self.num -= 1
-                skip_button.setText("Skip (" + str(self.num) + ")")
+            if self.skip_num:
+                self.skip_num -= 1
+                skip_button.setText("Skip (" + str(self.skip_num) + ")")
                 switchToDict()
                 buttons_stackedLayout.setCurrentIndex(0)
                 exercise_tab.setHidden(True)
@@ -224,6 +232,7 @@ class MainWindow(QMainWindow):
         def Continue():
             switchToDict()
             cor_incor_text.setText("") #hide (in)correct message
+            cor_incor_icon.setHidden(True)
             buttons_stackedLayout.setCurrentIndex(0)
             exercise_tab.setHidden(True)
             self.video.play_button.setEnabled(True)
