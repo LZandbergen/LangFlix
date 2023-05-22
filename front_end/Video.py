@@ -220,6 +220,7 @@ class Video(QtWidgets.QWidget):
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPaused, lambda x: self.set_play_button_style()) 
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
 
+        '''
         # add turn LangFlix on/off toggle to the video window
         self.appOnToggle = QtWidgets.QPushButton("LangFlix")
         self.appOnToggle.setCheckable(True)
@@ -230,6 +231,7 @@ class Video(QtWidgets.QWidget):
                                        border: 1px solid;
                                        border-style: solid;
                                        font-weight: 750;}""")
+        '''
 
         #time value
         self.time_text = QtWidgets.QLineEdit()
@@ -256,7 +258,7 @@ class Video(QtWidgets.QWidget):
         self.video_layout.setContentsMargins(0, 0, 0, 0)
 
         self.video_buttons.addWidget(self.play_button, 1)
-        self.video_buttons.addWidget(self.appOnToggle, 2)
+        #self.video_buttons.addWidget(self.appOnToggle, 2)
         self.video_buttons.addWidget(self.volume_button, 1)
         self.video_buttons.addWidget(self.volume_slider, 3)
         self.video_buttons.addWidget(self.time_text, 3)
@@ -288,6 +290,7 @@ class Video(QtWidgets.QWidget):
      
      def set_zipf(self, new_zipf):
          self.zipf_start = new_zipf
+         self.zipf_cur = new_zipf
 
      def volume_mute(self):#show_volume_slider(self):
         if self.volume_slider.value() != 0:
@@ -421,7 +424,7 @@ class Video(QtWidgets.QWidget):
             if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
                 self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[0]+'</b></font>', self.subs_cur[ind].text)
-                self.subs_cur.save(path.join("front_end", "fr_cleaned.srt"), encoding='utf-8')
+                self.subs_cur.save(path.join("front_end", "subs_cleaned.srt"), encoding='utf-8')
          except: return
 
      def get_word_data_from_sub(self, ind):
@@ -443,10 +446,10 @@ class Video(QtWidgets.QWidget):
          print(self.num_correct_ex)
          print(self.zipf_cur)
          if len(self.num_correct_ex) == 3: # reevaluate the langauge level every 3 exercises
-             if sum(self.num_correct_ex) == 3: #if got 3 correct in a row increase level
-                 self.zipf_cur += 1
-             elif sum(self.num_correct_ex) == 1: #if got only 1 out of 3 correct in a row decrease level
-                 self.zipf_cur -= 1
+             if sum(self.num_correct_ex) == 3: #if got 3 correct in a row increase difficulty (decrease zipf)
+                 self.zipf_cur =  max(1, self.zipf_cur - 0.5)
+             elif sum(self.num_correct_ex) == 1: #if got only 1 out of 3 correct in a row decrease difficulty (increase zipf)
+                 self.zipf_cur = min(self.zipf_cur + 0.5, 7)
              while True: # remove the sequence of correct exercises preceding the wrong one
                  try:
                     ex = self.num_correct_ex.pop(0)

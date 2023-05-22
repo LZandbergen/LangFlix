@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
         #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
-
+        '''
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
                 self.video.appOnToggle.setStyleSheet("""QPushButton
@@ -60,6 +60,7 @@ class MainWindow(QMainWindow):
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.video.update_time_slider()) 
 
         self.video.appOnToggle.clicked.connect(switchAppOff)
+        '''
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
@@ -513,7 +514,7 @@ class MainWindow(QMainWindow):
         def switchToMain():
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
-            self.video.cefr_start = self.CEFRlevel # set cefr variable of the video object
+            #self.video.zipf_start = self.CEFRlevel # set cefr variable of the video object
             self.video.set_zipf(cefr_to_zipf_func(self.CEFRlevel[0]))
             
         setLevel_button.clicked.connect(switchToMain)

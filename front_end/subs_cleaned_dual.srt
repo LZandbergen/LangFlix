@@ -228,7 +228,7 @@ de l'iPhone, tu l'as faite ?</font>
 
 53
 00:02:35,320 --> 00:02:38,120
-Otherwise, your <font color=#00D1FF weight=750><b>phone</b></font> won't be performing
+Otherwise, your phone won't be performing
 to its maximum ability.
 
 54
@@ -294,7 +294,7 @@ d'une super application de rencontres.</font>
 
 67
 00:02:51,680 --> 00:02:53,840
-to you about a dating app
+to you about a dating <font color=#00D1FF weight=750><b>app</b></font>
 that sounds great.
 
 68
