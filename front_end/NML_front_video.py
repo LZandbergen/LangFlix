@@ -10,6 +10,7 @@ from os import path
 from Video import Video
 import re
 import random
+from cefr_to_zipf import cefr_to_zipf_func
 
 
 class MainWindow(QMainWindow):
@@ -30,10 +31,12 @@ class MainWindow(QMainWindow):
 
         # create video window   
         #self.video = QtWidgets.QWidget()
-        self.video = Video() # video screen + player button toolbar
+        self.video = Video(path.join("shows", "French","S01E01 Are We Shtty.mkv"), path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.join("subtitles", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
+        #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
+        '''
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
                 self.video.appOnToggle.setStyleSheet("""QPushButton
@@ -57,6 +60,7 @@ class MainWindow(QMainWindow):
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.video.update_time_slider()) 
 
         self.video.appOnToggle.clicked.connect(switchAppOff)
+        '''
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
@@ -148,14 +152,18 @@ class MainWindow(QMainWindow):
         # Function to check if the answer is correct
         def checkAnswer():
             cur_checked = '_'
+            is_correct = 0
             for rb, word in [[r_button1,rb_text1], [r_button2,rb_text2], [r_button3,rb_text3]]:
                 if rb.isChecked():
                     cur_checked = word.text()
                 if cur_checked == self.correct_word:
+                    is_correct = 1
                     cor_incor_text.setText("Great, correct!")
                     pixmap = QtGui.QPixmap(path.join("front_end", "correct.png"))
                     cor_incor_icon.setPixmap(pixmap)
+                    cor_incor_icon.setHidden(False)
                     buttons_stackedLayout.setCurrentIndex(1)
+                    addWordToDict(self.correct_word, "translation")
                     rb.setStyleSheet('''QRadioButton 
                                             {padding-left: 40px; color: #00D1FF; font-weight: 700; font-size: 15px; background-color: #1E1E1E;}
                                         QRadioButton::indicator::unchecked
@@ -165,15 +173,20 @@ class MainWindow(QMainWindow):
                                     ''')
                     break
                 else: 
-                    cor_incor_text.setText("Incorrect, try again")
+                    is_correct = 0
+                    cor_incor_text.setText("Incorrect, sorry")
                     pixmap = QtGui.QPixmap(path.join("front_end", "incorrect.png"))
                     cor_incor_icon.setPixmap(pixmap)
+                    cor_incor_icon.setHidden(False)
+            buttons_stackedLayout.setCurrentIndex(1)
+            self.video.num_correct_ex.append(is_correct)
+            self.video.adjust_difficulty()
         submit_button.clicked.connect(checkAnswer)                             
 
 
-        self.num = 3 # Number of skips                                                      
+        self.skip_num = 3 # Number of skips                                                      
         # Styling Skip button
-        skip_button = QtWidgets.QPushButton("Skip (" + str(self.num) + ")")
+        skip_button = QtWidgets.QPushButton("Skip (" + str(self.skip_num) + ")")
         #skip_button.setFont(QtGui.QFont(families[0]))
         skip_button.setStyleSheet("""QPushButton
                                        {background-color: #1E1E1E; 
@@ -190,10 +203,11 @@ class MainWindow(QMainWindow):
                
         # Function to skip exercise
         def skip():
-            if self.num:
-                self.num -= 1
-                skip_button.setText("Skip (" + str(self.num) + ")")
+            if self.skip_num:
+                self.skip_num -= 1
+                skip_button.setText("Skip (" + str(self.skip_num) + ")")
                 switchToDict()
+                buttons_stackedLayout.setCurrentIndex(0)
                 exercise_tab.setHidden(True)
                 self.video.play_button.setEnabled(True)
                 self.video.player.play()
@@ -219,6 +233,9 @@ class MainWindow(QMainWindow):
         # Function to finish exercise and resume video  
         def Continue():
             switchToDict()
+            cor_incor_text.setText("") #hide (in)correct message
+            cor_incor_icon.setHidden(True)
+            buttons_stackedLayout.setCurrentIndex(0)
             exercise_tab.setHidden(True)
             self.video.play_button.setEnabled(True)
             self.video.player.play()
@@ -247,11 +264,14 @@ class MainWindow(QMainWindow):
 
         # Functions for switching between tabs
         def switchToDict():
+            dictionary_tab.moveToThread(tabs_layout.thread())
             stackedLayout.setCurrentIndex(1)
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         def switchToExercise():
+            #stackedLayout.moveToThread(self.thread())
             stackedLayout.setCurrentIndex(0)
+            exercise_tab.setHidden(False)
             exercise_tab.setVisible(True)
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
@@ -313,7 +333,9 @@ class MainWindow(QMainWindow):
             rb_text2.setText(word2)
             rb_text3.setText(word3)
             self.correct_word = cor_word
-            switchToExercise()
+            #switchToExercise()
+        # connect the cue exercise signal to the switchToExercise function, because they happen in different threads
+        self.video.cue_ex_sig.connect(switchToExercise)
 
         # Create the exercise page       
         page1 = QtWidgets.QWidget()
@@ -334,9 +356,10 @@ class MainWindow(QMainWindow):
         page1Layout.addLayout(buttons_stackedLayout)
         page1.setLayout(page1Layout)
         stackedLayout.addWidget(page1)
+        '''
         # Generate text for the exercise
         generateExercise("Sentence with 'quotation' marks.", "word1", "word2", "word3", "word1")
-        
+        '''
         # Function to add a new word to dictionary
         def addWordToDict(word, translation):
             row = QtWidgets.QHBoxLayout()
@@ -491,10 +514,12 @@ class MainWindow(QMainWindow):
         def switchToMain():
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
-            self.video.cefr_start = self.CEFRlevel # set cefr variable of the video object
-            print(self.CEFRlevel)
+            #self.video.zipf_start = self.CEFRlevel # set cefr variable of the video object
+            self.video.set_zipf(cefr_to_zipf_func(self.CEFRlevel[0]))
+            
         setLevel_button.clicked.connect(switchToMain)
-
+        
+    
         # Wrapping the levels page in layouts
         a_layout = QtWidgets.QHBoxLayout()
         b_layout = QtWidgets.QHBoxLayout()
@@ -554,15 +579,23 @@ class MainWindow(QMainWindow):
             if player_time >= sub_time and player_time <= up_time_bound:
                 self.video.player.pause()
                 self.video.play_button.setEnabled(False)
-                target_word_data = self.video.get_word_data_from_sub(ind+1)[0]
-                sentence = re.sub(target_word_data[0], '_____', self.video.subs_cur[ind+1])
-                words = [target_word_data[1]] #list of answer options
-                random.shuffle(words) # shuffle word order
-                generateExercise(sentence, words[0], words[1], words[2], target_word_data[1])
+                ex_type = 1
+                if self.video.cur_ex_ind % 3 != 0: 
+                    ind += 1 # if it is exercise type 3 increment the index to target the future subtitle
+                    ex_type = 3
+                target_word_data = self.video.get_word_data_from_sub(ind)[0]
+                word_options = target_word_data[3][1:-1].split(', ') #list of answer options
+                if len(word_options) == 1: word_options.append('')
+                sentence = re.sub(r''+target_word_data[0], '_____', self.video.subs_cur[ind].text)
+                #words = [target_word_data[1]] 
+                word_options.append(target_word_data[1])
+                random.shuffle(word_options) # shuffle word order
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
-                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
                 self.video.ind_to_stop_at_stack.pop(0)
+                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+                generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
+                self.video.cue_ex_sig.emit()
 
     # function for showing and hiding screen elements
     def showLayoutChildren(self, layout, show = True):

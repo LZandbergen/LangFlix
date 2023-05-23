@@ -6,6 +6,7 @@ from wordfreq import zipf_frequency
 import time
 from os import path
 from distractor_words import get_alternate_words
+import json
 
 def load_parser(target_language="es", native_language="en"):
     """ Loads NLP parser and translator object, input should be string of language code.
@@ -52,6 +53,7 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, distractor_file=Fa
     nlp, translator = load_parser(target_language=language_abbreviation)
     word_freq_dict = dict()
     noun_translations = []
+    word_translation_dict = dict()
 
     for i, en_sub in enumerate(en_subs):
         en_text = parse_subtitle_text(en_sub)
@@ -84,6 +86,7 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, distractor_file=Fa
                     # See more at https://pypi.org/project/wordfreq/
                     word_frequency = zipf_frequency(x_word, language_abbreviation, wordlist='best', minimum=0.0)
                     word_freq_dict[x_word] = word_frequency
+                    word_translation_dict[x_word] = en_word
                     noun_translations.append((x_word, en_word))
 
                     # Find distractor words to use for exercises
@@ -100,19 +103,19 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, distractor_file=Fa
     #Save modifications of added information to a new srt file
     # en_subs.save(path.join('back_end', save_file))
     en_subs.save(save_file)
-    return word_freq_dict, noun_translations
+    return word_freq_dict, noun_translations, word_translation_dict
     
 def main():
     # x_location = "subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"
     # en_location = "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt"
     # foreign_language = "de"
 
-    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr", "FRENCH_Detox_S01E01_Dict.json"],
-        ["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E02.srt", "fr", "FRENCH_Detox_S01E02_Dict.json"],
-        ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de", "GERMAN_Drugs_Online_S01E01_Dict.json"],
-        ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E02.English.srt", "de", "GERMAN_Drugs_Online_S01E02_Dict.json"],
-        ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es", "SPANISH_Machos_Alpha_S01E01_Dict.json"],
-        ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E02.srt", "es", "SPANISH_Machos_Alpha_S01E02_Dict.json"]]
+    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr", "FRENCH_Detox_S01E01_Dict_tran.json"],
+        ["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E02.srt", "fr", "FRENCH_Detox_S01E02_Dict_tran.json"],
+        ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de", "GERMAN_Drugs_Online_S01E01_Dict_tran.json"],
+        ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E02.English.srt", "de", "GERMAN_Drugs_Online_S01E02_Dict_tran.json"],
+        ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es", "SPANISH_Machos_Alpha_S01E01_Dict_tran.json"],
+        ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E02.srt", "es", "SPANISH_Machos_Alpha_S01E02_Dict_tran.json"]]
     
     for x_location, en_location, foreign_language, distractor_file in files_list:
         # Time when starting the run, to determine how long it took at the end
@@ -122,11 +125,17 @@ def main():
 
         # foreign_language = 'es'
         x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
-        word_freq_dict, noun_translations = process_subtitles(x_subs, en_subs, foreign_language, distractor_file=distractor_file, save_file=f"subtitles/MODIFIED_{save_location}")
+        word_freq_dict, noun_translations, word_translation_dict = process_subtitles(x_subs, en_subs, foreign_language, distractor_file=distractor_file, save_file=f"subtitles/MODIFIED_{save_location}")
         
         print("Dictionary with word frequencies\n", word_freq_dict)
         print("\nList of nouns and their translations\n", noun_translations)
+        print("Dictionary with word translations = \n", word_translation_dict)
 
+        for key, value in word_translation_dict.items():
+            word_translation_dict[key] = str(value)
+
+        with open(distractor_file, "w") as outfile:
+            json.dump(word_translation_dict, outfile)
         # Determine how long the script took to run
         end = time.time()
         total_time = end - start
