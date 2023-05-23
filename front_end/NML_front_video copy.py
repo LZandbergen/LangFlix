@@ -10,7 +10,6 @@ from os import path
 from Video import Video
 import re
 import random
-from cefr_to_zipf import cefr_to_zipf_func
 
 
 class MainWindow(QMainWindow):
@@ -31,12 +30,12 @@ class MainWindow(QMainWindow):
 
         # create video window   
         #self.video = QtWidgets.QWidget()
-        self.video = Video(path.normpath("shows/French/S01E01 Are We Shtty.mkv"), path.normpath("subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.normpath("subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
+        self.video = Video(path.join("shows", "French","S01E01 Are We Shtty.mkv"), path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.join("subtitles", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
         #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
-        '''
+
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
                 self.video.appOnToggle.setStyleSheet("""QPushButton
@@ -60,7 +59,6 @@ class MainWindow(QMainWindow):
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.video.update_time_slider()) 
 
         self.video.appOnToggle.clicked.connect(switchAppOff)
-        '''
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
@@ -181,7 +179,6 @@ class MainWindow(QMainWindow):
             buttons_stackedLayout.setCurrentIndex(1)
             self.video.num_correct_ex.append(is_correct)
             self.video.adjust_difficulty()
-            self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
         submit_button.clicked.connect(checkAnswer)                             
 
 
@@ -262,12 +259,6 @@ class MainWindow(QMainWindow):
         buttons_stackedLayout = QtWidgets.QStackedLayout()
         buttons_stackedLayout.addWidget(buttons_widget)
         buttons_stackedLayout.addWidget(continueButton_widget)
-
-        dict_is_hidden = False
-
-        def hideDictionary():
-            dict_is_hidden = True
-            self.showLayoutChildren(layout = side_layout, show = False)
 
         # Functions for switching between tabs
         def switchToDict():
@@ -521,12 +512,10 @@ class MainWindow(QMainWindow):
         def switchToMain():
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
-            #self.video.zipf_start = self.CEFRlevel # set cefr variable of the video object
-            self.video.set_zipf(cefr_to_zipf_func(self.CEFRlevel[0]))
-            
+            self.video.cefr_start = self.CEFRlevel # set cefr variable of the video object
+            print(self.CEFRlevel)
         setLevel_button.clicked.connect(switchToMain)
-        
-    
+
         # Wrapping the levels page in layouts
         a_layout = QtWidgets.QHBoxLayout()
         b_layout = QtWidgets.QHBoxLayout()
@@ -562,7 +551,6 @@ class MainWindow(QMainWindow):
         #state of interface at start of the app
         switchToDict()
         exercise_tab.setHidden(True)
-        #hideDictionary()
 
         # function for triggering events connected to video time
         def react_to_time_change(indices):
@@ -601,7 +589,7 @@ class MainWindow(QMainWindow):
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
                 self.video.ind_to_stop_at_stack.pop(0)
-                #self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
                 generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
                 self.video.cue_ex_sig.emit()
 
