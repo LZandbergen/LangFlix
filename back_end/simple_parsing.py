@@ -118,7 +118,7 @@ def main():
         # Time when starting the run, to determine how long it took at the end
         start = time.time()
 
-        save_location = x_location.split("/")[1]
+        save_location = en_location.split("/")[1]
 
         # foreign_language = 'es'
         x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
