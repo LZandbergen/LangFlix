@@ -75,7 +75,7 @@ And you came here because you've decided
 17
 00:00:53,840 --> 00:00:57,360
 to try to break away
-from patterns of toxic masculinity###masculinity:masculinidad:3.26:[sujetador, vámonos]###
+from patterns of toxic masculinity###masculinity:masculinidad:3.26###
 
 18
 00:00:57,440 --> 00:00:58,440
@@ -175,7 +175,7 @@ An ionizer.
 40
 00:02:04,920 --> 00:02:07,200
 It's an air purifier.
-Since we can't open these windows.
+Since we can't open these windows.###air:aire:5.07###
 
 41
 00:02:07,280 --> 00:02:09,760
@@ -201,7 +201,7 @@ I don't use it much anyway, but...
 
 46
 00:02:19,320 --> 00:02:20,800
-Don't get cancer.
+Don't get cancer.###cancer:cáncer:4.67###
 
 47
 00:02:20,880 --> 00:02:22,280
@@ -210,7 +210,7 @@ No, I wasn't planning on it.
 48
 00:02:23,160 --> 00:02:25,720
 This shit has really
-got me thinking, you know.
+got me thinking, you know.###shit:mierda:5.43###
 
 49
 00:02:26,480 --> 00:02:28,280
@@ -223,7 +223,7 @@ That so? Hadn't noticed at all. [scoffs]
 51
 00:02:30,240 --> 00:02:32,120
 Well, the same thing happened
-with the purifier.
+with the purifier.###purifier:purificador:2.51###
 
 52
 00:02:32,160 --> 00:02:33,680
@@ -232,7 +232,7 @@ This network has always been
 53
 00:02:33,760 --> 00:02:35,720
 at the forefront of society,
-not behind it.
+not behind it.###society:sociedad:5.4###
 
 54
 00:02:35,800 --> 00:02:38,640
@@ -242,7 +242,7 @@ Still on top, by a small margin.
 55
 00:02:38,720 --> 00:02:42,320
 A good executive has to know
-when they've completed their cycle,
+when they've completed their cycle,###cycle:ciclo:4.48###
 
 56
 00:02:42,920 --> 00:02:44,280
@@ -287,7 +287,7 @@ Well, I... [chuckles]
 65
 00:03:08,200 --> 00:03:11,296
 I would've liked to have picked the person
-taking over my role. No offense, hmm?
+taking over my role. No offense, hmm?###person:persona:5.56###
 
 66
 00:03:11,320 --> 00:03:12,160
@@ -296,12 +296,12 @@ None taken.
 67
 00:03:12,240 --> 00:03:15,400
 If I'm the new chief executive,
-I'll need to select my own team members.
+I'll need to select my own team members.###team:equipo:5.49###
 
 68
 00:03:15,480 --> 00:03:17,440
 You know, in fact,
-I already have a few names.
+I already have a few names.###names:nombres:4.86###
 
 69
 00:03:17,520 --> 00:03:20,360
@@ -353,7 +353,7 @@ What did I tell you about <i>Bad Bitch</i>?
 
 80
 00:03:44,880 --> 00:03:47,040
-I said it wasn't a good name for a comedy.
+I said it wasn't a good name for a comedy.###comedy:comedia:4.23###
 
 81
 00:03:47,120 --> 00:03:49,080
@@ -362,7 +362,7 @@ God damn, it was meant to be ironic.
 82
 00:03:49,160 --> 00:03:51,600
 People really have got
-to lighten up about things, José Ángel.
+to lighten up about things, José Ángel.###things:cosas:5.85###
 
 83
 00:03:51,640 --> 00:03:53,600
@@ -376,7 +376,7 @@ is really all that funny?
 85
 00:03:55,880 --> 00:03:58,800
 She's looking for revenge.
-It gets better over the season.
+It gets better over the season.###revenge:venganza:4.28###
 
 86
 00:03:58,880 --> 00:04:00,480
@@ -402,7 +402,7 @@ It's a corporate decision.
 91
 00:04:10,840 --> 00:04:13,280
 All of our managerial positions
-are filled by men.
+are filled by men.###men:hombres:5.44###
 
 92
 00:04:13,360 --> 00:04:14,720
@@ -420,7 +420,7 @@ Have you been screwing her?
 95
 00:04:18,800 --> 00:04:21,520
 See? That's the type
-of comment we're trying to avoid.
+of comment we're trying to avoid.###comment:comentario:4.78###
 
 96
 00:04:21,600 --> 00:04:23,680
@@ -461,7 +461,7 @@ office won't argue over a single euro.
 
 104
 00:04:45,160 --> 00:04:46,200
-Good luck.
+Good luck.###luck:suerte:5.25###
 
 105
 00:04:46,280 --> 00:04:48,080
@@ -474,7 +474,7 @@ Because the magic's leaving with me.
 
 107
 00:04:52,800 --> 00:04:55,280
-And this whiteboard that I bought myself.
+And this whiteboard that I bought myself.###whiteboard:pizarra:3.59###
 
 108
 00:04:59,800 --> 00:05:01,520
@@ -482,7 +482,7 @@ I'll leave it 'cause I biked here.
 
 109
 00:05:04,160 --> 00:05:05,520
-But I'm taking it tomorrow.
+But I'm taking it tomorrow.###tomorrow:mañana:5.48###
 
 110
 00:05:45,000 --> 00:05:47,400
@@ -519,7 +519,7 @@ God, honey, you really freaked me out.
 
 117
 00:06:07,760 --> 00:06:09,080
-Who's in the shower?
+Who's in the shower?###shower:ducha:4.1###
 
 118
 00:06:09,160 --> 00:06:10,200
@@ -555,7 +555,7 @@ Uh, you gotta go back home now, Álex.
 125
 00:06:25,520 --> 00:06:27,400
 When can I start making decisions
-about life?
+about life?###life:vida:5.95###
 
 126
 00:06:27,480 --> 00:06:29,280
@@ -747,7 +747,7 @@ What are you saying?
 
 168
 00:08:15,800 --> 00:08:17,320
-Five whole months!
+Five whole months!###months:meses:5.42###
 
 169
 00:08:17,400 --> 00:08:21,280
@@ -780,7 +780,7 @@ when he's under pressure.
 175
 00:08:30,560 --> 00:08:34,560
 Luis, our sex life is dead.
-Just admit it. Admit it!
+Just admit it. Admit it!###life:vida:5.95###
 
 176
 00:08:35,080 --> 00:08:36,080
@@ -788,12 +788,12 @@ Where are you going?
 
 177
 00:08:36,640 --> 00:08:38,600
-I'm taking this shit off. Itchy!
+I'm taking this shit off. Itchy!###shit:mierda:5.43###
 
 178
 00:08:38,680 --> 00:08:41,080
 - Shh! The kids.
-- [door slams shut]
+- [door slams shut]###kids:niños:5.39###
 
 179
 00:08:50,480 --> 00:08:51,880
@@ -807,7 +807,7 @@ tell me if you're not coming home.
 181
 00:08:54,560 --> 00:08:56,800
 Uh, honey,
-I just spent the night in a jail cell.
+I just spent the night in a jail cell.###night:noche:5.55###
 
 182
 00:08:56,880 --> 00:08:59,520
@@ -830,7 +830,7 @@ I don't use that.
 186
 00:09:06,160 --> 00:09:09,360
 Now you do. You got a better photo?
-Here you look kinda old.
+Here you look kinda old.###photo:foto:5.34###
 
 187
 00:09:09,440 --> 00:09:11,240
@@ -848,16 +848,16 @@ I'm just fine being single.
 190
 00:09:14,840 --> 00:09:16,640
 [Álex] Your browser history
-says otherwise.
+says otherwise.###history:historial:4.18###
 
 191
 00:09:16,720 --> 00:09:19,560
-Big tits, interracial. Hmm?
+Big tits, interracial. Hmm?###tits:tetas:4.21###
 
 192
 00:09:20,440 --> 00:09:23,680
 [clears throat] And why are you
-on my computer, hmm?
+on my computer, hmm?###computer:ordenador:4.15###
 
 193
 00:09:23,760 --> 00:09:25,840
@@ -866,7 +866,7 @@ I should be the one monitoring you.
 194
 00:09:25,920 --> 00:09:28,080
 Dad, grief period's over.
-Get back on the market now.
+Get back on the market now.###market:mercado:5.16###
 
 195
 00:09:28,160 --> 00:09:30,160
@@ -893,7 +893,7 @@ I'm not going out with anyone.
 
 200
 00:09:43,040 --> 00:09:46,600
-Hello, Ángeles. Dinner tomorrow?
+Hello, Ángeles. Dinner tomorrow?###tomorrow:mañana:5.48###
 
 201
 00:09:47,240 --> 00:09:49,480
@@ -936,7 +936,7 @@ How come?
 210
 00:10:12,560 --> 00:10:16,240
 Well, to be happy,
-and I don't know, to evolve in life.
+and I don't know, to evolve in life.###life:vida:5.95###
 
 211
 00:10:16,320 --> 00:10:18,920
@@ -994,12 +994,12 @@ outside my apartment.
 223
 00:10:43,280 --> 00:10:46,160
 She calls the cops,
-and I'm the one who goes to jail, man.
+and I'm the one who goes to jail, man.###cops:policía:5.28###
 
 224
 00:10:46,240 --> 00:10:48,120
 These days, if you got a dick,
-you're a monster.
+you're a monster.###dick:polla:3.9###
 
 225
 00:10:48,160 --> 00:10:50,656
@@ -1029,7 +1029,7 @@ an awesome new house.
 230
 00:11:01,280 --> 00:11:03,920
 Santi, we've all got our problems,
-all right?
+all right?###problems:problemas:5.43###
 
 231
 00:11:04,000 --> 00:11:05,920
@@ -1078,7 +1078,7 @@ Quit? Weren't you getting promoted?
 241
 00:11:33,880 --> 00:11:37,440
 Yes, but they wouldn't let me create
-my own team, so screw 'em all.
+my own team, so screw 'em all.###team:equipo:5.49###
 
 242
 00:11:37,520 --> 00:11:40,760
@@ -1120,7 +1120,7 @@ flight attendants too.
 250
 00:11:57,760 --> 00:12:00,680
 - I'm canceling the housewarming dinner.
-- No, no. [chuckles]
+- No, no. [chuckles]###dinner:cena:4.42###
 
 251
 00:12:00,760 --> 00:12:02,200
@@ -1139,11 +1139,11 @@ Let's watch a movie and relax, come on.
 254
 00:12:08,080 --> 00:12:11,520
 I'll open the wine now.
-Maybe I'll even open a magnum.
+Maybe I'll even open a magnum.###wine:vino:4.96###
 
 255
 00:12:13,080 --> 00:12:14,640
-Are you okay, baby?
+Are you okay, baby?###baby:bebé:4.7###
 
 256
 00:12:14,720 --> 00:12:17,680
@@ -1152,7 +1152,7 @@ Me? Great. Can't you see I'm happy?
 257
 00:12:17,760 --> 00:12:21,600
 Ha. Stepping outside your comfort zone
-can stimulate your creativity.
+can stimulate your creativity.###zone:zona:5.28###
 
 258
 00:12:21,680 --> 00:12:23,680
@@ -1179,7 +1179,7 @@ if I could help you out.
 263
 00:12:32,440 --> 00:12:35,440
 You do the wine, okay?
-And I'll pick out the movie.
+And I'll pick out the movie.###wine:vino:4.96###
 
 264
 00:12:35,520 --> 00:12:36,520
@@ -1193,7 +1193,7 @@ And I'll pick out the movie.
 266
 00:12:39,320 --> 00:12:42,640
 We can always sell the Mini.
-We don't really need two cars.
+We don't really need two cars.###cars:coches:4.33###
 
 267
 00:12:43,920 --> 00:12:44,760
@@ -1307,7 +1307,7 @@ I'm supposed to penetrate you now.
 291
 00:13:40,400 --> 00:13:43,560
 - Luis, get that outta my ass now.
-- Shit. Okay, okay.
+- Shit. Okay, okay.###ass:culo:4.77###
 
 292
 00:13:43,640 --> 00:13:45,320
@@ -1316,12 +1316,12 @@ I'm supposed to penetrate you now.
 
 293
 00:13:45,400 --> 00:13:46,640
-Uh, my love,
+Uh, my love,###love:amor:5.41###
 
 294
 00:13:47,400 --> 00:13:50,480
 if you squeeze your sphincter,
-it won't move. Hmm?
+it won't move. Hmm?###sphincter:esfínter:2.6###
 
 295
 00:13:50,560 --> 00:13:54,160
@@ -1348,11 +1348,11 @@ and now I can't sleep.
 300
 00:14:05,600 --> 00:14:08,400
 Kids, this has gotta stop, okay?
-Same thing every night.
+Same thing every night.###night:noche:5.55###
 
 301
 00:14:08,480 --> 00:14:10,720
-[groans] Come on, kids, back to bed.
+[groans] Come on, kids, back to bed.###bed:cama:4.89###
 
 302
 00:14:10,800 --> 00:14:12,760
@@ -1386,12 +1386,12 @@ Get it over with and then eat in peace?
 
 309
 00:14:36,880 --> 00:14:39,200
-No, put it in the <i>coulant.</i>
-It's our favorite dessert.
+No, put it in the coulant.
+It's our favorite dessert.###dessert:postre:3.99###
 
 310
 00:14:39,280 --> 00:14:40,960
-Give it to her out of the box and keep it.
+Give it to her out of the box and keep it.###box:caja:4.82###
 
 311
 00:14:41,040 --> 00:14:43,000
@@ -1440,7 +1440,7 @@ You as well.
 
 321
 00:15:03,000 --> 00:15:04,960
-Three years already, my God.
+Three years already, my God.###years:años:6.12###
 
 322
 00:15:05,040 --> 00:15:07,640
@@ -1468,7 +1468,7 @@ the luckiest guy in the world.
 327
 00:15:18,080 --> 00:15:20,880
 You are the sexiest and smartest woman
-I've ever met in my life.
+I've ever met in my life.###woman:mujer:5.57###
 
 328
 00:15:20,960 --> 00:15:22,440
@@ -1514,7 +1514,7 @@ Bring her the sherbet.
 337
 00:15:41,720 --> 00:15:44,360
 Do I turn you on, like at the beginning,
-or is something missing?
+or is something missing?###beginning:principio:5.1###
 
 338
 00:15:44,440 --> 00:15:45,960
@@ -1588,7 +1588,7 @@ What do you mean? What are you saying?
 
 354
 00:16:21,280 --> 00:16:23,120
-So we can try sleeping with other people.
+So we can try sleeping with other people.###people:personas:5.84###
 
 355
 00:16:24,520 --> 00:16:27,336
@@ -1602,7 +1602,7 @@ No way, never.
 357
 00:16:28,280 --> 00:16:31,440
 Raúl, I adore you,
-but monogamy is unsustainable.
+but monogamy is unsustainable.###monogamy:monogamia:2.73###
 
 358
 00:16:31,520 --> 00:16:35,720
@@ -1630,12 +1630,12 @@ Otherwise, you'll just ruin it all.
 363
 00:16:44,440 --> 00:16:48,120
 But, like, you just asked
-for permission to fuck other guys.
+for permission to fuck other guys.###permission:permiso:4.71###
 
 364
 00:16:48,880 --> 00:16:51,600
 No, I'm saying that I don't
-want us to fall victim to monotony.
+want us to fall victim to monotony.###monotony:monotonía:3.13###
 
 365
 00:16:51,680 --> 00:16:53,720
@@ -1659,16 +1659,16 @@ because I'd rather we broke up now.
 369
 00:17:01,920 --> 00:17:04,560
 - And then we can stay friends.
-- Oh, this is an ultimatum?
+- Oh, this is an ultimatum?###ultimatum:ultimátum:3.23###
 
 370
 00:17:04,640 --> 00:17:07,320
-I'm 42 years old. And I want it all.
+I'm 42 years old. And I want it all.###years:años:6.12###
 
 371
 00:17:07,400 --> 00:17:10,680
 I want the warmth of home life
-and the warmth of another guy. Hmm?
+and the warmth of another guy. Hmm?###home:hogar:4.84###
 
 372
 00:17:10,760 --> 00:17:12,560
@@ -1680,7 +1680,7 @@ Can I think this over a little?
 
 374
 00:17:18,040 --> 00:17:19,360
-Sure, my love.
+Sure, my love.###love:amor:5.41###
 
 375
 00:17:19,880 --> 00:17:23,720
@@ -1750,7 +1750,7 @@ let's move into the cobra.
 390
 00:18:08,480 --> 00:18:12,040
 And downward-facing dog.
-Very good, ladies.
+Very good, ladies.###dog:perro:4.9###
 
 391
 00:18:12,560 --> 00:18:15,160
@@ -1773,7 +1773,7 @@ but no one's forcing you, okay? Now relax...
 395
 00:18:25,160 --> 00:18:28,640
 Hmm? Taking advantage of this
-beautiful sunrise to post on Instagram.
+beautiful sunrise to post on Instagram.###sunrise:amanecer:4.2###
 
 396
 00:18:28,720 --> 00:18:29,560
@@ -1786,7 +1786,7 @@ You're serious? [scoffs]
 398
 00:18:30,840 --> 00:18:34,360
 Cynthia got paid 2,000 euros to post
-a photo of herself drinking kombucha.
+a photo of herself drinking kombucha.###photo:foto:5.34###
 
 399
 00:18:34,440 --> 00:18:37,920
@@ -1801,11 +1801,11 @@ uh, followers. You got 500.
 401
 00:18:40,680 --> 00:18:43,520
 Oh, Pedro, making money, darling.
-I have to earn a living.
+I have to earn a living.###money:dinero:5.47###
 
 402
 00:18:43,600 --> 00:18:46,280
-Oh, quick! Quick, take a photo. Hurry!
+Oh, quick! Quick, take a photo. Hurry!###photo:foto:5.34###
 
 403
 00:18:46,800 --> 00:18:48,880
@@ -1832,7 +1832,7 @@ Okay, very good, that's it. You get it?
 
 408
 00:18:59,320 --> 00:19:00,800
-Uh, it's still on selfie mode.
+Uh, it's still on selfie mode.###mode:modo:5.19###
 
 409
 00:19:00,880 --> 00:19:03,880
@@ -1841,7 +1841,7 @@ Uh, it's still on selfie mode.
 
 410
 00:19:03,960 --> 00:19:06,280
-My love, you look horrible there. [laughs]
+My love, you look horrible there. [laughs]###love:amor:5.41###
 
 411
 00:19:06,360 --> 00:19:08,216
@@ -1872,7 +1872,7 @@ Pedro, break, let's go!
 417
 00:19:27,880 --> 00:19:31,600
 "The measures approved by a judge
-can be modified by a new legal agreement
+can be modified by a new legal agreement###measures:medidas:4.99###
 
 418
 00:19:31,680 --> 00:19:34,680
@@ -1882,7 +1882,7 @@ by the new needs of the children
 419
 00:19:34,760 --> 00:19:38,280
 or the change of circumstances taken
-into account by approving them."
+into account by approving them."###account:cuenta:5.78###
 
 420
 00:19:38,360 --> 00:19:41,000
@@ -1906,7 +1906,7 @@ That's final.
 424
 00:19:49,200 --> 00:19:53,640
 At that time, Álex's opinion wasn't taken
-into account, but now she's 16 years old.
+into account, but now she's 16 years old.###years:años:6.12###
 
 425
 00:19:53,720 --> 00:19:55,080
@@ -1924,7 +1924,7 @@ who wants full custody now.
 428
 00:20:00,440 --> 00:20:02,440
 What's wrong?
-One night in jail wasn't enough, huh?
+One night in jail wasn't enough, huh?###jail:cárcel:4.76###
 
 429
 00:20:02,520 --> 00:20:03,520
@@ -1946,12 +1946,12 @@ and the judge gives Santi custody,
 433
 00:20:09,520 --> 00:20:12,000
 he'll also most likely
-get the family home back as well.
+get the family home back as well.###family:familia:5.53###
 
 434
 00:20:12,600 --> 00:20:14,840
 - Oh, you wanna put me out on the street?
-- Uh, no.
+- Uh, no.###street:calle:5.27###
 
 435
 00:20:14,920 --> 00:20:18,880
@@ -1976,7 +1976,7 @@ Hey, don't ever have kids.
 
 440
 00:20:34,600 --> 00:20:36,240
-Well, it's a rocket.
+Well, it's a rocket.###rocket:cohete:3.71###
 
 441
 00:20:37,040 --> 00:20:39,240
@@ -1985,17 +1985,17 @@ Yes, yes, that's what I heard from Ulises.
 442
 00:20:39,320 --> 00:20:41,320
 It was, well, a bit awkward,
-to tell you the truth.
+to tell you the truth.###truth:verdad:5.68###
 
 443
 00:20:41,920 --> 00:20:44,520
 We have a strict child protection policy
-at this school.
+at this school.###protection:protección:4.92###
 
 444
 00:20:44,600 --> 00:20:47,400
 But it's just a rocket,
-like I just said, Erika. [chuckles]
+like I just said, Erika. [chuckles]###rocket:cohete:3.71###
 
 445
 00:20:48,280 --> 00:20:49,280
@@ -2007,7 +2007,7 @@ like I just said, Erika. [chuckles]
 
 447
 00:20:55,880 --> 00:20:57,800
-Right, looks ready for takeoff.
+Right, looks ready for takeoff.###takeoff:despegue:3.55###
 
 448
 00:20:57,880 --> 00:20:59,520
@@ -2015,7 +2015,7 @@ Where the hell did you leave it?
 
 449
 00:20:59,600 --> 00:21:00,880
-In the bathroom, I washed it.
+In the bathroom, I washed it.###bathroom:baño:4.8###
 
 450
 00:21:00,960 --> 00:21:05,080
@@ -2041,7 +2041,7 @@ Thirty-one.
 
 455
 00:21:13,840 --> 00:21:15,240
-Fuck, you look younger.
+Fuck, you look younger.###Fuck:joder:4.54###
 
 456
 00:21:15,320 --> 00:21:17,880
@@ -2056,7 +2056,7 @@ Fuck, you look younger.
 458
 00:21:20,000 --> 00:21:23,280
 I'm sure you've got many great things
-to teach nine-year-old kids,
+to teach nine-year-old kids,###kids:niños:5.39###
 
 459
 00:21:23,360 --> 00:21:26,640
@@ -2066,7 +2066,7 @@ what it's like to be married.
 460
 00:21:27,360 --> 00:21:29,600
 You don't know
-what it's like finding 20 minutes
+what it's like finding 20 minutes###minutes:minutos:5.24###
 
 461
 00:21:29,680 --> 00:21:32,400
@@ -2099,12 +2099,12 @@ who won't touch you with a ten-foot pole.
 467
 00:21:41,240 --> 00:21:44,280
 You didn't consider that this little
-toy here might be our last attempt
+toy here might be our last attempt###attempt:intento:4.81###
 
 468
 00:21:44,360 --> 00:21:46,480
 to salvage a marriage
-that's sinking faster than shit.
+that's sinking faster than shit.###shit:mierda:5.43###
 
 469
 00:21:46,520 --> 00:21:47,640
@@ -2149,7 +2149,7 @@ Goodbye, Erika.
 478
 00:22:09,360 --> 00:22:11,680
 [Pedro] "Worrying won't prevent
-tomorrow's problems."
+tomorrow's problems."###problems:problemas:5.43###
 
 479
 00:22:11,760 --> 00:22:13,400
@@ -2184,7 +2184,7 @@ Oh. There's more. Of course.
 486
 00:22:28,520 --> 00:22:32,280
 Is it necessary to show off your ass every
-time you post a cheap self-help quote?
+time you post a cheap self-help quote?###help:ayuda:5.33###
 
 487
 00:22:32,360 --> 00:22:34,000
@@ -2193,7 +2193,7 @@ Hmm, what should I do next time?
 488
 00:22:34,080 --> 00:22:36,160
 Send you the draft,
-so his majesty can give approval?
+so his majesty can give approval?###draft:borrador:3.87###
 
 489
 00:22:36,200 --> 00:22:37,840
@@ -2208,7 +2208,7 @@ anything about my job, okay?
 491
 00:22:41,920 --> 00:22:44,200
 How nice.
-What a great friendship you've got.
+What a great friendship you've got.###friendship:amistad:4.6###
 
 492
 00:22:46,480 --> 00:22:47,920
@@ -2232,7 +2232,7 @@ the obligatory barbecue instead.
 496
 00:22:55,280 --> 00:22:58,120
 - Want me to grill a steak?
-- No, don't worry. I'll eat the leaves.
+- No, don't worry. I'll eat the leaves.###steak:filete:3.09###
 
 497
 00:22:58,200 --> 00:22:59,680
@@ -2308,7 +2308,7 @@ Oh, no, I haven't even met her yet.
 512
 00:23:27,120 --> 00:23:30,120
 - Yeah, so she can see you have friends!
-- No, Raúl, no. Damn it, Raúl, no!
+- No, Raúl, no. Damn it, Raúl, no!###friends:amigos:5.43###
 
 513
 00:23:30,200 --> 00:23:31,120
@@ -2326,7 +2326,7 @@ Oh, no, I haven't even met her yet.
 
 516
 00:23:36,200 --> 00:23:37,600
-Hmm. What kind of content?
+Hmm. What kind of content?###content:contenido:4.99###
 
 517
 00:23:37,680 --> 00:23:39,536
@@ -2335,7 +2335,7 @@ Hmm. What kind of content?
 
 518
 00:23:39,560 --> 00:23:43,120
-Healthy food, mindfulness, decoration.
+Healthy food, mindfulness, decoration.###decoration:decoración:4.03###
 
 519
 00:23:43,200 --> 00:23:44,680
@@ -2357,7 +2357,7 @@ she's made the most of the furlough.
 523
 00:23:49,920 --> 00:23:53,440
 She's got degrees in design, nutrition,
-oh, and a doctorate in psychology.
+oh, and a doctorate in psychology.###psychology:psicología:4.25###
 
 524
 00:23:53,520 --> 00:23:55,240
@@ -2437,7 +2437,7 @@ on the dating scene after a long time.
 540
 00:24:29,160 --> 00:24:31,240
 There's the flirting,
-the nervousness, the novelty...
+the nervousness, the novelty...###novelty:novedad:4.14###
 
 541
 00:24:31,280 --> 00:24:35,120
@@ -2462,7 +2462,7 @@ I'd rather not.
 545
 00:24:41,320 --> 00:24:44,520
 Santi, you don't have to cling
-onto the patriarchal model of monogamy.
+onto the patriarchal model of monogamy.###model:modelo:5.03###
 
 546
 00:24:44,600 --> 00:24:45,600
@@ -2485,12 +2485,12 @@ It's like we're a virus.
 550
 00:24:51,800 --> 00:24:53,880
 I feel like there's a war
-on the Y chromosome now.
+on the Y chromosome now.###chromosome:cromosoma:3.01###
 
 551
 00:24:53,960 --> 00:24:56,480
 It's a defective chromosome.
-Even the biologists are saying so.
+Even the biologists are saying so.###chromosome:cromosoma:3.01###
 
 552
 00:24:56,560 --> 00:24:58,560
@@ -2499,7 +2499,7 @@ Oh, yeah? So why do you wanna be like us?
 553
 00:24:58,640 --> 00:25:01,680
 No, no, no. Don't confuse things.
-All we want is equality.
+All we want is equality.###equality:igualdad:4.65###
 
 554
 00:25:01,760 --> 00:25:04,400
@@ -2509,7 +2509,7 @@ paid the same as Messi?
 555
 00:25:04,480 --> 00:25:07,120
 - That isn't sexism. It's marketing.
-- It's a patriarchal market.
+- It's a patriarchal market.###market:mercado:5.16###
 
 556
 00:25:07,200 --> 00:25:09,920
@@ -2523,7 +2523,7 @@ Well, too bad, Raúl, too bad.
 558
 00:25:11,360 --> 00:25:14,320
 Now we gotta cry.
-We're all supposed to show our emotions.
+We're all supposed to show our emotions.###emotions:emociones:4.34###
 
 559
 00:25:14,400 --> 00:25:15,720
@@ -2574,7 +2574,7 @@ It's bigger than our whole bedroom.
 569
 00:25:34,760 --> 00:25:37,040
 But, hey, some of us get
-to marry a television mogul
+to marry a television mogul###television:televisión:4.99###
 
 570
 00:25:37,120 --> 00:25:38,120
@@ -2597,7 +2597,7 @@ and some of us marry a cop.
 574
 00:25:43,520 --> 00:25:46,480
 And most important,
-never objectify a woman at all.
+never objectify a woman at all.###woman:mujer:5.57###
 
 575
 00:25:46,560 --> 00:25:48,240
@@ -2611,7 +2611,7 @@ his little girl in a bikini?
 577
 00:25:50,440 --> 00:25:53,520
 Look, things are changing,
-and if you don't like it, fuck off.
+and if you don't like it, fuck off.###things:cosas:5.85###
 
 578
 00:25:54,320 --> 00:25:55,320
@@ -2643,7 +2643,7 @@ But, Esther, you're too drunk right now.
 584
 00:26:10,000 --> 00:26:12,320
 Put your panties back on,
-or you're gonna lose 'em.
+or you're gonna lose 'em.###panties:bragas:3.36###
 
 585
 00:26:13,240 --> 00:26:14,520
@@ -2665,7 +2665,7 @@ Is it what we were talking about?
 
 589
 00:26:25,560 --> 00:26:26,760
-I got fired from work, Luz.
+I got fired from work, Luz.###work:trabajo:5.81###
 
 590
 00:26:26,840 --> 00:26:28,000
@@ -2710,12 +2710,12 @@ Clearing up. Coffee, anyone?
 
 599
 00:26:47,360 --> 00:26:49,400
-You're serious? With my best friend?
+You're serious? With my best friend?###friend:amigo:5.36###
 
 600
 00:26:49,480 --> 00:26:51,216
 - [Luz] Raúl, please.
-- He's your best friend?
+- He's your best friend?###friend:amigo:5.36###
 
 601
 00:26:51,240 --> 00:26:53,360
@@ -2728,7 +2728,7 @@ As if I'd do anything with Pedro. [scoffs]
 
 603
 00:26:55,800 --> 00:26:58,040
-I guess you guys don't talk about things.
+I guess you guys don't talk about things.###things:cosas:5.85###
 
 604
 00:26:59,240 --> 00:27:01,760
@@ -2761,7 +2761,7 @@ Over here.
 610
 00:27:14,440 --> 00:27:17,080
 Well, well,
-what a beautiful house you got.
+what a beautiful house you got.###house:casa:5.77###
 
 611
 00:27:17,160 --> 00:27:19,176
@@ -2813,7 +2813,7 @@ Um, uh... [clears throat]
 621
 00:27:36,360 --> 00:27:39,120
 [groans] Come down here
-and drink some coffee.
+and drink some coffee.###coffee:café:4.81###
 
 622
 00:27:39,680 --> 00:27:41,960
@@ -2973,7 +2973,7 @@ Bring me a towel, you fucking bastards.
 657
 00:29:03,160 --> 00:29:05,056
 - [laughs]
-- [Luis] You've got this big-ass house.
+- [Luis] You've got this big-ass house.###house:casa:5.77###
 
 658
 00:29:05,080 --> 00:29:06,320
