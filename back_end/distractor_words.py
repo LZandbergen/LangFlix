@@ -4,6 +4,7 @@ import spacy
 import re
 from wordfreq import zipf_frequency
 import random
+import translate as tr
 
 
 def get_alternate_words(frequency=5.0, tolerance=0.2, sample_size=3, filename="/home/lzandbergen/Documents/NML/LangFlix/back_end/nouns_dict.json"):
@@ -33,6 +34,9 @@ def create_dictionary(language='es', file_name="back_end/La.casa.de.papel.S01E01
     subs = pysrt.open(file_name)
     # Create an empty dictionary to store nouns and their frequencies
     noun_dict = {}
+    # Create a second dictionary to store the translations.
+    translation_dict = {}
+
     if language == "es":
         # Load the Spanish language model for spaCy
         nlp = spacy.load("es_core_news_sm")
@@ -41,7 +45,11 @@ def create_dictionary(language='es', file_name="back_end/La.casa.de.papel.S01E01
     elif language == 'fr':
         nlp = spacy.load("fr_core_news_sm")
 
+    # Complile re expression for subtitle cleaning
     expression = re.compile("[\(\<].*?[\)\>]")
+
+    # Create translator objet
+    translator = tr.Translator(to_lang=language)
 
     for sub in subs:
         # Extract the subtitle text and remove expressions within parentheses or angle brackets
@@ -55,12 +63,16 @@ def create_dictionary(language='es', file_name="back_end/La.casa.de.papel.S01E01
                 # Store the noun and its Zipf frequency in the dictionary
                 noun_dict[string] = zipf_frequency(
                     string, language, wordlist='best', minimum=0.0)
+                translation_dict[string] = translator.translate(string)
 
     # Dump the noun dictionary to a JSON file
     print(noun_dict)
     print(f"dictionary length: {len(noun_dict)}")
+    print(f"translation length: {len(translation_dict)}")
     with open(save_name, 'w') as file:
         json.dump(noun_dict, file)
+    with open(f"translations_{save_name}", "w") as file:
+        json.dump(translation_dict, file)
 
 
 files_list = [["fr", "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "FRENCH_Detox_S01E01_Dict.json"],
