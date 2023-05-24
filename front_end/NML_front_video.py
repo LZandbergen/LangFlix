@@ -11,6 +11,7 @@ from Video import Video
 import re
 import random
 from cefr_to_zipf import cefr_to_zipf_func
+import json
 
 
 class MainWindow(QMainWindow):
@@ -34,6 +35,9 @@ class MainWindow(QMainWindow):
         self.video = Video(path.normpath("shows/French/S01E01 Are We Shtty.mkv"), path.normpath("subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.normpath("subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
+
+        with open('FRENCH_Detox_S01E01_Dict_tran.json', encoding='utf-8') as json_file:
+            translation_dict = json.load(json_file)
 
         #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
         '''
@@ -179,6 +183,9 @@ class MainWindow(QMainWindow):
                     cor_incor_icon.setPixmap(pixmap)
                     cor_incor_icon.setHidden(False)
             buttons_stackedLayout.setCurrentIndex(1)
+            rb_text1.setText(rb_text1.text() + ' = ' + translation_dict[rb_text1.text()])
+            rb_text2.setText(rb_text2.text() + ' = ' + translation_dict[rb_text2.text()])
+            rb_text3.setText(rb_text3.text() + ' = ' + translation_dict[rb_text3.text()])
             self.video.num_correct_ex.append(is_correct)
             self.video.adjust_difficulty()
             self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
