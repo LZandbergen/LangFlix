@@ -10,7 +10,7 @@ import sys
 from datetime import timedelta
 from os import path
 import numpy as np
-import itertools
+#from back_end. import Class (Class has cefr to zip function)
 
 slider_style = """
 QSlider::groove:horizontal {
@@ -123,24 +123,16 @@ class Video(QtWidgets.QWidget):
      def __init__(self, video_file, sub_file_l1, sub_file_l2):
         super().__init__()
 
-        #self.cefr_start = 'A2' #cefr
-        #self.cefr_cur = 5.0 #zipf
-
-        self.zipf_start = -1
-        self.zipf_cur = self.zipf_start
+        self.cefr_start = 'A2' #cefr
+        self.cefr_cur = 5.0 #zipf
 
         self.subs_are_dual = False
-        self.num_correct_ex = []
-
-        self.zero_counter = 0
-        self.one_counter = 0
-        self.def_dec = -0.1
-        self.def_inc = 0.1
 
         #self.time_between_ex = 60 * 10**6 #time intervals between exercises
         #self.ex_counter = 1 #counter for number of exercises so far
 
         self.num_exercises = 10 # number of exercises per video
+        self.num_correct_ex = []
 
         self.sub_ind_for_ex = [] # array to store the indices of candidate subs per exercise
 
@@ -153,8 +145,8 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(sub_file_l1)
-        self.subs_cur = pysrt.open(sub_file_l1)
+        self.subs_orig = pysrt.open(sub_file_l1)#path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
+        self.subs_cur = pysrt.open(sub_file_l1)#path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"))
 
         self.subs_l2 = pysrt.open(sub_file_l2)
         
@@ -180,8 +172,11 @@ class Video(QtWidgets.QWidget):
         # instantiate video player
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
-        self.media = Instance.media_new(video_file)
+        self.media = Instance.media_new(video_file)#path.join("shows", "French","S01E01 Are We Shtty.mkv"))
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
+        #self.player.add_slave(0, path.join("front_end", "subs_cleaned.srt"), True)
+        #self.player.add_slave(0, path.join("front_end", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), True)
+
         self.player.set_media(self.media) 
         self.player.audio_set_volume(0)
         
@@ -226,7 +221,6 @@ class Video(QtWidgets.QWidget):
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPaused, lambda x: self.set_play_button_style()) 
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
 
-        '''
         # add turn LangFlix on/off toggle to the video window
         self.appOnToggle = QtWidgets.QPushButton("LangFlix")
         self.appOnToggle.setCheckable(True)
@@ -237,7 +231,6 @@ class Video(QtWidgets.QWidget):
                                        border: 1px solid;
                                        border-style: solid;
                                        font-weight: 750;}""")
-        '''
 
         #time value
         self.time_text = QtWidgets.QLineEdit()
@@ -264,7 +257,7 @@ class Video(QtWidgets.QWidget):
         self.video_layout.setContentsMargins(0, 0, 0, 0)
 
         self.video_buttons.addWidget(self.play_button, 1)
-        #self.video_buttons.addWidget(self.appOnToggle, 2)
+        self.video_buttons.addWidget(self.appOnToggle, 2)
         self.video_buttons.addWidget(self.volume_button, 1)
         self.video_buttons.addWidget(self.volume_slider, 3)
         self.video_buttons.addWidget(self.time_text, 3)
@@ -285,18 +278,11 @@ class Video(QtWidgets.QWidget):
             else:
                 layout.itemAt(i).widget().hide()
      """
-    #  def get_cefr(self):
-    #      return self.cefr_cur
+     def get_cefr(self):
+         return self.cefr_cur
      
-    #  def set_cefr(self, new_cefr):
-    #      self.cefr_cur = new_cefr
-
-     def get_current_zipf(self):
-         return self.zipf_cur
-     
-     def set_zipf(self, new_zipf):
-         self.zipf_start = new_zipf
-         self.zipf_cur = new_zipf
+     def set_cefr(self, new_cefr):
+         self.cefr_cur = new_cefr
 
      def volume_mute(self):#show_volume_slider(self):
         if self.volume_slider.value() != 0:
@@ -322,7 +308,8 @@ class Video(QtWidgets.QWidget):
                  self.player.video_set_subtitle_file(path.join("front_end", "subs_cleaned_dual.srt"))
              else:
                  self.player.video_set_subtitle_file(path.join("front_end", "subs_cleaned.srt"))
-             #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
+             #self.player.add_slave(path.join("front_end", "fr_cleaned.srt"), 'sub1', True)
+             #self.player.add_slave(path.join("front_end", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), 'sub2', True)
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
      def play_video(self):
@@ -391,6 +378,8 @@ class Video(QtWidgets.QWidget):
      '''
 
      def prep_subs(self):
+         #break_time = self.sub_time_to_timedelta(self.subs_orig[int(np.floor(len(self.subs_orig)/self.num_exercises))].start) # get interval between exercises
+         #if break_time > timedelta(minutes = 3): 
          break_time = timedelta(minutes = 3)
          ex_counter = 1
          low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6) # lower search frame bound by 30 seconds
@@ -425,7 +414,8 @@ class Video(QtWidgets.QWidget):
          '''
      def choose_ex_ind(self, ind_list):
          try:
-            ind = min(ind_list, key = lambda x: abs(self.zipf_cur - float(self.get_word_data_from_sub(x)[0][2])))
+            ind = min(ind_list, key = lambda x: abs(self.cefr_cur - float(self.get_word_data_from_sub(x)[0][2])))
+            print(self.get_word_data_from_sub(ind)[0][2])
             self.ind_to_stop_at_stack.append(ind)
             if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
@@ -449,39 +439,23 @@ class Video(QtWidgets.QWidget):
          rsubs.save (path.join("front_end", "subs_cleaned_dual.srt"), encoding='utf-8')
 
      def adjust_difficulty(self):
-         print('old list', self.num_correct_ex)
-         print('old zipf', self.zipf_cur)
-         if self.num_correct_ex[-1] == 1:
-             self.zipf_cur += -0.1 * 2 ** (len(list(itertools.takewhile(lambda x: x == 1, self.num_correct_ex[::-1]))) - 1)
-         else:
-             self.zipf_cur += 0.1 * 2 ** (len(list(itertools.takewhile(lambda x: x == 0, self.num_correct_ex[::-1]))) - 1)
-         
-         if (np.asarray(self.num_correct_ex).all() or not np.asarray(self.num_correct_ex).any()) and len(self.num_correct_ex) == 3: 
-             self.num_correct_ex = []
-         elif len(self.num_correct_ex) == 2 and self.num_correct_ex[0] != self.num_correct_ex[1]:
-             self.num_correct_ex.pop(0)
-         elif len(self.num_correct_ex) == 3:
-             if self.num_correct_ex[0] != self.num_correct_ex[1]:
-                 self.num_correct_ex.pop(0)
-             elif self.num_correct_ex[1] != self.num_correct_ex[2]:
-                 self.num_correct_ex.pop(0)
-                 self.num_correct_ex.pop(0)
-
-
-         '''
+         print(self.num_correct_ex)
+         print(self.cefr_cur)
          if len(self.num_correct_ex) == 3: # reevaluate the langauge level every 3 exercises
-             if sum(self.num_correct_ex) == 3: #if got 3 correct in a row increase difficulty (decrease zipf)
-                 self.zipf_cur =  max(1, self.zipf_cur - 0.5)
-             elif sum(self.num_correct_ex) == 1: #if got only 1 out of 3 correct in a row decrease difficulty (increase zipf)
-                 self.zipf_cur = min(self.zipf_cur + 0.5, 7)
+             if sum(self.num_correct_ex) == 3: #if got 3 correct in a row increase level
+                 self.cefr_cur += 1
+             elif sum(self.num_correct_ex) == 1: #if got only 1 out of 3 correct in a row decrease level
+                 self.cefr_cur -= 1
              while True: # remove the sequence of correct exercises preceding the wrong one
                  try:
                     ex = self.num_correct_ex.pop(0)
                  except: break
                  if ex == 0:
                      break
-         '''
-         print('new list', self.num_correct_ex)
-         print('new list', self.zipf_cur)
+         print(self.num_correct_ex)
+         print(self.cefr_cur)
+             
+
+     
      
      

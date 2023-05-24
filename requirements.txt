@@ -1,0 +1,9 @@
+##### Required 
+pyside6-essentials
+vlc
+sys
+re
+random
+json
+pysrt
+spacy

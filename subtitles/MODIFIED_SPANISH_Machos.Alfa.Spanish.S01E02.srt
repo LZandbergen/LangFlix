@@ -29,7 +29,7 @@ Do you need anything else?
 
 8
 00:00:38,200 --> 00:00:40,960
-My whiteboard.
+My whiteboard.###whiteboard:pizarra:3.59###
 
 9
 00:00:43,080 --> 00:00:45,880
@@ -52,7 +52,7 @@ I think you're an amazing guy.
 
 13
 00:00:55,280 --> 00:00:56,280
-Gee, thanks.
+Gee, thanks.###thanks:gracias:5.86###
 
 14
 00:00:56,640 --> 00:00:57,640
@@ -61,7 +61,7 @@ I agree with you.
 15
 00:00:59,360 --> 00:01:01,520
 Would you be interested
-in joining my team?
+in joining my team?###team:equipo:5.49###
 
 16
 00:01:02,280 --> 00:01:03,280
@@ -70,11 +70,11 @@ As assistant manager?
 17
 00:01:03,360 --> 00:01:05,880
 Do you really think
-I'd put my brilliance
+I'd put my brilliance###brilliance:brillantez:2.97###
 
 18
 00:01:05,960 --> 00:01:07,600
-at the service of an opportunist
+at the service of an opportunist###opportunist:oportunista:3.26###
 
 19
 00:01:07,680 --> 00:01:10,600
@@ -84,7 +84,7 @@ kind of feminist affirmative action?
 20
 00:01:10,680 --> 00:01:13,360
 Hmm. It's not my fault
-that things are changing, Pedro.
+that things are changing, Pedro.###things:cosas:5.85###
 
 21
 00:01:13,440 --> 00:01:14,280
@@ -93,7 +93,7 @@ You sure?
 22
 00:01:14,360 --> 00:01:17,240
 They pay you to think up idiotic shows
-that will get high ratings
+that will get high ratings###shows:programas:4.92###
 
 23
 00:01:17,320 --> 00:01:19,480
@@ -102,7 +102,7 @@ so they can advertise hair products,
 24
 00:01:19,560 --> 00:01:21,920
 creams for antiaging,
-cereals with whole grains
+cereals with whole grains###cereals:cereales:3.85###
 
 25
 00:01:22,000 --> 00:01:23,640
@@ -110,12 +110,12 @@ and other mass-produced pieces of garbage
 
 26
 00:01:23,720 --> 00:01:25,320
-to all these silly little women
+to all these silly little women###women:mujeres:5.5###
 
 27
 00:01:25,400 --> 00:01:28,280
 who've bought into
-the hyped-up empowerment bullshit.
+the hyped-up empowerment bullshit.###empowerment:empoderamiento:3.58###
 
 28
 00:01:28,360 --> 00:01:29,680
@@ -167,26 +167,26 @@ No, no. No more dates.
 
 39
 00:02:01,880 --> 00:02:03,720
-But I slammed the door in her face.
+But I slammed the door in her face.###door:puerta:5.07###
 
 40
 00:02:03,800 --> 00:02:06,120
 Yeah, that's why I had
-to work on an apology.
+to work on an apology.###apology:disculpa:4.24###
 
 41
 00:02:06,200 --> 00:02:08,560
 She'll be your body number one.
-Would nine o'clock work?
+Would nine o'clock work?###number:númer:1.65###
 
 42
 00:02:08,640 --> 00:02:10,560
-My body number one?
+My body number one?###number:númer:1.65###
 
 43
 00:02:10,640 --> 00:02:12,680
 You have to erase Mom
-from your body's memory.
+from your body's memory.###memory:memoria:4.89###
 
 44
 00:02:12,760 --> 00:02:15,000
@@ -206,7 +206,7 @@ did you get that crazy idea?
 47
 00:02:19,520 --> 00:02:22,160
 - I'm sending you the link.
-- But what?
+- But what?###link:enlace:4.56###
 
 48
 00:02:23,360 --> 00:02:25,320
@@ -238,7 +238,7 @@ What test?
 
 54
 00:02:36,840 --> 00:02:38,880
-Hey, Dad, why even get up in the morning?
+Hey, Dad, why even get up in the morning?###morning:mañana:5.48###
 
 55
 00:02:38,960 --> 00:02:41,120
@@ -294,7 +294,7 @@ I just don't... don't understand it.
 
 67
 00:03:14,480 --> 00:03:16,160
-I don't see the need for it at all.
+I don't see the need for it at all.###need:necesidad:5.03###
 
 68
 00:03:16,240 --> 00:03:18,400
@@ -337,7 +337,7 @@ wow, crazy stuff.
 76
 00:03:38,160 --> 00:03:41,640
 It's very difficult to find people
-who are mature and sure of themselves.
+who are mature and sure of themselves.###people:personas:5.84###
 
 77
 00:03:41,720 --> 00:03:43,720
@@ -365,7 +365,7 @@ Yeah, why not?
 82
 00:03:53,560 --> 00:03:57,320
 Yeah, with some young 20-something girl
-with perky tits and a tight ass,
+with perky tits and a tight ass,###ass:culo:4.77###
 
 83
 00:03:57,400 --> 00:04:00,720
@@ -375,7 +375,7 @@ writhing in bed, sweating it out, huh?
 84
 00:04:00,800 --> 00:04:03,040
 - Is that a yes?
-- No, don't put words in my mouth.
+- No, don't put words in my mouth.###yes:sí:5.75###
 
 85
 00:04:03,120 --> 00:04:06,320
@@ -398,7 +398,7 @@ I said no, okay?
 89
 00:04:20,800 --> 00:04:23,760
 I made coffee, and I just went
-and bought some fresh croissants.
+and bought some fresh croissants.###croissants:cruasanes:1.89###
 
 90
 00:04:23,840 --> 00:04:27,280
@@ -408,12 +408,12 @@ and bought some fresh croissants.
 91
 00:04:27,360 --> 00:04:29,600
 Mmm! Let's save money
-and have dinner here.
+and have dinner here.###dinner:cena:4.42###
 
 92
 00:04:29,680 --> 00:04:32,680
 I bought these vegan hamburgers that'll
-make you forget about steak forever.
+make you forget about steak forever.###hamburgers:hamburguesas:3.77###
 
 93
 00:04:32,720 --> 00:04:35,320
@@ -437,7 +437,7 @@ Read, hang out with your buddies, hmm.
 97
 00:04:42,600 --> 00:04:45,120
 Install the new kitchen faucet.
-I don't know, live a little.
+I don't know, live a little.###kitchen:cocina:4.71###
 
 98
 00:04:45,200 --> 00:04:46,720
@@ -454,7 +454,7 @@ What's wrong with the one we've got?
 101
 00:04:52,480 --> 00:04:55,760
 This one's like those industrial ones.
-It stretches like a garden hose.
+It stretches like a garden hose.###hose:manguera:3.35###
 
 102
 00:04:55,840 --> 00:04:57,600
@@ -473,7 +473,7 @@ She may quit.
 105
 00:05:04,360 --> 00:05:06,280
 Wanna spend the day together
-and go shopping?
+and go shopping?###shopping:compras:4.51###
 
 106
 00:05:06,360 --> 00:05:07,920
@@ -487,12 +487,12 @@ and hold hands. That's free.
 108
 00:05:10,400 --> 00:05:14,000
 Hmm. I'm meeting Cynthia. She was gifted
-a beauty treatment and invited me along.
+a beauty treatment and invited me along.###beauty:belleza:4.73###
 
 109
 00:05:14,080 --> 00:05:16,080
 - How nice of your sister, the influencer.
-- Hmm.
+- Hmm.###sister:hermana:4.86###
 
 110
 00:05:16,160 --> 00:05:18,160
@@ -502,7 +502,7 @@ a beauty treatment and invited me along.
 111
 00:05:26,560 --> 00:05:28,920
 - Are you off today, sir?
-- Taking a sick day.
+- Taking a sick day.###day:día:5.96###
 
 112
 00:05:29,000 --> 00:05:31,640
@@ -515,7 +515,7 @@ Yeah.
 114
 00:05:33,400 --> 00:05:36,680
 Okay, when would you say that
-your sex problems first arose?
+your sex problems first arose?###problems:problemas:5.43###
 
 115
 00:05:36,760 --> 00:05:39,440
@@ -525,7 +525,7 @@ to buy a new coffee maker.
 116
 00:05:39,520 --> 00:05:42,800
 Our sex life was washed away
-a long time ago by two tsunamis.
+a long time ago by two tsunamis.###life:vida:5.95###
 
 117
 00:05:42,880 --> 00:05:45,040
@@ -542,7 +542,7 @@ And he has the sex drive of a plant.
 120
 00:05:48,480 --> 00:05:51,520
 It's 'cause she wants it when I'm tired.
-I'm under a lot of stress.
+I'm under a lot of stress.###stress:estrés:4.19###
 
 121
 00:05:51,600 --> 00:05:54,280
@@ -569,16 +569,16 @@ First and foremost, no personal attacks.
 
 126
 00:06:05,400 --> 00:06:07,040
-Remember that you're on the same team.
+Remember that you're on the same team.###team:equipo:5.49###
 
 127
 00:06:07,840 --> 00:06:11,200
 Like many couples,
-you have a communication problem.
+you have a communication problem.###communication:comunicación:5.05###
 
 128
 00:06:11,280 --> 00:06:13,640
-My first recommendation is that you talk.
+My first recommendation is that you talk.###recommendation:recomendación:4.04###
 
 129
 00:06:13,720 --> 00:06:16,360
@@ -588,7 +588,7 @@ It's the only thing we do.
 130
 00:06:16,440 --> 00:06:19,520
 There's a lot of social pressure
-about how much sex a couple should have,
+about how much sex a couple should have,###sex:sexo:4.98###
 
 131
 00:06:19,600 --> 00:06:21,640
@@ -597,26 +597,26 @@ but the important thing is quality.
 132
 00:06:21,720 --> 00:06:25,400
 And for that, it's important to talk.
-To talk about sex without fear.
+To talk about sex without fear.###sex:sexo:4.98###
 
 133
 00:06:25,480 --> 00:06:28,440
 About each other's tastes,
-about what it is you miss.
+about what it is you miss.###tastes:gustos:4.16###
 
 134
 00:06:28,520 --> 00:06:29,600
-Well, fucking.
+Well, fucking.###fucking:follar:3.61###
 
 135
 00:06:30,200 --> 00:06:32,200
 I had a patient
-who was strongly feminist,
+who was strongly feminist,###feminist:feminista:4.11###
 
 136
 00:06:32,240 --> 00:06:35,440
 and she was mortified when she was
-turned on by being called a slut in bed.
+turned on by being called a slut in bed.###bed:cama:4.89###
 
 137
 00:06:35,520 --> 00:06:37,760
@@ -629,7 +629,7 @@ calling you a "slut"?
 
 139
 00:06:38,880 --> 00:06:41,280
-None at all. If she likes it.
+None at all. If she likes it.###None:ninguno:4.83###
 
 140
 00:06:41,360 --> 00:06:44,240
@@ -677,7 +677,7 @@ Sorry, need to come in here?
 150
 00:07:14,840 --> 00:07:17,240
 No, no. Go on, go on.
-There is more bathrooms.
+There is more bathrooms.###bathrooms:baños:4.14###
 
 151
 00:07:21,200 --> 00:07:22,800
@@ -728,8 +728,8 @@ All done.
 
 162
 00:08:10,800 --> 00:08:14,280
-<i>No leaks at all, no drips.
-In short, no issues at all.</i>
+No leaks at all, no drips.
+In short, no issues at all.###issues:problemas:5.43###
 
 163
 00:08:14,360 --> 00:08:16,320
@@ -738,7 +738,7 @@ In short, no issues at all.</i>
 
 164
 00:08:16,400 --> 00:08:18,320
-Do you need any help?
+Do you need any help?###help:ayuda:5.33###
 
 165
 00:08:20,600 --> 00:08:23,320
@@ -768,11 +768,11 @@ Do you, I don't know, wanna try it again?
 171
 00:08:42,080 --> 00:08:45,080
 Sweetie, if I want bad sex,
-I already have my husband.
+I already have my husband.###sex:sexo:4.98###
 
 172
 00:08:46,120 --> 00:08:47,000
-Seventeen years.
+Seventeen years.###years:años:6.12###
 
 173
 00:08:47,080 --> 00:08:48,240
@@ -781,7 +781,7 @@ SWINGING
 174
 00:08:48,320 --> 00:08:52,080
 Seventeen years of happiness.
-And suddenly, she's a different person.
+And suddenly, she's a different person.###person:persona:5.56###
 
 175
 00:08:52,160 --> 00:08:54,440
@@ -794,7 +794,7 @@ There's, like, I don't know,
 177
 00:08:55,880 --> 00:08:58,360
 all this silence at home,
-all this tension.
+all this tension.###silence:silencio:4.89###
 
 178
 00:08:58,440 --> 00:09:00,640
@@ -806,7 +806,7 @@ Yes. Ah, yes, sorry, Jesús.
 
 180
 00:09:03,920 --> 00:09:05,480
-I'm taking some notes for the lawsuit.
+I'm taking some notes for the lawsuit.###lawsuit:demanda:4.79###
 
 181
 00:09:05,560 --> 00:09:07,360
@@ -816,7 +816,7 @@ I saw the list of calls,
 182
 00:09:07,440 --> 00:09:10,760
 and I saw she'd called her cousin Almudena
-160 times in a month.
+160 times in a month.###month:mes:5.31###
 
 183
 00:09:10,840 --> 00:09:12,080
@@ -826,7 +826,7 @@ and I saw she'd called her cousin Almudena
 184
 00:09:12,160 --> 00:09:14,880
 Plus, I have her number,
-and it's different. Ha!
+and it's different. Ha!###number:númer:1.65###
 
 185
 00:09:14,960 --> 00:09:18,000
@@ -876,7 +876,7 @@ of the blue like this?</i>
 
 195
 00:09:39,280 --> 00:09:40,920
-Like, at the office or...
+Like, at the office or...###office:oficina:5.04###
 
 196
 00:09:40,960 --> 00:09:43,720
@@ -909,7 +909,7 @@ Where's Duna?
 202
 00:09:57,160 --> 00:10:00,760
 Picking her kid up. He's sick. Go on,
-serve your friends and your parents.
+serve your friends and your parents.###parents:padres:5.15###
 
 203
 00:10:01,280 --> 00:10:03,800
@@ -928,7 +928,7 @@ Hey.
 206
 00:10:11,560 --> 00:10:14,736
 - We've started going on morning walks.
-- I'm a guy who needs incentives, my boy.
+- I'm a guy who needs incentives, my boy.###morning:mañana:5.48###
 
 207
 00:10:14,760 --> 00:10:15,800
@@ -941,7 +941,7 @@ Look what I brought you.
 209
 00:10:17,520 --> 00:10:19,920
 Mama, I really don't need any food.
-I own a restaurant.
+I own a restaurant.###restaurant:restaurante:4.45###
 
 210
 00:10:20,000 --> 00:10:22,160
@@ -950,7 +950,7 @@ with the boys?
 
 211
 00:10:22,240 --> 00:10:24,720
-Hi, guys. Empanadas with tuna.
+Hi, guys. Empanadas with tuna.###tuna:atún:3.66###
 
 212
 00:10:25,320 --> 00:10:26,200
@@ -960,7 +960,7 @@ Hi, guys. Empanadas with tuna.
 213
 00:10:26,280 --> 00:10:29,840
 Oh, hurry, warm these up.
-In the oven, don't nuke them.
+In the oven, don't nuke them.###oven:horno:4.17###
 
 214
 00:10:29,920 --> 00:10:31,480
@@ -982,16 +982,16 @@ Thanks, Pili.
 
 218
 00:10:38,400 --> 00:10:39,320
-They're tuna.
+They're tuna.###tuna:atún:3.66###
 
 219
 00:10:39,400 --> 00:10:41,280
 Have you seen your mom's ass
-in those?
+in those?###ass:culo:4.77###
 
 220
 00:10:41,360 --> 00:10:43,480
-She's got the ass of a goddess.
+She's got the ass of a goddess.###goddess:diosa:4.04###
 
 221
 00:10:43,560 --> 00:10:45,120
@@ -1009,7 +1009,7 @@ Mmm!
 224
 00:10:48,120 --> 00:10:50,760
 Hey, your parents are proof
-that happy marriages do exist.
+that happy marriages do exist.###parents:padres:5.15###
 
 225
 00:10:50,840 --> 00:10:52,440
@@ -1021,7 +1021,7 @@ Damn, yeah, that's true.
 
 227
 00:10:54,440 --> 00:10:56,120
-A different generation. Doesn't count.
+A different generation. Doesn't count.###generation:generación:4.78###
 
 228
 00:10:56,200 --> 00:10:58,720
@@ -1067,7 +1067,7 @@ into a love shack, you know.
 
 237
 00:11:15,720 --> 00:11:17,840
-You're such pig. She's only 16 years old.
+You're such pig. She's only 16 years old.###years:años:6.12###
 
 238
 00:11:17,920 --> 00:11:20,680
@@ -1095,7 +1095,7 @@ Don't say that. My God!
 
 243
 00:11:29,640 --> 00:11:31,720
-Stuffed the turkey, popped the cherry.
+Stuffed the turkey, popped the cherry.###turkey:pavo:3.66###
 
 244
 00:11:31,760 --> 00:11:33,240
@@ -1129,7 +1129,7 @@ LORETO'S DRIVING SCHOOL
 
 251
 00:11:50,880 --> 00:11:53,800
-<i>Garage number 11, opening up.</i>
+Garage number 11, opening up.###number:númer:1.65###
 
 252
 00:11:53,880 --> 00:11:55,760
@@ -1146,7 +1146,7 @@ I can't believe we're doing this.
 
 255
 00:12:02,360 --> 00:12:04,040
-Straight from the garage to the bedroom.
+Straight from the garage to the bedroom.###garage:garaje:3.7###
 
 256
 00:12:04,120 --> 00:12:06,000
@@ -1155,7 +1155,7 @@ It's so sad coming here with your husband.
 257
 00:12:06,080 --> 00:12:08,760
 - Didn't you want some privacy?
-- Yes, I know, but this is so sad.
+- Yes, I know, but this is so sad.###privacy:privacidad:4.26###
 
 258
 00:12:08,840 --> 00:12:10,320
@@ -1168,7 +1168,7 @@ Hey, we can always turn around.
 260
 00:12:11,800 --> 00:12:14,640
 No way. Your mom's watching the kids
-for once. Come on, let's do it.
+for once. Come on, let's do it.###kids:niños:5.39###
 
 261
 00:12:15,320 --> 00:12:17,080
@@ -1178,7 +1178,7 @@ the therapist said we should talk.
 262
 00:12:17,120 --> 00:12:19,240
 - Correct.
-- About sex.
+- About sex.###sex:sexo:4.98###
 
 263
 00:12:19,320 --> 00:12:20,640
@@ -1187,7 +1187,7 @@ Well, let's talk about sex then.
 264
 00:12:20,720 --> 00:12:24,040
 All right. Uh, okay,
-but don't take things the wrong way.
+but don't take things the wrong way.###things:cosas:5.85###
 
 265
 00:12:24,120 --> 00:12:25,480
@@ -1197,7 +1197,7 @@ but don't take things the wrong way.
 266
 00:12:26,080 --> 00:12:29,520
 Do you have any sexual urges
-throughout the day?
+throughout the day?###day:día:5.96###
 
 267
 00:12:30,120 --> 00:12:32,520
@@ -1218,7 +1218,7 @@ Where at?
 
 271
 00:12:36,800 --> 00:12:38,880
-I don't know, shower, work, anywhere.
+I don't know, shower, work, anywhere.###shower:ducha:4.1###
 
 272
 00:12:38,960 --> 00:12:41,000
@@ -1227,7 +1227,7 @@ I don't know, shower, work, anywhere.
 
 273
 00:12:41,680 --> 00:12:44,040
-When, uh, Julián goes for coffee, I do it.
+When, uh, Julián goes for coffee, I do it.###coffee:café:4.81###
 
 274
 00:12:44,120 --> 00:12:46,600
@@ -1261,7 +1261,7 @@ about you.
 
 281
 00:12:56,400 --> 00:12:57,640
-You can be my new fantasy.
+You can be my new fantasy.###fantasy:fantasía:4.22###
 
 282
 00:12:57,720 --> 00:12:59,360
@@ -1270,7 +1270,7 @@ Oh, okay, okay. Well, I don't mind.
 283
 00:12:59,440 --> 00:13:02,080
 - You like that I think of others?
-- Why would I like that?
+- Why would I like that?###others:otros:5.87###
 
 284
 00:13:02,160 --> 00:13:03,160
@@ -1292,7 +1292,7 @@ Don't know. It came to mind now.
 288
 00:13:08,000 --> 00:13:11,080
 Luis, I need you
-to take more initiative, okay?
+to take more initiative, okay?###initiative:iniciativa:4.69###
 
 289
 00:13:11,160 --> 00:13:13,720
@@ -1300,16 +1300,16 @@ I mean, when you feel horny, come find me.
 
 290
 00:13:13,800 --> 00:13:15,800
-If I'm in the kitchen, we'll do it there.
+If I'm in the kitchen, we'll do it there.###kitchen:cocina:4.71###
 
 291
 00:13:15,880 --> 00:13:17,040
-And the kids?
+And the kids?###kids:niños:5.39###
 
 292
 00:13:17,120 --> 00:13:20,000
 The kids need new hobbies.
-They spend too much time at home, dear.
+They spend too much time at home, dear.###kids:niños:5.39###
 
 293
 00:13:20,080 --> 00:13:22,320
@@ -1371,7 +1371,7 @@ I must really turn him on."
 305
 00:14:03,520 --> 00:14:06,200
 But let me tell you,
-having your self-esteem boosted at my age,
+having your self-esteem boosted at my age,###esteem:estima:4.25###
 
 306
 00:14:06,280 --> 00:14:08,080
@@ -1384,7 +1384,7 @@ Yeah, well, good to hear.
 308
 00:14:09,440 --> 00:14:12,280
 Uh, because you know, that isn't...
-that's really not my style.
+that's really not my style.###style:estilo:5.07###
 
 309
 00:14:12,360 --> 00:14:13,520
@@ -1411,17 +1411,17 @@ But she's dead now.
 314
 00:14:23,200 --> 00:14:25,160
 - Oof!
-- She died in a car accident.
+- She died in a car accident.###accident:accidente:4.69###
 
 315
 00:14:25,240 --> 00:14:27,720
 - She crashed head-on into a bus.
-- Oof!
+- Oof!###bus:autobús:4.31###
 
 316
 00:14:27,800 --> 00:14:30,160
 School bus.
-No kids were hurt. Oof, you know.
+No kids were hurt. Oof, you know.###kids:niños:5.39###
 
 317
 00:14:30,240 --> 00:14:32,120
@@ -1449,7 +1449,7 @@ I don't know. Pandemic.
 322
 00:14:42,480 --> 00:14:45,520
 Something happened that day
-and took the spotlight off of it. Yeah.
+and took the spotlight off of it. Yeah.###day:día:5.96###
 
 323
 00:14:45,600 --> 00:14:47,880
@@ -1470,12 +1470,12 @@ Um, got any kids?
 327
 00:14:53,840 --> 00:14:56,840
 Uh, yes, a daughter.
-She's, uh, 16 years old.
+She's, uh, 16 years old.###years:años:6.12###
 
 328
 00:14:56,920 --> 00:15:00,120
 But you know, I barely see her.
-She has a life of her own and...
+She has a life of her own and...###life:vida:5.95###
 
 329
 00:15:00,200 --> 00:15:04,480
@@ -1488,7 +1488,7 @@ And what are they like?
 
 331
 00:15:06,920 --> 00:15:08,160
-They're a different generation.
+They're a different generation.###generation:generación:4.78###
 
 332
 00:15:08,200 --> 00:15:10,160
@@ -1502,7 +1502,7 @@ More grown-up, what do you mean by that?
 334
 00:15:12,880 --> 00:15:15,760
 Look, Santi,
-I lost my virginity when I was 22,
+I lost my virginity when I was 22,###virginity:virginidad:3.61###
 
 335
 00:15:15,840 --> 00:15:18,880
@@ -1516,17 +1516,17 @@ having orgies when they're 15 years old.
 
 337
 00:15:22,240 --> 00:15:23,240
-Orgies.
+Orgies.###Orgies:orgía:3.3###
 
 338
 00:15:23,320 --> 00:15:25,840
 They see sex in a different way
-is what I mean.
+is what I mean.###sex:sexo:4.98###
 
 339
 00:15:26,440 --> 00:15:29,240
 But, listen, I do think
-it's a very healthy thing, right?
+it's a very healthy thing, right?###thing:cosa:5.53###
 
 340
 00:15:29,320 --> 00:15:30,240
@@ -1567,7 +1567,7 @@ No, just...
 348
 00:15:50,680 --> 00:15:54,560
 I heard... I heard a weird noise,
-and I was worried about you, you know.
+and I was worried about you, you know.###noise:ruido:4.57###
 
 349
 00:15:54,640 --> 00:15:56,040
@@ -1620,7 +1620,7 @@ Hello!
 360
 00:16:42,520 --> 00:16:45,720
 I'm here in this big house,
-seeing my sister.
+seeing my sister.###house:casa:5.77###
 
 361
 00:16:45,800 --> 00:16:48,840
@@ -1630,7 +1630,7 @@ and who do we have here in the kitchen?
 362
 00:16:48,920 --> 00:16:51,400
 It's my bro-in-law.
-He's made dinner for us.
+He's made dinner for us.###dinner:cena:4.42###
 
 363
 00:16:51,480 --> 00:16:52,320
@@ -1639,7 +1639,7 @@ Don't film me.
 364
 00:16:52,400 --> 00:16:55,000
 Well, he's in a bad mood
-because he got fired from work.
+because he got fired from work.###work:trabajo:5.81###
 
 365
 00:16:56,160 --> 00:16:58,016
@@ -1662,7 +1662,7 @@ Mm. It's a bit swollen from the treatment.
 369
 00:17:04,480 --> 00:17:06,560
 Yes, but you're gonna love it.
-Tomorrow, baby face.
+Tomorrow, baby face.###Tomorrow:mañana:5.48###
 
 370
 00:17:07,160 --> 00:17:09,880
@@ -1696,7 +1696,7 @@ this weekend. We can come.
 376
 00:17:20,720 --> 00:17:24,120
 Are you going to stay here for dinner,
-or are you leaving?
+or are you leaving?###dinner:cena:4.42###
 
 377
 00:17:24,200 --> 00:17:25,120
@@ -1735,8 +1735,8 @@ Open it.
 
 385
 00:17:48,720 --> 00:17:52,280
-<i>"Spreading the Love,
-a Guide to Open Relationships."</i>
+"Spreading the Love,
+a Guide to Open Relationships."###Love:amor:5.41###
 
 386
 00:17:52,360 --> 00:17:53,200
@@ -1751,7 +1751,7 @@ Look here. This is my favorite one.
 388
 00:17:56,480 --> 00:17:58,440
 - The possibilities are endless.
-- Hmm.
+- Hmm.###possibilities:posibilidades.:4.62###
 
 389
 00:17:58,520 --> 00:18:01,040
@@ -1764,7 +1764,7 @@ or romantic anarchists, poly-fidelity...
 
 391
 00:18:04,960 --> 00:18:06,560
-I want you to meet my parents.
+I want you to meet my parents.###parents:padres:5.15###
 
 392
 00:18:07,640 --> 00:18:09,680
@@ -1777,7 +1777,7 @@ What do you mean?
 394
 00:18:10,680 --> 00:18:13,200
 We've been dating for three years.
-I think it's about time.
+I think it's about time.###years:años:6.12###
 
 395
 00:18:14,160 --> 00:18:17,400
@@ -1785,7 +1785,7 @@ Yes. Well, I... okay, at the right moment.
 
 396
 00:18:17,480 --> 00:18:20,440
-Look here. "Basic rules."
+Look here. "Basic rules."###rules:reglas:4.76###
 
 397
 00:18:20,520 --> 00:18:23,240
@@ -1801,12 +1801,12 @@ That's something we'll need to work on.
 
 400
 00:18:27,520 --> 00:18:29,480
-Wanna have dinner with them tomorrow?
+Wanna have dinner with them tomorrow?###tomorrow:mañana:5.48###
 
 401
 00:18:29,560 --> 00:18:32,400
 Oh, but tomorrow I wanted to take you
-to this place that's amazing.
+to this place that's amazing.###tomorrow:mañana:5.48###
 
 402
 00:18:32,480 --> 00:18:35,440
@@ -1820,7 +1820,7 @@ Yeah.
 404
 00:18:37,000 --> 00:18:39,560
 A relationship isn't solid
-until your girlfriend bites the bullet
+until your girlfriend bites the bullet###girlfriend:novia:4.81###
 
 405
 00:18:39,640 --> 00:18:41,960
@@ -1828,7 +1828,7 @@ and meets her in-laws. It's the way it is.
 
 406
 00:18:44,880 --> 00:18:46,840
-Okay, well, let's see them tomorrow.
+Okay, well, let's see them tomorrow.###tomorrow:mañana:5.48###
 
 407
 00:18:46,920 --> 00:18:48,920
@@ -1865,7 +1865,7 @@ What the hell!
 
 415
 00:19:55,200 --> 00:19:56,440
-"Starting out my day."
+"Starting out my day."###day:día:5.96###
 
 416
 00:19:58,640 --> 00:20:01,240
@@ -1887,7 +1887,7 @@ You'll give me a double chin, no.
 420
 00:20:26,960 --> 00:20:29,000
 Your legs look longer,
-because of the perspective.
+because of the perspective.###perspective:perspectiva:4.56###
 
 421
 00:20:30,080 --> 00:20:32,760
@@ -1913,11 +1913,11 @@ Hmm.
 
 426
 00:20:45,720 --> 00:20:47,520
-Not working today either, sir?
+Not working today either, sir?###today:hoy:5.74###
 
 427
 00:20:48,560 --> 00:20:51,520
-No, uh, I took the week off, actually.
+No, uh, I took the week off, actually.###week:semana:5.48###
 
 428
 00:20:51,600 --> 00:20:54,120
@@ -1926,11 +1926,11 @@ Oh, how nice. You work so hard.
 429
 00:21:03,240 --> 00:21:05,560
 Hey, why are you making
-the maid take photos?
+the maid take photos?###photos:fotos:5.24###
 
 430
 00:21:05,640 --> 00:21:07,640
-A photographer costs a lot, you know.
+A photographer costs a lot, you know.###photographer:fotógrafo:4.05###
 
 431
 00:21:07,720 --> 00:21:09,600
@@ -2005,7 +2005,7 @@ Can't you see we're recording right now?
 
 447
 00:22:02,200 --> 00:22:03,800
-But she said take the initiative.
+But she said take the initiative.###initiative:iniciativa:4.69###
 
 448
 00:22:03,880 --> 00:22:05,640
@@ -2015,7 +2015,7 @@ But she said take the initiative.
 449
 00:22:05,720 --> 00:22:07,120
 - That's a kind of rape.
-- Wow.
+- Wow.###rape:violación:4.33###
 
 450
 00:22:07,200 --> 00:22:09,720
@@ -2038,7 +2038,7 @@ Mm-hmm.
 454
 00:22:16,080 --> 00:22:19,240
 Then in 24 hours,
-I've gone from asexual to rapist.
+I've gone from asexual to rapist.###rapist:violador:3.7###
 
 455
 00:22:19,320 --> 00:22:20,160
@@ -2070,7 +2070,7 @@ it's because I didn't hear you, hmm?
 461
 00:22:30,160 --> 00:22:32,000
 You could also make me coffee,
-to wake me up.
+to wake me up.###coffee:café:4.81###
 
 462
 00:22:32,080 --> 00:22:34,640
@@ -2103,7 +2103,7 @@ like an angel.
 468
 00:22:50,680 --> 00:22:53,680
 Okay, she heard you arrive,
-and the boyfriend jumped out the window.
+and the boyfriend jumped out the window.###window:ventana:4.54###
 
 469
 00:22:53,760 --> 00:22:56,000
@@ -2143,7 +2143,7 @@ You should answer it.
 
 477
 00:23:09,120 --> 00:23:10,720
-Turn the speaker on. Turn the...
+Turn the speaker on. Turn the...###speaker:altavoz:3.35###
 
 478
 00:23:10,800 --> 00:23:12,360
@@ -2174,7 +2174,7 @@ and I got all anxious about that.
 
 484
 00:23:25,920 --> 00:23:28,480
-The truth is that I just couldn't...
+The truth is that I just couldn't...###truth:verdad:5.68###
 
 485
 00:23:29,760 --> 00:23:30,760
@@ -2218,7 +2218,7 @@ and stop playing games.
 
 494
 00:23:49,720 --> 00:23:51,280
-They're gonna fix your phimosis.
+They're gonna fix your phimosis.###phimosis:fimosis:2.2###
 
 495
 00:23:51,360 --> 00:23:52,800
@@ -2240,12 +2240,12 @@ What should we do? We could hit the town.
 499
 00:24:02,160 --> 00:24:05,520
 Uh, no, no, today's impossible.
-Got this thing at home that...
+Got this thing at home that...###today:hoy:5.74###
 
 500
 00:24:05,600 --> 00:24:08,560
 I'm going to dinner with Luz.
-I'm introducing her to my parents.
+I'm introducing her to my parents.###parents:padres:5.15###
 
 501
 00:24:14,200 --> 00:24:15,200
@@ -2253,7 +2253,7 @@ What?
 
 502
 00:24:19,760 --> 00:24:21,880
-They've been married for 44 years.
+They've been married for 44 years.###years:años:6.12###
 
 503
 00:24:21,960 --> 00:24:25,080
@@ -2292,12 +2292,12 @@ Yes, uh, delicious.
 511
 00:24:38,600 --> 00:24:41,800
 Hey, I'm gonna come over for dinner
-to introduce you to Luz.
+to introduce you to Luz.###dinner:cena:4.42###
 
 512
 00:24:41,880 --> 00:24:43,576
-<i>- Which Luz?
-- His girlfriend.</i>
+- Which Luz?
+- His girlfriend.###girlfriend:novia:4.81###
 
 513
 00:24:43,600 --> 00:24:45,760
@@ -2307,17 +2307,17 @@ to introduce you to Luz.
 514
 00:24:45,840 --> 00:24:48,600
 - There in half an hour.
-<i>- Oh, today? No! No, no, no, no, no.</i>
+- Oh, today? No! No, no, no, no, no.###today:hoy:5.74###
 
 515
 00:24:48,680 --> 00:24:50,520
-<i>- We... we can't today.</i>
-- Why not?
+- We... we can't today.
+- Why not?###today:hoy:5.74###
 
 516
 00:24:51,520 --> 00:24:53,640
 - Mama.
-<i>- We're going to a concert.</i>
+- We're going to a concert.###concert:concierto:4.6###
 
 517
 00:24:53,720 --> 00:24:55,480
@@ -2331,7 +2331,7 @@ and Uncle Javier</i>
 519
 00:24:56,920 --> 00:24:58,600
 But since
-when do you like classical music?
+when do you like classical music?###music:música:5.24###
 
 520
 00:24:58,680 --> 00:25:00,480
@@ -2353,12 +2353,12 @@ What? We're not going, huh?
 524
 00:25:08,440 --> 00:25:11,440
 - They're going to a concert.
-- Why didn't you ask them before?
+- Why didn't you ask them before?###concert:concierto:4.6###
 
 525
 00:25:11,520 --> 00:25:14,080
 I never schedule with my parents.
-They're always home.
+They're always home.###parents:padres:5.15###
 
 526
 00:25:14,160 --> 00:25:16,640
@@ -2372,7 +2372,7 @@ they've got, huh?
 528
 00:25:19,440 --> 00:25:21,440
 - Uh-huh.
-- They even go out to concerts and stuff.
+- They even go out to concerts and stuff.###concerts:conciertos:4.22###
 
 529
 00:25:21,520 --> 00:25:22,440
@@ -2406,7 +2406,7 @@ Let's see. That's it. Ginger, my favorite.
 536
 00:25:39,840 --> 00:25:43,800
 This is all accompanied
-by this marvelous cardboard flatbread,
+by this marvelous cardboard flatbread,###cardboard:cartón:3.89###
 
 537
 00:25:43,880 --> 00:25:45,360
@@ -2423,7 +2423,7 @@ use it to fix a wonky table instead.
 
 540
 00:25:52,040 --> 00:25:53,840
-I don't know who makes this bread.
+I don't know who makes this bread.###bread:pan:4.82###
 
 541
 00:25:53,920 --> 00:25:57,640
@@ -2433,7 +2433,7 @@ they won't find out.
 542
 00:25:57,720 --> 00:26:01,040
 Mm. I've gotta go.
-My boyfriend is giving me the look.
+My boyfriend is giving me the look.###boyfriend:novio:4.63###
 
 543
 00:26:01,760 --> 00:26:02,760
@@ -2442,7 +2442,7 @@ Bye.
 544
 00:26:03,680 --> 00:26:05,520
 - Mmm.
-- We having this for dinner?
+- We having this for dinner?###dinner:cena:4.42###
 
 545
 00:26:05,600 --> 00:26:06,880
@@ -2468,16 +2468,16 @@ with your friends now?
 550
 00:26:19,160 --> 00:26:21,520
 People say that work absorbs you,
-but that's a lie.
+but that's a lie.###work:trabajo:5.81###
 
 551
 00:26:21,600 --> 00:26:23,080
-It's life that absorbs you.
+It's life that absorbs you.###life:vida:5.95###
 
 552
 00:26:23,160 --> 00:26:25,320
 - What?
-- Everyone has their families now.
+- Everyone has their families now.###families:familias:4.89###
 
 553
 00:26:25,400 --> 00:26:28,080
@@ -2517,7 +2517,7 @@ It makes my legs look skinny.
 561
 00:26:47,680 --> 00:26:50,280
 Well, I'm quickly getting more
-and more followers, smart-ass.
+and more followers, smart-ass.###followers:seguidores:4.68###
 
 562
 00:26:50,360 --> 00:26:52,800
@@ -2578,7 +2578,7 @@ No, no, no. Let me say something.
 
 575
 00:27:42,400 --> 00:27:44,840
-Uh, so we split up three years ago.
+Uh, so we split up three years ago.###years:años:6.12###
 
 576
 00:27:44,920 --> 00:27:46,320
@@ -2598,12 +2598,12 @@ I truly hate her with all my soul,
 579
 00:27:50,920 --> 00:27:54,640
 every single day I hope she'll crawl back
-and beg me to forgive her,
+and beg me to forgive her,###day:día:5.96###
 
 580
 00:27:54,720 --> 00:27:58,120
 because the saddest thing of all
-is that I'm still in love with her.
+is that I'm still in love with her.###love:amor:5.41###
 
 581
 00:27:58,200 --> 00:28:00,840
@@ -2617,17 +2617,17 @@ What are you looking for?
 583
 00:28:03,680 --> 00:28:06,640
 - An orgasm.
-- Well, then that doesn't affect us.
+- Well, then that doesn't affect us.###orgasm:orgasmo:3.59###
 
 584
 00:28:15,040 --> 00:28:17,920
 Oh! Hang on. Hang on, hot shot.
-Why are you in such a hurry?
+Why are you in such a hurry?###hurry:prisa:4.13###
 
 585
 00:28:18,000 --> 00:28:19,640
 - Eh?
-- I'm gonna need some lube.
+- I'm gonna need some lube.###lube:lubricante:3.13###
 
 586
 00:28:19,720 --> 00:28:21,520
@@ -2701,7 +2701,7 @@ No fucking way. Oh.
 602
 00:29:06,200 --> 00:29:09,720
 Fuck me! A 30-euro cover charge.
-Is dinner included or what?
+Is dinner included or what?###dinner:cena:4.42###
 
 603
 00:29:10,560 --> 00:29:12,600
@@ -2746,7 +2746,7 @@ This is a swingers' club, darling.
 
 612
 00:29:32,640 --> 00:29:33,840
-Is this your girlfriend?
+Is this your girlfriend?###girlfriend:novia:4.81###
 
 613
 00:29:34,520 --> 00:29:36,000
@@ -2774,7 +2774,7 @@ It was a gift from your father.
 618
 00:29:46,760 --> 00:29:48,840
 It got infected.
-She had to take antibiotics.
+She had to take antibiotics.###antibiotics:antibióticos:3.55###
 
 619
 00:29:48,920 --> 00:29:50,600
@@ -2797,11 +2797,11 @@ See you later.
 
 623
 00:30:01,720 --> 00:30:04,320
-But, uh, I thought they had a concert.
+But, uh, I thought they had a concert.###concert:concierto:4.6###
 
 624
 00:30:07,880 --> 00:30:09,480
-With my aunt and uncle.
+With my aunt and uncle.###uncle:tío:4.59###
 
 625
 00:30:11,120 --> 00:30:12,960
@@ -2813,7 +2813,7 @@ Thank you.
 
 627
 00:30:14,680 --> 00:30:18,400
-Javier and Alicia. My... my aunt Alicia.
+Javier and Alicia. My... my aunt Alicia.###aunt:tía:4.35###
 
 628
 00:30:20,200 --> 00:30:21,200
@@ -2839,7 +2839,7 @@ with Ángeles is over, okay?
 
 633
 00:30:47,240 --> 00:30:50,320
-Body number one, that one's down.
+Body number one, that one's down.###number:númer:1.65###
 
 634
 00:30:50,400 --> 00:30:52,440
@@ -2864,7 +2864,7 @@ No, no. There. There. What's under there?
 639
 00:31:03,200 --> 00:31:06,520
 Oh, this here?
-Mm, they're cushions to hold my laptop up.
+Mm, they're cushions to hold my laptop up.###cushions:cojines:2.98###
 
 640
 00:31:06,600 --> 00:31:09,160
@@ -2880,7 +2880,7 @@ Hmm.
 
 643
 00:31:27,760 --> 00:31:29,480
-Have a good night.
+Have a good night.###night:noche:5.55###
 
 644
 00:31:33,720 --> 00:31:36,080
@@ -2893,17 +2893,17 @@ Luz.
 646
 00:31:37,240 --> 00:31:41,720
 Okay, do they get a discount,
-like, in museums?
+like, in museums?###museums:museos:4.02###
 
 647
 00:31:42,240 --> 00:31:44,600
 My parents are swingers.
-The world's going to hell.
+The world's going to hell.###parents:padres:5.15###
 
 648
 00:31:44,680 --> 00:31:46,960
 Look, now we know
-how they've kept up the passion.
+how they've kept up the passion.###passion:pasión:4.55###
 
 649
 00:31:47,040 --> 00:31:48,160
@@ -2943,7 +2943,7 @@ Is that what you really want?
 
 657
 00:32:07,720 --> 00:32:09,960
-No, I wanna go back to a week ago,
+No, I wanna go back to a week ago,###week:semana:5.48###
 
 658
 00:32:10,040 --> 00:32:12,136
@@ -2971,17 +2971,17 @@ Look, no, no, no, no. I'm uncomfortable.
 663
 00:32:21,760 --> 00:32:24,120
 I don't want anyone banging my girlfriend.
-Call me a weirdo.
+Call me a weirdo.###girlfriend:novia:4.81###
 
 664
 00:32:24,200 --> 00:32:27,200
 I love you,
-but I no longer believe in monogamy.
+but I no longer believe in monogamy.###monogamy:monogamia:2.73###
 
 665
 00:32:27,280 --> 00:32:30,416
 I don't believe in the dirty things that
-those people do, people like my parents.
+those people do, people like my parents.###parents:padres:5.15###
 
 666
 00:32:30,440 --> 00:32:32,240
@@ -2999,7 +2999,7 @@ You should support me, man.
 
 669
 00:32:39,240 --> 00:32:40,880
-You're not the center of the universe.
+You're not the center of the universe.###universe:universo:4.66###
 
 670
 00:32:40,960 --> 00:32:43,240
@@ -3008,12 +3008,12 @@ that you wanna be an influ...
 
 671
 00:32:43,320 --> 00:32:45,640
-Creator of content.
+Creator of content.###content:contenido:4.99###
 
 672
 00:32:45,720 --> 00:32:48,920
 But there are millions. Millions, Daniela.
-What makes you so special?
+What makes you so special?###Millions:millones:5.46###
 
 673
 00:32:49,000 --> 00:32:51,560
@@ -3046,7 +3046,7 @@ And do not get me started on that trip.
 679
 00:33:03,600 --> 00:33:06,280
 Ah-ah! So you don't wanna go
-on vacation with me?
+on vacation with me?###vacation:vacaciones:4.74###
 
 680
 00:33:06,360 --> 00:33:07,280
@@ -3056,7 +3056,7 @@ on vacation with me?
 681
 00:33:07,360 --> 00:33:09,640
 But not with your sister,
-Miss Treatments, God no.
+Miss Treatments, God no.###sister:hermana:4.86###
 
 682
 00:33:09,720 --> 00:33:11,640
