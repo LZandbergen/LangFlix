@@ -75,13 +75,14 @@ def create_dictionary(language='es', file_name="back_end/La.casa.de.papel.S01E01
         json.dump(translation_dict, file)
 
 
-files_list = [["fr", "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "FRENCH_Detox_S01E01_Dict.json"],
+
+if __name__ == "__main__":
+    files_list = [["fr", "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "FRENCH_Detox_S01E01_Dict.json"],
               ["fr", "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt", "FRENCH_Detox_S01E02_Dict.json"],
               ["de", "subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "GERMAN_Drugs_Online_S01E01_Dict.json"],
               ["de", "subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt", "GERMAN_Drugs_Online_S01E02_Dict.json"],
               ["es", "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "SPANISH_Machos_Alpha_S01E01_Dict.json"],
               ["es", "subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "SPANISH_Machos_Alpha_S01E02_Dict.json"]]
-
-# for language, file_name, save_name in files_list:
-if __name__ == "__main__":
-    create_dictionary("es", "subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "SPANISH_Machos_Alpha_S01E02_Dict.json")
+    for language, file_name, save_name in files_list:
+        create_dictionary(language, file_name, save_name)
+    # create_dictionary("es", "subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "SPANISH_Machos_Alpha_S01E02_Dict.json")
