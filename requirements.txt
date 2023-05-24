@@ -1,5 +1,5 @@
 ##### Required 
-Pyside6
+pyside6-essentials
 vlc
 sys
 re
