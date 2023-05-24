@@ -10,6 +10,9 @@ from os import path
 from Video import Video
 import re
 import random
+from cefr_to_zipf import cefr_to_zipf_func
+import json
+from translate import translate as tr
 
 
 class MainWindow(QMainWindow):
@@ -28,14 +31,22 @@ class MainWindow(QMainWindow):
         families = []
         for id in [id1, id2, id3]: families.append(QtGui.QFontDatabase.applicationFontFamilies(id)) 
 
+        translator = tr.Translator(from_lang='fr', to_lang='en')
+
         # create video window   
         #self.video = QtWidgets.QWidget()
-        self.video = Video(path.join("shows", "French","S01E01 Are We Shtty.mkv"), path.join("subtitles", "MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.join("subtitles", "FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
+        self.video = Video(path.normpath("shows/French/S01E01 Are We Shtty.mkv"), path.normpath("subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.normpath("subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
-        #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
+        with open('translations_FRENCH_Detox_S01E01_Dict.json', encoding='utf-8') as json_file:
+            translation_dict = json.load(json_file)
 
+        with open('FRENCH_Detox_S01E01_Dict_tran.json', encoding='utf-8') as json_file:
+            translation_dict.update(json.load(json_file))
+
+        #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
+        '''
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
                 self.video.appOnToggle.setStyleSheet("""QPushButton
@@ -59,6 +70,7 @@ class MainWindow(QMainWindow):
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.video.update_time_slider()) 
 
         self.video.appOnToggle.clicked.connect(switchAppOff)
+        '''
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
@@ -140,7 +152,7 @@ class MainWindow(QMainWindow):
         #cor_incor_text.setFont(QtGui.QFont(families[0]))
         cor_incor_icon = QtWidgets.QLabel()
         cor_incor_icon.setStyleSheet('QLabel {background-color: #1E1E1E;}')
-        QtGui.QIcon(path.join("front_end", "tab_image.png"))
+        #QtGui.QIcon(path.join("front_end", "tab_image.png"))
         cor_incor_layout = QtWidgets.QHBoxLayout()
         cor_incor_layout.setAlignment(QtCore.Qt.AlignCenter)
         cor_incor_layout.addWidget(cor_incor_icon)
@@ -177,8 +189,12 @@ class MainWindow(QMainWindow):
                     cor_incor_icon.setPixmap(pixmap)
                     cor_incor_icon.setHidden(False)
             buttons_stackedLayout.setCurrentIndex(1)
+            rb_text1.setText(rb_text1.text() + ' = ' + translator.translate(rb_text1.text()).lower())#translation_dict[rb_text1.text()].lower())
+            rb_text2.setText(rb_text2.text() + ' = ' + translator.translate(rb_text2.text()).lower())#translation_dict[rb_text2.text()].lower())
+            rb_text3.setText(rb_text3.text() + ' = ' + translator.translate(rb_text3.text()).lower())#translation_dict[rb_text3.text()].lower())
             self.video.num_correct_ex.append(is_correct)
             self.video.adjust_difficulty()
+            self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
         submit_button.clicked.connect(checkAnswer)                             
 
 
@@ -260,18 +276,24 @@ class MainWindow(QMainWindow):
         buttons_stackedLayout.addWidget(buttons_widget)
         buttons_stackedLayout.addWidget(continueButton_widget)
 
+        dict_is_hidden = False
+
+        def hideDictionary():
+            dict_is_hidden = True
+            self.showLayoutChildren(layout = side_layout, show = False)
+
         # Functions for switching between tabs
         def switchToDict():
             dictionary_tab.moveToThread(tabs_layout.thread())
             stackedLayout.setCurrentIndex(1)
-            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image1.png"); text-align: center; background-position: center right;}')
+            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         def switchToExercise():
             #stackedLayout.moveToThread(self.thread())
             stackedLayout.setCurrentIndex(0)
             exercise_tab.setHidden(False)
             exercise_tab.setVisible(True)
-            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
+            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
 
         # Create and connect tabs to switch between pages
@@ -512,10 +534,12 @@ class MainWindow(QMainWindow):
         def switchToMain():
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
-            self.video.cefr_start = self.CEFRlevel # set cefr variable of the video object
-            print(self.CEFRlevel)
+            #self.video.zipf_start = self.CEFRlevel # set cefr variable of the video object
+            self.video.set_zipf(cefr_to_zipf_func(self.CEFRlevel[0]))
+            
         setLevel_button.clicked.connect(switchToMain)
-
+        
+    
         # Wrapping the levels page in layouts
         a_layout = QtWidgets.QHBoxLayout()
         b_layout = QtWidgets.QHBoxLayout()
@@ -551,6 +575,7 @@ class MainWindow(QMainWindow):
         #state of interface at start of the app
         switchToDict()
         exercise_tab.setHidden(True)
+        #hideDictionary()
 
         # function for triggering events connected to video time
         def react_to_time_change(indices):
@@ -582,14 +607,30 @@ class MainWindow(QMainWindow):
                 target_word_data = self.video.get_word_data_from_sub(ind)[0]
                 word_options = target_word_data[3][1:-1].split(', ') #list of answer options
                 if len(word_options) == 1: word_options.append('')
-                sentence = re.sub(r''+target_word_data[0], '_____', self.video.subs_cur[ind].text)
+                sentence = re.sub(r''+target_word_data[0], '_____', self.video.subs_cur[ind].text) # sentence in English
+                '''
+                l2_sub = None
+                sub = self.video.subs_cur[ind]
+                sub_time = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
+                                seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
+                up_time_bound = sub_time + timedelta(microseconds= 2*10**6)
+                low_time_bound = sub_time - timedelta(microseconds= 2*10**6)
+                for sub in self.video.subs_l2: 
+                    stime = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
+                                seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
+                    if stime >= low_time_bound and stime <= up_time_bound:
+                        l2_sub = sub
+                        break
+                sentence = re.sub(r''+target_word_data[1], '_____', l2_sub.text)
+                print(sentence)
+                '''
                 #words = [target_word_data[1]] 
                 word_options.append(target_word_data[1])
                 random.shuffle(word_options) # shuffle word order
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
                 self.video.ind_to_stop_at_stack.pop(0)
-                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+                #self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
                 generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
                 self.video.cue_ex_sig.emit()
 
@@ -600,7 +641,7 @@ class MainWindow(QMainWindow):
                     self.showLayoutChildren(layout.itemAt(i).layout(), show)
             else:
                 if show:
-                    layout.itemAt(i).widget().show()
+                    layout.itemAt(i).widget().show()  
                 else:
                     layout.itemAt(i).widget().hide()
 

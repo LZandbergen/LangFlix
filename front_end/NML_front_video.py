@@ -12,6 +12,7 @@ import re
 import random
 from cefr_to_zipf import cefr_to_zipf_func
 import json
+from translate import translate as tr
 
 
 class MainWindow(QMainWindow):
@@ -19,6 +20,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("LangFlix")
+        self.setWindowIcon(QtGui.QIcon('front_end/logo.png'))
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("""background-color: #171717;""")
         
@@ -30,14 +32,19 @@ class MainWindow(QMainWindow):
         families = []
         for id in [id1, id2, id3]: families.append(QtGui.QFontDatabase.applicationFontFamilies(id)) 
 
+        translator = tr.Translator(from_lang='fr', to_lang='en')
+
         # create video window   
         #self.video = QtWidgets.QWidget()
         self.video = Video(path.normpath("shows/French/S01E01 Are We Shtty.mkv"), path.normpath("subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.normpath("subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
-        with open('FRENCH_Detox_S01E01_Dict_tran.json', encoding='utf-8') as json_file:
+        with open('translations_FRENCH_Detox_S01E01_Dict.json', encoding='utf-8') as json_file:
             translation_dict = json.load(json_file)
+
+        with open('FRENCH_Detox_S01E01_Dict_tran.json', encoding='utf-8') as json_file:
+            translation_dict.update(json.load(json_file))
 
         #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
         '''
@@ -68,6 +75,7 @@ class MainWindow(QMainWindow):
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
+        exercise_text.setWordWrap(True)
         #exercise_text.setFont(QtGui.QFont(families[0]))
         exercise_text.setStyleSheet('QLabel {padding-left: 16px; color: #CACACA; font-size: 16px; font-weight: 780; background-color: #1E1E1E;}')
 
@@ -85,7 +93,7 @@ class MainWindow(QMainWindow):
                     QRadioButton::indicator::unchecked
                         {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                     QRadioButton::indicator::checked
-                        {image: url(Downloads/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                        {image: url(front_end/RadioButton (1).png); width: 14px; height: 14px;}
                  '''
         r_button1 = QtWidgets.QRadioButton()
         r_button1.setStyleSheet(style)
@@ -146,7 +154,7 @@ class MainWindow(QMainWindow):
         #cor_incor_text.setFont(QtGui.QFont(families[0]))
         cor_incor_icon = QtWidgets.QLabel()
         cor_incor_icon.setStyleSheet('QLabel {background-color: #1E1E1E;}')
-        QtGui.QIcon(path.join("front_end", "tab_image.png"))
+        #QtGui.QIcon(path.join("front_end", "tab_image.png"))
         cor_incor_layout = QtWidgets.QHBoxLayout()
         cor_incor_layout.setAlignment(QtCore.Qt.AlignCenter)
         cor_incor_layout.addWidget(cor_incor_icon)
@@ -173,7 +181,7 @@ class MainWindow(QMainWindow):
                                         QRadioButton::indicator::unchecked
                                             {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                                         QRadioButton::indicator::checked
-                                            {image: url(Downloads/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                                            {image: url(front_end/RadioButton (1).png); width: 14px; height: 14px;}
                                     ''')
                     break
                 else: 
@@ -183,9 +191,9 @@ class MainWindow(QMainWindow):
                     cor_incor_icon.setPixmap(pixmap)
                     cor_incor_icon.setHidden(False)
             buttons_stackedLayout.setCurrentIndex(1)
-            rb_text1.setText(rb_text1.text() + ' = ' + translation_dict[rb_text1.text()])
-            rb_text2.setText(rb_text2.text() + ' = ' + translation_dict[rb_text2.text()])
-            rb_text3.setText(rb_text3.text() + ' = ' + translation_dict[rb_text3.text()])
+            rb_text1.setText(rb_text1.text() + ' = ' + translator.translate(rb_text1.text()).lower())#translation_dict[rb_text1.text()].lower())
+            rb_text2.setText(rb_text2.text() + ' = ' + translator.translate(rb_text2.text()).lower())#translation_dict[rb_text2.text()].lower())
+            rb_text3.setText(rb_text3.text() + ' = ' + translator.translate(rb_text3.text()).lower())#translation_dict[rb_text3.text()].lower())
             self.video.num_correct_ex.append(is_correct)
             self.video.adjust_difficulty()
             self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
@@ -280,14 +288,14 @@ class MainWindow(QMainWindow):
         def switchToDict():
             dictionary_tab.moveToThread(tabs_layout.thread())
             stackedLayout.setCurrentIndex(1)
-            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image1.png"); text-align: center; background-position: center right;}')
+            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         def switchToExercise():
             #stackedLayout.moveToThread(self.thread())
             stackedLayout.setCurrentIndex(0)
             exercise_tab.setHidden(False)
             exercise_tab.setVisible(True)
-            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("./Downloads/LangFlix/front_end/tab_image2.png"); text-align: center; background-position: center left;}')
+            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
 
         # Create and connect tabs to switch between pages
@@ -341,7 +349,7 @@ class MainWindow(QMainWindow):
                 exercise_text.setText("What do you think is going to be said \nnext?")
                 exercise_sentence.setText('"' + sentence + '"')
             elif ex_type ==1:
-                exercise_text.setText("What does the highlighted word mean?")
+                exercise_text.setText("What is the translation of the highlighted word?")
                 exercise_sentence.setText("")
             rb_text1.setText(word1)
             rb_text2.setText(word2)
@@ -374,11 +382,17 @@ class MainWindow(QMainWindow):
         # Generate text for the exercise
         generateExercise("Sentence with 'quotation' marks.", "word1", "word2", "word3", "word1")
         '''
+
+        self.display_type = 'Hover'
+
         # Function to add a new word to dictionary
+        '''
         def addWordToDict(word, translation):
             row = QtWidgets.QHBoxLayout()
             row.setAlignment(QtCore.Qt.AlignLeft)
             new_word = QtWidgets.QLabel(word)
+        '''
+        '''
             new_word.setFont(QtGui.QFont(families[0]))
             new_word.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; padding-right: 100px; width = 100; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
             equals = QtWidgets.QLabel("=")
@@ -386,6 +400,70 @@ class MainWindow(QMainWindow):
             word_translation = QtWidgets.QLabel(translation)
             word_translation.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 100px; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
             word_translation.setFont(QtGui.QFont(families[0])) 
+            row.addWidget(new_word)
+            row.addWidget(equals)
+            row.addWidget(word_translation)
+            row.setSpacing(0)
+            page2Layout.addLayout(row)
+        '''
+        '''
+            new_word.setMouseTracking(True)
+            new_word.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+            row.setAlignment(new_word, QtCore.Qt.AlignCenter)
+            equals = QtWidgets.QLabel("=")
+            equals.setObjectName('equals')
+            equals.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
+            size3 = (24, 45)
+            equals.setFixedSize(*size3)
+            equals.setSizePolicy( QtWidgets.QSizePolicy.Policy.Minimum,  QtWidgets.QSizePolicy.Policy.Fixed)
+            equals.setAlignment(QtCore.Qt.AlignCenter)
+            row.setAlignment(equals, QtCore.Qt.AlignCenter)
+            word_translation = QtWidgets.QLabel(translation)
+            word_translation.setFont(QtGui.QFont(families[0])) 
+            word_translation.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+            word_translation.setBuddy(equals)
+            word_translation.installEventFilter(self)
+            row.setAlignment(word_translation, QtCore.Qt.AlignCenter)
+            row.addWidget(new_word)
+            row.addWidget(equals)
+            row.addWidget(word_translation)
+            row.setSpacing(0)
+            page2Layout.addLayout(row)
+        '''
+
+        def addWordToDict(word, translation):
+            row = QtWidgets.QHBoxLayout()
+            new_word = QtWidgets.QLabel(word)
+            new_word.setMouseTracking(True)
+            new_word.setFont(QtGui.QFont(families[0]))
+            ###
+            new_word.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+            ###
+            row.setAlignment(new_word, QtCore.Qt.AlignCenter)
+            equals = QtWidgets.QLabel("=")
+            equals.setObjectName('equals')
+            ###
+            equals.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
+            ###  
+            size3 = (24, 45)
+            ###
+            equals.setFixedSize(*size3)
+            ###
+            equals.setSizePolicy( QtWidgets.QSizePolicy.Policy.Minimum,  QtWidgets.QSizePolicy.Policy.Fixed)
+            ###
+            equals.setAlignment(QtCore.Qt.AlignCenter)
+            ###
+            row.setAlignment(equals, QtCore.Qt.AlignCenter)
+            word_translation = QtWidgets.QLabel(translation)
+            ###
+            word_translation.setFont(QtGui.QFont(families[0])) 
+            ###
+            word_translation.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+            word_translation.setBuddy(equals)
+            
+            ###
+            word_translation.installEventFilter(self)
+            row.setAlignment(word_translation, QtCore.Qt.AlignCenter)
             row.addWidget(new_word)
             row.addWidget(equals)
             row.addWidget(word_translation)
@@ -400,18 +478,18 @@ class MainWindow(QMainWindow):
         page2Layout = QtWidgets.QVBoxLayout()
         page2Layout.setAlignment(QtCore.Qt.AlignTop)
         spacer1 = QtWidgets.QSpacerItem(2, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        word_1 = QtWidgets.QLabel("word_1")
+        #word_1 = QtWidgets.QLabel("word_1")
         #word_1.setFont(QtGui.QFont(families[0]))
-        word_1.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
-        word_2 = QtWidgets.QLabel("word_2")
+        #word_1.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
+        #word_2 = QtWidgets.QLabel("word_2")
         #word_2.setFont(QtGui.QFont(families[0]))
-        word_2.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
+        #word_2.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
         page2Layout.addItem(spacer1)
         page2Layout.setSpacing(2)
-        page2Layout.addWidget(word_1)
-        page2Layout.addWidget(word_2)
-        addWordToDict("word3","trans")
-        addWordToDict("word4word4word4","tran")
+        #page2Layout.addWidget(word_1)
+        #page2Layout.addWidget(word_2)
+        #addWordToDict("word3","trans")
+        #addWordToDict("word4word4word4","tran")
         page2.setLayout(page2Layout)
         stackedLayout.addWidget(page2)
 
@@ -442,7 +520,16 @@ class MainWindow(QMainWindow):
         final_levelsLayout = QtWidgets.QVBoxLayout()
         final_levelsLayout.setAlignment(QtCore.Qt.AlignCenter)
         final_levelsLayout.addWidget(levelsWidget)
-
+        logo = QtWidgets.QLabel()
+        pixmap3 = QtGui.QPixmap('front_end/logo.png')
+        logo.setPixmap(pixmap3)
+        logo.setAlignment(QtCore.Qt.AlignCenter)
+        welcomeText = QtWidgets.QLabel(" Welcome to LangFlix –")
+        welcomeText.setAlignment(QtCore.Qt.AlignCenter)
+        welcomeText.setStyleSheet('QLabel {color: #CACACA; font-size: 22px; font-weight: 650; background-color: #171717;}')
+        welcomeText2 = QtWidgets.QLabel("app for learning new vocabulary \nwhile watching shows!")
+        welcomeText2.setAlignment(QtCore.Qt.AlignCenter)
+        welcomeText2.setStyleSheet('QLabel {color: #CACACA; font-size: 16px; font-weight: 650; background-color: #171717;}')
         levelsText = QtWidgets.QLabel("Choose your current language level:")
         #levelsText.setFont(QtGui.QFont(families[0]))
         levelsText.setStyleSheet('QLabel {color: #CACACA; font-size: 16px; font-weight: 780; background-color: #171717;}')
@@ -547,6 +634,11 @@ class MainWindow(QMainWindow):
         c_layout.addWidget(c1)
         c_layout.addWidget(c2)
         c_layout.setContentsMargins(89,0,89,0)
+        levelsLayout.addWidget(logo)
+        levelsLayout.addWidget(welcomeText)
+        levelsLayout.addItem(QtWidgets.QSpacerItem(2, 3, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        levelsLayout.addWidget(welcomeText2)
+        levelsLayout.addItem(QtWidgets.QSpacerItem(2, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
         levelsLayout.addWidget(levelsText)
         levelsLayout.addItem(QtWidgets.QSpacerItem(2, 25, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
         levelsLayout.addLayout(a_layout)
@@ -601,7 +693,23 @@ class MainWindow(QMainWindow):
                 target_word_data = self.video.get_word_data_from_sub(ind)[0]
                 word_options = target_word_data[3][1:-1].split(', ') #list of answer options
                 if len(word_options) == 1: word_options.append('')
-                sentence = re.sub(r''+target_word_data[0], '_____', self.video.subs_cur[ind].text)
+                sentence = re.sub(r''+target_word_data[0], '_____', self.video.subs_cur[ind].text) # sentence in English
+                '''
+                l2_sub = None
+                sub = self.video.subs_cur[ind]
+                sub_time = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
+                                seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
+                up_time_bound = sub_time + timedelta(microseconds= 2*10**6)
+                low_time_bound = sub_time - timedelta(microseconds= 2*10**6)
+                for sub in self.video.subs_l2: 
+                    stime = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
+                                seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
+                    if stime >= low_time_bound and stime <= up_time_bound:
+                        l2_sub = sub
+                        break
+                sentence = re.sub(r''+target_word_data[1], '_____', l2_sub.text)
+                print(sentence)
+                '''
                 #words = [target_word_data[1]] 
                 word_options.append(target_word_data[1])
                 random.shuffle(word_options) # shuffle word order
@@ -619,7 +727,7 @@ class MainWindow(QMainWindow):
                     self.showLayoutChildren(layout.itemAt(i).layout(), show)
             else:
                 if show:
-                    layout.itemAt(i).widget().show()
+                    layout.itemAt(i).widget().show()  
                 else:
                     layout.itemAt(i).widget().hide()
 
@@ -636,7 +744,18 @@ class MainWindow(QMainWindow):
                     self.video.video_layout.removeItem(self.video.video_menuBar)
                     self.video.video_menuBar.setEnabled(False)
                     self.showLayoutChildren(layout = self.video.video_menuBar, show = False)
-        
+        else:
+            if self.display_type == 'Hover':
+                if event.type() == QtCore.QEvent.Enter:
+                    source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+                    source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+                elif event.type() == QtCore.QEvent.Leave:
+                    source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #171717; font-weight: 800; font-size: 15px; background-color: #171717;}')
+                    source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #171717; font-weight: 800; font-size: 15px; background-color: #171717;}')
+            elif self.display_type == "Always":
+                source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+                source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+
         return super().eventFilter(source, event)
          
             
