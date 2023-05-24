@@ -21,9 +21,9 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("""background-color: #171717;""")
         
-        id1 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "fonts", "Quicksand-SemiBold.ttf"))
-        id2 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "fonts", "Quicksand-LightItalic.ttf"))
-        id3 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "fonts", "Quicksand-Medium.ttf"))
+        id1 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "Fonts", "Quicksand-SemiBold.ttf"))
+        id2 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "Fonts", "Quicksand-LightItalic.ttf"))
+        id3 = QtGui.QFontDatabase.addApplicationFont(path.join("front_end", "Fonts", "Quicksand-Medium.ttf"))
         if id1 < 0 or id2 < 0 or id3 < 0: 
             print("Error with adding font")
         families = []
