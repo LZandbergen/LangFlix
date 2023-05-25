@@ -166,11 +166,11 @@ class Video(QtWidgets.QWidget):
         self.make_dual_subs()
         #self.buttonSizeHeight = self.size().height()/10 * 3
 
-        self.volumeButtonIcons = [QtGui.QIcon(path.join("front_end", "icons8-speaker-50.png")),
-                                QtGui.QIcon(path.join("front_end", "icons8-no-speaker-50.png"))]
+        self.volumeButtonIcons = [QtGui.QIcon("icons8-speaker-50.png"),
+                                QtGui.QIcon("icons8-no-speaker-50.png")]
 
-        self.playButtonIcons = [QtGui.QIcon(path.join("front_end", "icons8-pause-50.png")),
-                                QtGui.QIcon(path.join("front_end", "icons8-play-50.png"))]
+        self.playButtonIcons = [QtGui.QIcon("icons8-pause-50.png"),
+                                QtGui.QIcon("icons8-play-50.png")]
         # create video window
         self.video = QtWidgets.QFrame()#QWidget() # video screen
         self.video.setStyleSheet("""background-color: black; border-bottom-color: white;""")
@@ -320,9 +320,9 @@ class Video(QtWidgets.QWidget):
          self.isPaused = not self.player.is_playing()
          if self.player.is_playing():
              if self.subs_are_dual:
-                 self.player.video_set_subtitle_file(path.join("front_end", "subs_cleaned_dual.srt"))
+                 self.player.video_set_subtitle_file("subs_cleaned_dual.srt")
              else:
-                 self.player.video_set_subtitle_file(path.join("front_end", "subs_cleaned.srt"))
+                 self.player.video_set_subtitle_file("subs_cleaned.srt")
              #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
@@ -410,7 +410,7 @@ class Video(QtWidgets.QWidget):
                  ex_counter+=1
                  low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
                  up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
-         self.subs_cur.save(path.join("front_end", "subs_cleaned.srt"), encoding='utf-8')
+         self.subs_cur.save("subs_cleaned.srt", encoding='utf-8')
          print(self.sub_ind_for_ex)
          self.num_exercises = len(self.sub_ind_for_ex) # update number of exercises to the number of possible exercises
          self.choose_ex_ind(self.sub_ind_for_ex[0])
@@ -422,7 +422,7 @@ class Video(QtWidgets.QWidget):
              if word:
                  self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750><b>'+word[0][1]+'</b></font>', self.subs_orig[ind].text)
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text)
-         self.subs_cur.save(path.join("front_end", "MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt"), encoding='utf-8')
+         self.subs_cur.save(\"MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt", encoding='utf-8')
          '''
      def choose_ex_ind(self, ind_list):
          try:
@@ -431,7 +431,7 @@ class Video(QtWidgets.QWidget):
             if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
                 self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[0]+'</b></font>', self.subs_cur[ind].text)
-                self.subs_cur.save(path.join("front_end", "subs_cleaned.srt"), encoding='utf-8')
+                self.subs_cur.save("subs_cleaned.srt", encoding='utf-8')
          except: return
 
      def get_word_data_from_sub(self, ind):
@@ -447,7 +447,7 @@ class Video(QtWidgets.QWidget):
          rsubs = self.subs_cur + self.subs_l2
          rsubs.sort()
          rsubs.clean_indexes()
-         rsubs.save (path.join("front_end", "subs_cleaned_dual.srt"), encoding='utf-8')
+         rsubs.save ("subs_cleaned_dual.srt", encoding='utf-8')
 
      def adjust_difficulty(self):
          print('old list', self.num_correct_ex)
