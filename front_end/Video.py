@@ -120,11 +120,18 @@ class Video(QtWidgets.QWidget):
      
      cue_ex_sig = QtCore.Signal()
 
-     def __init__(self, video_file, sub_file_l1, sub_file_l2):
+     def __init__(self, episode):
         super().__init__()
 
         #self.cefr_start = 'A2' #cefr
         #self.cefr_cur = 5.0 #zipf
+
+        series_dict = {'fr_ep1': {'vid': "shows/French/S01E01 Are We Shtty.mkv", 'sub_l1': "subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt", 'sub_l2': "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt"},
+                       'fr_ep2': {'vid': "shows/French/S01E02 Off_The_Hook.mkv", 'sub_l1': "subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E02.srt", 'sub_l2': "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt"},
+                       'sp_ep1': {'vid': "shows/Spanish/Machos alfa S01E01.mkv", 'sub_l1': "subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt", 'sub_l2': "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
+                       'sp_ep2': {'vid': "shows/Spanish/Machos alfa S01E01.mkv", 'sub_l1': "subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt", 'sub_l2': "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
+                       'de_ep1': {'vid': "shows/Spanish/Machos alfa S01E01.mkv", 'sub_l1': "subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt", 'sub_l2': "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
+                       'de_ep2': {'vid': "shows/Spanish/Machos alfa S01E01.mkv", 'sub_l1': "subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt", 'sub_l2': "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"}}
 
         self.zipf_start = -1
         self.zipf_cur = self.zipf_start
@@ -153,10 +160,10 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(sub_file_l1)
-        self.subs_cur = pysrt.open(sub_file_l1)
+        self.subs_orig = pysrt.open(series_dict[episode]['sub_l1'])
+        self.subs_cur = pysrt.open(series_dict[episode]['sub_l1'])
 
-        self.subs_l2 = pysrt.open(sub_file_l2)
+        self.subs_l2 = pysrt.open(series_dict[episode]['sub_l2'])
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
         #self.sub_to_pause_at = [1, 12]
@@ -166,11 +173,11 @@ class Video(QtWidgets.QWidget):
         self.make_dual_subs()
         #self.buttonSizeHeight = self.size().height()/10 * 3
 
-        self.volumeButtonIcons = [QtGui.QIcon("icons8-speaker-50.png"),
-                                QtGui.QIcon("icons8-no-speaker-50.png")]
+        self.volumeButtonIcons = [QtGui.QIcon("front_end/icons8-speaker-50.png"),
+                                QtGui.QIcon("front_end/icons8-no-speaker-50.png")]
 
-        self.playButtonIcons = [QtGui.QIcon("icons8-pause-50.png"),
-                                QtGui.QIcon("icons8-play-50.png")]
+        self.playButtonIcons = [QtGui.QIcon("front_end/icons8-pause-50.png"),
+                                QtGui.QIcon("front_end/icons8-play-50.png")]
         # create video window
         self.video = QtWidgets.QFrame()#QWidget() # video screen
         self.video.setStyleSheet("""background-color: black; border-bottom-color: white;""")
@@ -180,7 +187,7 @@ class Video(QtWidgets.QWidget):
         # instantiate video player
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
-        self.media = Instance.media_new(video_file)
+        self.media = Instance.media_new(series_dict[episode]['vid'])
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
         #self.player.audio_set_volume(0)
@@ -327,6 +334,7 @@ class Video(QtWidgets.QWidget):
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
      def play_video(self):
+        self.player.audio_set_track(3)
         if self.player.is_playing():
             self.player.pause()
             #self.isPaused = True

@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
 
         # create video window   
         #self.video = QtWidgets.QWidget()
-        self.video = Video(path.normpath("shows/French/S01E01 Are We Shtty.mkv"), path.normpath("subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"), path.normpath("subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt") )# video screen + player button toolbar
+        self.video = Video(episode = 'fr_ep1')# video screen + player button toolbar
         self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
