@@ -183,7 +183,7 @@ class Video(QtWidgets.QWidget):
         self.media = Instance.media_new(video_file)
         #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
-        self.player.audio_set_volume(0)
+        #self.player.audio_set_volume(0)
         
         # Connect video player to window: https://github.com/devos50/vlc-pyqt5-example
         if sys.platform == "win32": # for Windows
@@ -200,6 +200,7 @@ class Video(QtWidgets.QWidget):
         self.volume_slider.setSingleStep(1)
         self.volume_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.volume_slider.valueChanged.connect(self.change_volume)
+        #self.volume_slider.setValue(100)
 
         #self.base_height = self.volume_slider.size().height()
 

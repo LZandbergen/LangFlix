@@ -13,6 +13,7 @@ import random
 from cefr_to_zipf import cefr_to_zipf_func
 import json
 from translate import translate as tr
+from deep_translator import GoogleTranslator
 
 
 class MainWindow(QMainWindow):
@@ -32,7 +33,7 @@ class MainWindow(QMainWindow):
         families = []
         for id in [id1, id2, id3]: families.append(QtGui.QFontDatabase.applicationFontFamilies(id)) 
 
-        translator = tr.Translator(from_lang='fr', to_lang='en')
+        translator = GoogleTranslator(source='fr', target='en')
 
         # create video window   
         #self.video = QtWidgets.QWidget()
@@ -161,6 +162,7 @@ class MainWindow(QMainWindow):
         cor_incor_layout.addWidget(cor_incor_text)
         
         self.correct_word = ''
+        self.answer_opt_transl = {}
         # Function to check if the answer is correct
         def checkAnswer():
             cur_checked = '_'
@@ -175,7 +177,7 @@ class MainWindow(QMainWindow):
                     cor_incor_icon.setPixmap(pixmap)
                     cor_incor_icon.setHidden(False)
                     buttons_stackedLayout.setCurrentIndex(1)
-                    addWordToDict(self.correct_word, "translation")
+                    addWordToDict(self.correct_word, self.answer_opt_transl[self.correct_word])
                     rb.setStyleSheet('''QRadioButton 
                                             {padding-left: 40px; color: #00D1FF; font-weight: 700; font-size: 15px; background-color: #1E1E1E;}
                                         QRadioButton::indicator::unchecked
@@ -713,6 +715,8 @@ class MainWindow(QMainWindow):
                 #words = [target_word_data[1]] 
                 word_options.append(target_word_data[1])
                 random.shuffle(word_options) # shuffle word order
+                for word in word_options:
+                    self.answer_opt_transl[word] = translator.translate(word).lower() 
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
                 self.video.ind_to_stop_at_stack.pop(0)
