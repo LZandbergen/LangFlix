@@ -355,7 +355,7 @@ class MainWindow(QMainWindow):
         # Function to generate a new exercise
         def generateExercise(sentence, word1, word2, word3, cor_word, ex_type = 3):
             if ex_type == 3:
-                exercise_text.setText("What do you think is going to be said \nnext?")
+                exercise_text.setText("What do you think is going to be said next? Pick a French word that fits the sentence below best semantically.")
                 exercise_sentence.setText('"' + sentence + '"')
             elif ex_type ==1:
                 exercise_text.setText("What is the translation of the highlighted word?")
