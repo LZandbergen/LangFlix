@@ -126,6 +126,8 @@ class Video(QtWidgets.QWidget):
         #self.cefr_start = 'A2' #cefr
         #self.cefr_cur = 5.0 #zipf
 
+        self.episode = episode
+
         series_dict = {'fr_ep1': {'vid': "shows/French/S01E01 Are We Shtty.mkv", 'sub_l1': "subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt", 'sub_l2': "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt"},
                        'fr_ep2': {'vid': "shows/French/S01E02 Off_The_Hook.mkv", 'sub_l1': "subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E02.srt", 'sub_l2': "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt"},
                        'sp_ep1': {'vid': "shows/Spanish/Machos alfa S01E01.mkv", 'sub_l1': "subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt", 'sub_l2': "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
@@ -334,7 +336,8 @@ class Video(QtWidgets.QWidget):
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
      def play_video(self):
-        self.player.audio_set_track(3)
+        if "fr" in self.episode or "sp" in self.episode:
+            self.player.audio_set_track(3)
         if self.player.is_playing():
             self.player.pause()
             #self.isPaused = True
