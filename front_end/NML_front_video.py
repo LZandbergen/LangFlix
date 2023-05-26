@@ -12,7 +12,6 @@ import re
 import random
 from cefr_to_zipf import cefr_to_zipf_func
 import json
-from translate import translate as tr
 from deep_translator import GoogleTranslator
 
 
@@ -225,10 +224,12 @@ class MainWindow(QMainWindow):
                 self.skip_num -= 1
                 skip_button.setText("Skip (" + str(self.skip_num) + ")")
                 switchToDict()
+                hideDictionary()
                 buttons_stackedLayout.setCurrentIndex(0)
                 exercise_tab.setHidden(True)
                 self.video.play_button.setEnabled(True)
                 self.video.player.play()
+                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
         skip_button.clicked.connect(skip) 
 
         # Styling Continue button
@@ -251,6 +252,7 @@ class MainWindow(QMainWindow):
         # Function to finish exercise and resume video  
         def Continue():
             switchToDict()
+            hideDictionary()
             cor_incor_text.setText("") #hide (in)correct message
             cor_incor_icon.setHidden(True)
             buttons_stackedLayout.setCurrentIndex(0)
@@ -280,11 +282,13 @@ class MainWindow(QMainWindow):
         buttons_stackedLayout.addWidget(buttons_widget)
         buttons_stackedLayout.addWidget(continueButton_widget)
 
-        dict_is_hidden = False
+        dict_hide_setting = False
+        dual_subs_setting = False
 
         def hideDictionary():
-            dict_is_hidden = True
-            self.showLayoutChildren(layout = side_layout, show = False)
+            if dict_hide_setting:
+                grid.removeItem(side_layout)
+                self.showLayoutChildren(layout = side_layout, show = False)
 
         # Functions for switching between tabs
         def switchToDict():
@@ -292,8 +296,11 @@ class MainWindow(QMainWindow):
             stackedLayout.setCurrentIndex(1)
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
+        
         def switchToExercise():
             #stackedLayout.moveToThread(self.thread())
+            if grid.count() == 1:
+                grid.addItem(side_layout)
             stackedLayout.setCurrentIndex(0)
             exercise_tab.setHidden(False)
             exercise_tab.setVisible(True)
@@ -663,7 +670,7 @@ class MainWindow(QMainWindow):
         #state of interface at start of the app
         switchToDict()
         exercise_tab.setHidden(True)
-        #hideDictionary()
+        hideDictionary()
 
         # function for triggering events connected to video time
         def react_to_time_change(indices):
@@ -701,8 +708,8 @@ class MainWindow(QMainWindow):
                 sub = self.video.subs_cur[ind]
                 sub_time = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
                                 seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
-                up_time_bound = sub_time + timedelta(microseconds= 2*10**6)
-                low_time_bound = sub_time - timedelta(microseconds= 2*10**6)
+                up_time_bound = sub_time + timedelta(microseconds= 3*10**6)
+                low_time_bound = sub_time - timedelta(microseconds= 3*10**6)
                 for sub in self.video.subs_l2: 
                     stime = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
                                 seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
