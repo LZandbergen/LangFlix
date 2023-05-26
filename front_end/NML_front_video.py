@@ -37,8 +37,10 @@ class MainWindow(QMainWindow):
         # create video window   
         #self.video = QtWidgets.QWidget()
         self.video = Video(episode = 'fr_ep1')# video screen + player button toolbar
-        self.video.installEventFilter(self)
+        #self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
+
+        print(self.video.appOnToggle.isChecked())
 
         with open('translations_FRENCH_Detox_S01E01_Dict.json', encoding='utf-8') as json_file:
             translation_dict = json.load(json_file)
@@ -47,9 +49,10 @@ class MainWindow(QMainWindow):
             translation_dict.update(json.load(json_file))
 
         #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
-        '''
+        
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
+                self.dict_hide_setting = False
                 self.video.appOnToggle.setStyleSheet("""QPushButton
                                       {background-color: lightblue; 
                                        color: white;
@@ -59,7 +62,9 @@ class MainWindow(QMainWindow):
                                        font-weight: 750;}""")
                 self.video.videoEventManager.event_detach(vlc.EventType.MediaPlayerPositionChanged)
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
+                self.video.cue_app_on.emit()
             else:
+                self.dict_hide_setting = True
                 self.video.appOnToggle.setStyleSheet("""QPushButton
                                       {background-color: grey; 
                                        color: white;
@@ -68,10 +73,10 @@ class MainWindow(QMainWindow):
                                        border-style: solid;
                                        font-weight: 750;}""")
                 self.video.videoEventManager.event_detach(vlc.EventType.MediaPlayerPositionChanged)
-                self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: self.video.update_time_slider()) 
-
+                self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change_LangFlix_Off(self.video.ind_to_stop_at_stack)) 
+                self.video.cue_app_off.emit()
         self.video.appOnToggle.clicked.connect(switchAppOff)
-        '''
+        
 
         # Styling exercise text
         exercise_text = QtWidgets.QLabel("What do you think is going to be said \nnext?")
@@ -282,17 +287,36 @@ class MainWindow(QMainWindow):
         buttons_stackedLayout.addWidget(buttons_widget)
         buttons_stackedLayout.addWidget(continueButton_widget)
 
-        dict_hide_setting = False
-        dual_subs_setting = False
+        self.dict_hide_setting = False
+        self.dual_subs_setting = False
 
         def hideDictionary():
-            if dict_hide_setting:
+            if self.dict_hide_setting:
                 grid.removeItem(side_layout)
                 self.showLayoutChildren(layout = side_layout, show = False)
+            else:
+                if grid.count() == 1:
+                    grid.addItem(side_layout)
+                '''
+                stackedLayout.setCurrentIndex(1)
+                dictionary_tab.setHidden(False)
+                dictionary_tab.setVisible(True)
+                dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image1.png"); text-align: center; background-position: center right;}')
+                exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
+                '''
+                switchToExercise()
+                exercise_tab.setHidden(True)
+                dictionary_tab.setHidden(False)
+                switchToDict()
+        
+                
+
+        self.video.cue_app_on.connect(hideDictionary)
+        self.video.cue_app_off.connect(hideDictionary)
 
         # Functions for switching between tabs
         def switchToDict():
-            dictionary_tab.moveToThread(tabs_layout.thread())
+            #dictionary_tab.moveToThread(tabs_layout.thread())
             stackedLayout.setCurrentIndex(1)
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
@@ -355,7 +379,7 @@ class MainWindow(QMainWindow):
         # Function to generate a new exercise
         def generateExercise(sentence, word1, word2, word3, cor_word, ex_type = 3):
             if ex_type == 3:
-                exercise_text.setText("What do you think is going to be said next? Pick a French word that fits the sentence below best semantically.")
+                exercise_text.setText("What do you think is going to be said next? Pick a word that fits the sentence below best.")
                 exercise_sentence.setText('"' + sentence + '"')
             elif ex_type ==1:
                 exercise_text.setText("What is the translation of the highlighted word?")
@@ -670,7 +694,8 @@ class MainWindow(QMainWindow):
         #state of interface at start of the app
         switchToDict()
         exercise_tab.setHidden(True)
-        hideDictionary()
+        #dict_hide_setting = True
+        #hideDictionary()
 
         # function for triggering events connected to video time
         def react_to_time_change(indices):
@@ -730,6 +755,32 @@ class MainWindow(QMainWindow):
                 #self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
                 generateExercise(sentence, word_options[0], word_options[1], word_options[2], target_word_data[1], ex_type)
                 self.video.cue_ex_sig.emit()
+
+        # function for triggering events connected to video time when LangFlix is off
+        def react_to_time_change_LangFlix_Off(indices):
+            #update slider position
+            self.video.time_slider.setValue(self.video.player.get_position()*1000)
+            # update time text
+            total_time = str(timedelta(microseconds = self.video.player.get_length()*1000)).split('.')[0]
+            cur_time = str(timedelta(microseconds = self.video.player.get_time()*1000)).split('.')[0]
+            self.video.time_text.setText(f'{cur_time}/{total_time}')
+            try:
+                ind = indices[0]
+                if self.video.cur_ex_ind % 3 != 0: ind -= 1 #pause one scene prior to target to ask question about the future if exercise is type 3
+            except:
+                return 
+            #pause video at target subtitle
+            sub_start = self.video.subs_cur[ind].start
+            sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
+                                seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
+            player_time = timedelta(microseconds=self.video.player.get_time()*1000)
+            up_time_bound = sub_time + timedelta(microseconds= 10**6)
+            #switch to exercise
+            if player_time >= sub_time and player_time <= up_time_bound:
+                self.video.cur_ex_ind+=1
+                #compute one exercise in advance
+                self.video.ind_to_stop_at_stack.pop(0)
+                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
 
     # function for showing and hiding screen elements
     def showLayoutChildren(self, layout, show = True):

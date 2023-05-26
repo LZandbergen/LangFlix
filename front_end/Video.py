@@ -119,6 +119,8 @@ border-radius: 6px;
 class Video(QtWidgets.QWidget):
      
      cue_ex_sig = QtCore.Signal()
+     cue_app_off = QtCore.Signal()
+     cue_app_on = QtCore.Signal()
 
      def __init__(self, episode):
         super().__init__()
@@ -162,10 +164,12 @@ class Video(QtWidgets.QWidget):
         #self.setStyleSheet("""background-color: black;""")
         self.isPaused = True
         self.isMuted = True
-        self.subs_orig = pysrt.open(series_dict[episode]['sub_l1'])
-        self.subs_cur = pysrt.open(series_dict[episode]['sub_l1'])
 
-        self.subs_l2 = pysrt.open(series_dict[episode]['sub_l2'])
+        self.subs_orig = pysrt.open(series_dict[episode]['sub_l1']) #the modified subs with ###
+        self.subs_cur = pysrt.open(series_dict[episode]['sub_l1']) #subs currently used for the exercises with no ###
+
+        self.subs_l1 = pysrt.open(series_dict[episode]['sub_l1']) # plain l1 subs with no ### and no highlighted words
+        self.subs_l2 = pysrt.open(series_dict[episode]['sub_l2']) # l2 subs
         
         #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
         #self.sub_to_pause_at = [1, 12]
@@ -236,18 +240,19 @@ class Video(QtWidgets.QWidget):
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPaused, lambda x: self.set_play_button_style()) 
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
 
-        '''
+        
         # add turn LangFlix on/off toggle to the video window
         self.appOnToggle = QtWidgets.QPushButton("LangFlix")
         self.appOnToggle.setCheckable(True)
+        self.appOnToggle.setChecked(True)
         self.appOnToggle.setStyleSheet("""QPushButton
-                                      {background-color: grey; 
+                                      {background-color: lightblue; 
                                        color: white;
                                        border-radius: 6px;
                                        border: 1px solid;
                                        border-style: solid;
                                        font-weight: 750;}""")
-        '''
+        
 
         #time value
         self.time_text = QtWidgets.QLineEdit()
@@ -274,7 +279,7 @@ class Video(QtWidgets.QWidget):
         self.video_layout.setContentsMargins(0, 0, 0, 0)
 
         self.video_buttons.addWidget(self.play_button, 1)
-        #self.video_buttons.addWidget(self.appOnToggle, 2)
+        self.video_buttons.addWidget(self.appOnToggle, 2)
         self.video_buttons.addWidget(self.volume_button, 1)
         self.video_buttons.addWidget(self.volume_slider, 3)
         self.video_buttons.addWidget(self.time_text, 3)
@@ -331,7 +336,10 @@ class Video(QtWidgets.QWidget):
              if self.subs_are_dual:
                  self.player.video_set_subtitle_file("subs_cleaned_dual.srt")
              else:
-                 self.player.video_set_subtitle_file("subs_cleaned.srt")
+                 if self.appOnToggle.isChecked():
+                    self.player.video_set_subtitle_file("subs_cleaned.srt")
+                 else: 
+                    self.player.video_set_subtitle_file("subs_cleaned_no_ex.srt")
              #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
           
@@ -413,6 +421,7 @@ class Video(QtWidgets.QWidget):
              word= self.get_word_data_from_sub(ind)
              if word: # if subtitle contains a word of interest
                  self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text) # clean subtitle for later displaying
+                 self.subs_l1[ind].text = self.subs_cur[ind].text
                  if sub_time >= low_time_bound and sub_time <= up_time_bound: # if subtitle falls within the time interval
                      sub_ind_list.append(ind)
              elif sub_time > up_time_bound and ex_counter < self.num_exercises:
@@ -422,6 +431,7 @@ class Video(QtWidgets.QWidget):
                  low_time_bound = break_time * ex_counter - timedelta(microseconds= 30*10**6)
                  up_time_bound = break_time * ex_counter + timedelta(microseconds=60 * 10**6)
          self.subs_cur.save("subs_cleaned.srt", encoding='utf-8')
+         self.subs_l1.save("subs_cleaned_no_ex.srt", encoding='utf-8')
          print(self.sub_ind_for_ex)
          self.num_exercises = len(self.sub_ind_for_ex) # update number of exercises to the number of possible exercises
          self.choose_ex_ind(self.sub_ind_for_ex[0])
