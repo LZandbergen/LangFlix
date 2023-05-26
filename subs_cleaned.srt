@@ -1249,7 +1249,7 @@ Look at us. Don't you want to start over?
 278
 00:12:57,120 --> 00:12:59,720
 With a clean slate, huh!
-Reclaim our fucking dignity!
+Reclaim our fucking <font color=#00D1FF weight=750><b>dignity</b></font>!
 
 279
 00:13:00,720 --> 00:13:02,000

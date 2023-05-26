@@ -125,10 +125,7 @@ class Video(QtWidgets.QWidget):
      def __init__(self, episode):
         super().__init__()
 
-        #self.cefr_start = 'A2' #cefr
-        #self.cefr_cur = 5.0 #zipf
-
-        self.episode = episode
+        self.episode = episode # key string for series_dict
 
         series_dict = {'fr_ep1': {'vid': "shows/French/S01E01 Are We Shtty.mkv", 'sub_l1': "subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt", 'sub_l2': "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt"},
                        'fr_ep2': {'vid': "shows/French/S01E02 Off_The_Hook.mkv", 'sub_l1': "subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E02.srt", 'sub_l2': "subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt"},
@@ -137,19 +134,11 @@ class Video(QtWidgets.QWidget):
                        'de_ep1': {'vid': "shows/Spanish/Machos alfa S01E01.mkv", 'sub_l1': "subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt", 'sub_l2': "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
                        'de_ep2': {'vid': "shows/Spanish/Machos alfa S01E01.mkv", 'sub_l1': "subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt", 'sub_l2': "subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"}}
 
-        self.zipf_start = -1
-        self.zipf_cur = self.zipf_start
+        self.zipf_start = -1 # user's CEFR level (as Zipf frequency) at the start of app use
+        self.zipf_cur = self.zipf_start # user's current language level
 
-        self.subs_are_dual = False
-        self.num_correct_ex = []
-
-        self.zero_counter = 0
-        self.one_counter = 0
-        self.def_dec = -0.1
-        self.def_inc = 0.1
-
-        #self.time_between_ex = 60 * 10**6 #time intervals between exercises
-        #self.ex_counter = 1 #counter for number of exercises so far
+        self.subs_are_dual = False # indicator of subtitles being in dual mode or not
+        self.num_correct_ex = [] # array that store exercise results as a sequence of 0 (incorrect) and 1 (correct)
 
         self.num_exercises = 10 # number of exercises per video
 
@@ -161,9 +150,8 @@ class Video(QtWidgets.QWidget):
 
         self.old_volume = 0 # volume prior to mute button being pressed
 
-        #self.setStyleSheet("""background-color: black;""")
-        self.isPaused = True
-        self.isMuted = True
+        self.isPaused = True # boolean indicating if video is paused
+        self.isMuted = True # boolean indicating if video is muted
 
         self.subs_orig = pysrt.open(series_dict[episode]['sub_l1']) #the modified subs with ###
         self.subs_cur = pysrt.open(series_dict[episode]['sub_l1']) #subs currently used for the exercises with no ###
@@ -171,32 +159,18 @@ class Video(QtWidgets.QWidget):
         self.subs_l1 = pysrt.open(series_dict[episode]['sub_l1']) # plain l1 subs with no ### and no highlighted words
         self.subs_l2 = pysrt.open(series_dict[episode]['sub_l2']) # l2 subs
         
-        #self.subs = pysrt.open("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
-        #self.sub_to_pause_at = [1, 12]
-        #self.timer = QtCore.QTimer()
-        #self.timer.timeout.connect(self.timerEvent)
-        self.prep_subs()
-        self.make_dual_subs()
-        #self.buttonSizeHeight = self.size().height()/10 * 3
+        self.prep_subs() # preprocess the subtitle file to make exercises with
+        #self.make_dual_subs() # generate dual subtitles for the Dual subtitles settings
 
-        self.volumeButtonIcons = [QtGui.QIcon("front_end/icons8-speaker-50.png"),
-                                QtGui.QIcon("front_end/icons8-no-speaker-50.png")]
-
-        self.playButtonIcons = [QtGui.QIcon("front_end/icons8-pause-50.png"),
-                                QtGui.QIcon("front_end/icons8-play-50.png")]
         # create video window
-        self.video = QtWidgets.QFrame()#QWidget() # video screen
+        self.video = QtWidgets.QFrame() # video screen
         self.video.setStyleSheet("""background-color: black; border-bottom-color: white;""")
-        self.video_menuBar = QtWidgets.QVBoxLayout()
-        self.video_buttons = QtWidgets.QHBoxLayout()
         
         # instantiate video player
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
         self.media = Instance.media_new(series_dict[episode]['vid'])
-        #self.media = Instance.media_new("/Users/mariiazamyrova/Desktop/NML_front_end/Exercise4_demo.mp4")
         self.player.set_media(self.media) 
-        #self.player.audio_set_volume(0)
         
         # Connect video player to window: https://github.com/devos50/vlc-pyqt5-example
         if sys.platform == "win32": # for Windows
@@ -206,42 +180,39 @@ class Video(QtWidgets.QWidget):
                
         self.videoEventManager = self.player.event_manager()
 
-        # make volume slider                               
+        #volume slider                               
         self.volume_slider = QtWidgets.QSlider()
         self.volume_slider.setMinimum(0)
         self.volume_slider.setMaximum(100)
         self.volume_slider.setSingleStep(1)
         self.volume_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.volume_slider.valueChanged.connect(self.change_volume)
-        #self.volume_slider.setValue(100)
 
-        #self.base_height = self.volume_slider.size().height()
-
-        # make volume button                         
+        #volume button 
+        self.volumeButtonIcons = [QtGui.QIcon("front_end/icons8-speaker-50.png"),
+                                QtGui.QIcon("front_end/icons8-no-speaker-50.png")]
+                                
         self.volume_button = QtWidgets.QPushButton()
         self.base_width = self.volume_button.size().width()
         self.volume_button.setCheckable(True)
         self.volume_button.clicked.connect(self.volume_mute)
         self.volume_button.setIcon(self.volumeButtonIcons[int(self.isMuted)])
-        #self.volume_button.size().setHeight(self.buttonSizeHeight)
-        #self.volume_button.setMinimumHeight(self.buttonSizeHeight)
-        #self.volume_button.setMinimumWidth(self.base_width)
         self.volume_button.setStyleSheet("""border-style: solid;""")
 
-        # make play/pause button
+        #play/pause button
+        self.playButtonIcons = [QtGui.QIcon("front_end/icons8-pause-50.png"),
+                                QtGui.QIcon("front_end/icons8-play-50.png")]
+        
         self.play_button = QtWidgets.QPushButton()
         self.play_button.setCheckable(True)
         self.play_button.clicked.connect(self.play_video)
         self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
-        #self.play_button.size().setHeight(self.buttonSizeHeight)
-        #self.play_button.setMinimumHeight(self.buttonSizeHeight)
-        #self.volume_button.setMinimumWidth(self.base_width)
         self.play_button.setStyleSheet("""border-style: solid;""")
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPaused, lambda x: self.set_play_button_style()) 
         self.videoEventManager.event_attach(vlc.EventType.MediaPlayerPlaying, lambda x: self.set_play_button_style()) 
 
         
-        # add turn LangFlix on/off toggle to the video window
+        #LangFlix on/off toggle to the video window
         self.appOnToggle = QtWidgets.QPushButton("LangFlix")
         self.appOnToggle.setCheckable(True)
         self.appOnToggle.setChecked(True)
@@ -252,9 +223,9 @@ class Video(QtWidgets.QWidget):
                                        border: 1px solid;
                                        border-style: solid;
                                        font-weight: 750;}""")
+        self.appOnToggle.clicked.connect(self.set_subtitles)
         
-
-        #time value
+        #time value display
         self.time_text = QtWidgets.QLineEdit()
         self.time_text.setReadOnly(True)
         self.time_text.setStyleSheet("""color: white;
@@ -273,89 +244,74 @@ class Video(QtWidgets.QWidget):
         self.time_slider.sliderReleased.connect(self.on_time_slider_released)
         self.time_slider.setStyleSheet(slider_style)
         self.time_slider.installEventFilter(self)
-        
-        self.video_layout = QtWidgets.QVBoxLayout()
-        self.video_layout.setSpacing(0)
-        self.video_layout.setContentsMargins(0, 0, 0, 0)
 
+        # group all of the video buttons together in the HBox layout
+        self.video_buttons = QtWidgets.QHBoxLayout()
         self.video_buttons.addWidget(self.play_button, 1)
         self.video_buttons.addWidget(self.appOnToggle, 2)
         self.video_buttons.addWidget(self.volume_button, 1)
         self.video_buttons.addWidget(self.volume_slider, 3)
         self.video_buttons.addWidget(self.time_text, 3)
 
+        # put together the buttons and the time progress bar to make up the menu bar
+        self.video_menuBar = QtWidgets.QVBoxLayout()
         self.video_menuBar.addWidget(self.time_slider)
         self.video_menuBar.addLayout(self.video_buttons)
 
+        # main video layout
+        self.video_layout = QtWidgets.QVBoxLayout()
+        self.video_layout.setSpacing(0)
+        self.video_layout.setContentsMargins(0, 0, 0, 0)
+
+        # put all of the sub layouts together in the main layout
         self.video_layout.addWidget(self.video)
         self.video_layout.addLayout(self.video_menuBar)
         self.setLayout(self.video_layout)
         
-        #self.installEventFilter(self)
-     """
-     def showLayoutChildren(self, layout, show = True):
-        for i in range(layout.count()):
-            if show:
-                layout.itemAt(i).widget().show()
-            else:
-                layout.itemAt(i).widget().hide()
-     """
-    #  def get_cefr(self):
-    #      return self.cefr_cur
-     
-    #  def set_cefr(self, new_cefr):
-    #      self.cefr_cur = new_cefr
-
+     # function that gets the current Zipf frequency
      def get_current_zipf(self):
          return self.zipf_cur
      
+     # function that sets the Zipf frequency
      def set_zipf(self, new_zipf):
          self.zipf_start = new_zipf
          self.zipf_cur = new_zipf
 
-     def volume_mute(self):#show_volume_slider(self):
+     # function that mutes the video
+     def volume_mute(self):
         if self.volume_slider.value() != 0:
             self.old_volume = self.volume_slider.value()
-            #self.player.audio_set_volume(0)
             self.volume_slider.setValue(0)
             self.isMuted = True
         else:
             self.volume_slider.setValue(self.old_volume)
             self.isMuted = False
         self.volume_button.setIcon(self.volumeButtonIcons[int(self.isMuted)])
-        '''
-        if self.volume_slider.isVisible():
-            self.volume_slider.hide()
-        else:
-            self.volume_slider.show()
-        '''
 
+     # function that changes the play button icon and sets the correct subtitle file
      def set_play_button_style(self):
          self.isPaused = not self.player.is_playing()
          if self.player.is_playing():
              if self.subs_are_dual:
-                 self.player.video_set_subtitle_file("subs_cleaned_dual.srt")
+                 self.make_dual_subs()
+                 #self.player.video_set_subtitle_file("subs_cleaned_dual.srt")
              else:
                  if self.appOnToggle.isChecked():
                     self.player.video_set_subtitle_file("subs_cleaned.srt")
                  else: 
                     self.player.video_set_subtitle_file("subs_cleaned_no_ex.srt")
-             #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/back_end/La.casa.de.papel.S01E01.WEBRip.Netflix.srt")
          self.play_button.setIcon(self.playButtonIcons[int(self.isPaused)])
-          
+
+     # function that maps the play button to the video play/pause functions. Also sets the video audio track
      def play_video(self):
         if "fr" in self.episode or "sp" in self.episode:
             self.player.audio_set_track(3)
         if self.player.is_playing():
             self.player.pause()
-            #self.isPaused = True
-            #self.timer.stop()
         else:
             self.player.play()
-            #self.isPaused = False
-            #self.timer.start(1000)
-            #self.player.video_set_subtitle_file("/Users/mariiazamyrova/Downloads/LangFlix/front_end/La.casa.de.papel.S01E01.WEBRip.NetflixCopy.srt")
-                
+
+     # function for changing video volume with volume slider
      def change_volume(self):
         self.player.audio_set_volume(self.volume_slider.value())
         if self.volume_slider.value() == 0:
@@ -363,53 +319,44 @@ class Video(QtWidgets.QWidget):
         else:
             self.isMuted = False
         self.volume_button.setIcon(self.volumeButtonIcons[int(self.isMuted)])
-        
+
+     # function that allows the user to scroll through the video with a time slider
      def change_video_pos(self):
          self.player.set_position(self.time_slider.value()/1000)
          total_time = str(timedelta(microseconds = self.player.get_length()*1000)).split('.')[0]
          cur_time = str(timedelta(microseconds = self.player.get_time()*1000)).split('.')[0]
          self.time_text.setText(f'{cur_time}/{total_time}')
 
+     # function that controls slider appearance when it is dragged
      def on_time_slider_pressed(self):
          self.time_slider.setStyleSheet(slider_style_hover)
          self.player.pause()
 
+     # function that controls slider appearance when it is released
      def on_time_slider_released(self):
          self.time_slider.setStyleSheet(slider_style)
          self.player.play()
 
+     '''
+     #function that upates the time slider slider position and the time display text
      def update_time_slider(self):
          self.time_slider.setValue(self.player.get_position()*1000)
          total_time = str(timedelta(microseconds = self.player.get_length()*1000)).split('.')[0]
          cur_time = str(timedelta(microseconds = self.player.get_time()*1000)).split('.')[0]
          self.time_text.setText(f'{cur_time}/{total_time}')
-
-     #how do we want to cue pausing? Should we use a dictionary with subtitle index to pause at, exercise type and the text to use for execise?
-     #how do i schedule video pause at given time?
-     '''
-     # function that cues events related to video timing
-     def react_to_time_change(self, indices):
-         #update slider position
-         self.time_slider.setValue(self.player.get_position()*1000)
-         try:
-             ind = indices[0]
-         except:
-             return 
-         #compute one exercise in advance
-         #timestamp = timedelta(microseconds=self.ex_counter * self.time_between_ex)#
-         sub_start = self.subs_cur[ind].start
-         sub_time = timedelta(hours=sub_start.hours, minutes=sub_start.minutes, 
-                             seconds=sub_start.seconds, microseconds=sub_start.milliseconds * 1000)   
-         #low_time_bound = sub_time - timedelta(microseconds= 10**6)
-         player_time = timedelta(microseconds=self.player.get_time()*1000)
-         up_time_bound = sub_time + timedelta(microseconds= 10**6)
-         if player_time >= sub_time and player_time <= up_time_bound:
-             self.player.pause()
-             self.cur_ex_ind+=1
-             self.choose_ex_ind(self.sub_ind_for_ex[self.cur_ex_ind])
-             self.ind_to_stop_at_stack.pop(0)
      '''
 
+     def set_subtitles(self):
+         if self.subs_are_dual:
+             self.make_dual_subs()
+             self.player.video_set_subtitle_file("subs_cleaned_dual.srt")
+         else:
+             if self.appOnToggle.isChecked():
+                self.player.video_set_subtitle_file("subs_cleaned.srt")
+             else: 
+                self.player.video_set_subtitle_file("subs_cleaned_no_ex.srt")
+
+     # function that selects candidate subs for every exercise timestamp and cleans the subtitles from the ### markup
      def prep_subs(self):
          break_time = timedelta(minutes = 3)
          ex_counter = 1
@@ -436,15 +383,7 @@ class Video(QtWidgets.QWidget):
          self.num_exercises = len(self.sub_ind_for_ex) # update number of exercises to the number of possible exercises
          self.choose_ex_ind(self.sub_ind_for_ex[0])
              
-             
-         '''
-         for ind in self.sub_to_pause_at:
-             word= re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
-             if word:
-                 self.subs_cur[ind].text = re.sub(word[0][0], '<font color=#00D1FF weight=750><b>'+word[0][1]+'</b></font>', self.subs_orig[ind].text)
-                 self.subs_cur[ind].text = re.sub(r'###[\W\w]+:[\W\w]+:[\W\w]+###', '', self.subs_cur[ind].text)
-         self.subs_cur.save(\"MANUAL_Money.Heist.S01E01.XviD-AFG-eng.wordsreplaced.srt", encoding='utf-8')
-         '''
+     # function that chooses the subtitle for the next exercise
      def choose_ex_ind(self, ind_list):
          try:
             ind = min(ind_list, key = lambda x: abs(self.zipf_cur - float(self.get_word_data_from_sub(x)[0][2])))
@@ -455,21 +394,26 @@ class Video(QtWidgets.QWidget):
                 self.subs_cur.save("subs_cleaned.srt", encoding='utf-8')
          except: return
 
+     # function that extracts the data between ### in the 'modified' subtitle file
      def get_word_data_from_sub(self, ind):
          return re.findall(r'###([\W\w]+):([\W\w]+):([\W\w]+):([\W\w]+)###', self.subs_orig[ind].text)
          
+     # function that convert the subtitle time property to a datetime.timedelta value
      def sub_time_to_timedelta(self, time):
          return timedelta(hours=time.hours, minutes=time.minutes, 
                              seconds=time.seconds, microseconds=time.milliseconds * 1000) 
      
+     # function that generates dual subtitles
      def make_dual_subs(self):
          for ind in range(len(self.subs_l2)):
              self.subs_l2[ind].text = '<font color=#F3E73C>'+self.subs_l2[ind].text+'</font>'
-         rsubs = self.subs_cur + self.subs_l2
+         rsubs = self.subs_l1 + self.subs_l2
+         if self.appOnToggle.isChecked(): rsubs = self.subs_cur + self.subs_l2
          rsubs.sort()
          rsubs.clean_indexes()
          rsubs.save ("subs_cleaned_dual.srt", encoding='utf-8')
 
+     # function that adjusts the user's language level (Zipf frequency) based on the sequence of their (in)correct exercise answers
      def adjust_difficulty(self):
          print('old list', self.num_correct_ex)
          print('old zipf', self.zipf_cur)
@@ -489,20 +433,6 @@ class Video(QtWidgets.QWidget):
                  self.num_correct_ex.pop(0)
                  self.num_correct_ex.pop(0)
 
-
-         '''
-         if len(self.num_correct_ex) == 3: # reevaluate the langauge level every 3 exercises
-             if sum(self.num_correct_ex) == 3: #if got 3 correct in a row increase difficulty (decrease zipf)
-                 self.zipf_cur =  max(1, self.zipf_cur - 0.5)
-             elif sum(self.num_correct_ex) == 1: #if got only 1 out of 3 correct in a row decrease difficulty (increase zipf)
-                 self.zipf_cur = min(self.zipf_cur + 0.5, 7)
-             while True: # remove the sequence of correct exercises preceding the wrong one
-                 try:
-                    ex = self.num_correct_ex.pop(0)
-                 except: break
-                 if ex == 0:
-                     break
-         '''
          print('new list', self.num_correct_ex)
          print('new list', self.zipf_cur)
      
