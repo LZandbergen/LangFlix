@@ -6,13 +6,52 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 import vlc
 import sys
 
+#### START
+from py_toggle import PyToggle
+
+def hex2QColor(c):
+    """Convert Hex color to QColor"""
+    r=int(c[0:2],16)
+    g=int(c[2:4],16)
+    b=int(c[4:6],16)
+    return QtGui.QColor(r,g,b)
+
+class HintMessageBox(QtWidgets.QMessageBox):
+    def __init__(self):
+        super().__init__()
+        
+        def mouseClickEvent(self, event):
+            self.close()
+
+class SettingsDialog(QtWidgets.QDialog):
+    def __init__(self, parent):
+        super().__init__(parent, QtCore.Qt.FramelessWindowHint)
+
+        self.activateWindow()
+        self.setGeometry(960, 78, 200, 100)
+        self.setStyleSheet("QDialog {background-color: #1E1E1E; border: 2px solid; border-radius: 5px; border-color: #121212;}")
+
+        self.backgroundColor = hex2QColor("1E1E1E")
+        self.foregroundColor = hex2QColor("1E1E1E")
+        self.borderRadius = 5
+        def paintEvent(self, event):
+            # get current window size
+            s = self.size()
+            qp = QtGui.QPainter()
+            qp.begin(self)
+            qp.setRenderHint(QtGui.QPainter.Antialiasing, True)
+            qp.setPen(self.foregroundColor)
+            qp.setBrush(self.backgroundColor)
+            qp.drawRoundedRect(0, 0, s.width(), s.height(),
+                            self.borderRadius, self.borderRadius)
+            qp.end()
+#### END
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("LangFlix")
-        ###
         self.setWindowIcon(QtGui.QIcon('./Documents/GitHub/LangFlix/front_end/logo.png'))
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("""background-color: #171717;""")
@@ -48,7 +87,14 @@ class MainWindow(QMainWindow):
                     QRadioButton::indicator::unchecked
                         {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                     QRadioButton::indicator::checked
-                        {image: url(Downloads/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                        {image: url(./Documents/GitHub/LangFlix/front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                 '''
+        style2 =  '''QRadioButton 
+                        {padding-left: 12px; color: #D9D9D9; font-weight: 700; font-size: 12px; background-color: #1E1E1E;}
+                    QRadioButton::indicator::unchecked
+                        {border-radius: 6px; border: 1.5px solid; width: 9px; height: 9px; border-color: black;}
+                    QRadioButton::indicator::checked
+                        {image: url(./Documents/GitHub/LangFlix/front_end/RadioButton (1).png); width: 13px; height: 13px;}
                  '''
         r_button1 = QtWidgets.QRadioButton()
         r_button1.setStyleSheet(style)
@@ -109,6 +155,10 @@ class MainWindow(QMainWindow):
         #cor_incor_text.setFont(QtGui.QFont(families[0]))
         cor_incor_icon = QtWidgets.QLabel()
         cor_incor_icon.setStyleSheet('QLabel {background-color: #1E1E1E;}')
+        #### START
+        cor_incor_icon.setFixedSize(16,16)
+        cor_incor_icon.setScaledContents(True)
+        #### END
         #QtGui.QIcon("./Documents/GitHub/LangFlix/front_end/tab_image.png")
         cor_incor_layout = QtWidgets.QHBoxLayout()
         cor_incor_layout.setAlignment(QtCore.Qt.AlignCenter)
@@ -123,7 +173,7 @@ class MainWindow(QMainWindow):
                     cur_checked = word.text()
                 if cur_checked == self.correct_word:
                     cor_incor_text.setText("Great, correct!")
-                    pixmap = QtGui.QPixmap("./Downloads/LangFlix/front_end/correct.png")
+                    pixmap = QtGui.QPixmap("./Documents/GitHub/LangFlix/front_end/correct.png")
                     cor_incor_icon.setPixmap(pixmap)
                     buttons_stackedLayout.setCurrentIndex(1)
                     rb.setStyleSheet('''QRadioButton 
@@ -136,7 +186,7 @@ class MainWindow(QMainWindow):
                     break
                 else: 
                     cor_incor_text.setText("Incorrect, try again")
-                    pixmap = QtGui.QPixmap("./Downloads/LangFlix/front_end/incorrect.png")
+                    pixmap = QtGui.QPixmap("./Documents/GitHub/LangFlix/front_end/incorrect.png")
                     cor_incor_icon.setPixmap(pixmap)
         submit_button.clicked.connect(checkAnswer)                             
 
@@ -254,12 +304,103 @@ class MainWindow(QMainWindow):
         size2 = (110, 50)
         exercise_tab.setFixedSize(*size2)
         exercise_tab.clicked.connect(switchToExercise)
+        
+        #### START
+        settings_button = QtWidgets.QPushButton('')
+        settings_button.setStyleSheet('''QPushButton 
+                                    {border: 0px; 
+                                    width: 20px;
+                                    image: url("./Documents/GitHub/LangFlix/front_end/settings.png");} 
+                                    QPushButton::hover
+                                    {image: url("./Documents/GitHub/LangFlix/front_end/settings_hover.png");
+                                }''')
+        
+        # Create text of the settings
+        setting1Header = QtWidgets.QLabel('Hide dictionary')
+        setting1Header.setStyleSheet('QLabel {padding-left: 10px; color: #FEFEFE; font-size: 12px; font-weight: 780; background-color: #1E1E1E;}')
+        setting1Text = QtWidgets.QLabel('Watch video in full screen with no dictionary')
+        setting1Text.setStyleSheet('QLabel {padding-left: 10px; padding-right: 23px; color: #D9D9D9; font-size: 12px; font-weight: 700; background-color: #1E1E1E;}')
+        setting2Header = QtWidgets.QLabel('Double subtitles')
+        setting2Header.setStyleSheet('QLabel {padding-left: 10px; color: #FEFEFE; font-size: 12px; font-weight: 780; background-color: #1E1E1E;}')
+        setting2Text = QtWidgets.QLabel('Show subtitles in both English and your\nlanguage')
+        setting2Text.setStyleSheet('QLabel {padding-left: 10px; color: #D9D9D9; font-size: 12px; font-weight: 700; background-color: #1E1E1E;}')
+        setting3Header = QtWidgets.QLabel('Translation in dictionary')
+        setting3Header.setStyleSheet('QLabel {padding-left: 10px; color: #FEFEFE; font-size: 12px; font-weight: 780; background-color: #1E1E1E;}')
+        # Hovering options buttons for settings
+        option_hover = QtWidgets.QRadioButton('On hover')
+        option_hover.setStyleSheet(style2)
+        option_hover.setChecked(True)
+        option_always = QtWidgets.QRadioButton('Always')
+        option_always.setStyleSheet(style2)
+        def setHover():
+            self.display_type == "Hover"
+        def setAlways():
+            self.display_type == "Always"
+        option_hover.clicked.connect(setHover)
+        option_always.clicked.connect(setAlways)
+        # Toggles for settings
+        toggle1 = PyToggle()
+        toggle1.setStyleSheet('QCheckBox {padding-right: 10px;}')
+        toggle2 = PyToggle()
+        toggle2.setStyleSheet('QCheckBox {padding-right: 10px;}')
+        def hideDict():
+            pass
+        def setDoubleSubs():
+            pass
+        toggle1.clicked.connect(hideDict)
+        toggle2.clicked.connect(setDoubleSubs)
+        # Add all settings components in a layout
+        separator = QtWidgets.QFrame()
+        separator.setFrameShape(QtWidgets.QFrame.HLine)
+        separator.setFrameShadow(QtWidgets.QFrame.Plain)
+        separator.setStyleSheet('QFrame {color: #252525; background-color: #1E1E1E;}')
+        separator2 = QtWidgets.QFrame()
+        separator2.setFrameShape(QtWidgets.QFrame.HLine)
+        separator2.setFrameShadow(QtWidgets.QFrame.Plain)
+        separator2.setStyleSheet('QFrame {color: #252525; background-color: #1E1E1E;}')
+        setting1_layout = QtWidgets.QHBoxLayout()
+        setting1_layout.setContentsMargins(0,0,12,0)
+        setting1_layout.addWidget(setting1Header)
+        setting1_layout.addWidget(toggle1)
+        setting2_layout = QtWidgets.QHBoxLayout()
+        setting2_layout.setContentsMargins(0,0,12,0)
+        setting2_layout.addWidget(setting2Header)
+        setting2_layout.addWidget(toggle2)
+        settingsScreen = QtWidgets.QVBoxLayout()
+        settingsScreen.setContentsMargins(2,0,2,0)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 12, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addLayout(setting1_layout)
+        settingsScreen.addWidget(setting1Text)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 5, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addWidget(separator)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 3, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addLayout(setting2_layout)
+        settingsScreen.addWidget(setting2Text)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 5, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addWidget(separator2)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 3, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addWidget(setting3Header)
+        settingsScreen.addWidget(option_hover)
+        settingsScreen.addWidget(option_always)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 13, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settings = SettingsDialog(self)
+        settings.setLayout(settingsScreen)
+        self.opened = True
+        def showSettings():
+            if self.opened:
+                settings.show()
+                self.opened = False
+            else:
+                settings.hide()
+                self.opened = True
+        settings_button.clicked.connect(showSettings)
         tabs_layout = QtWidgets.QHBoxLayout()
-        tabs_layout.addWidget(dictionary_tab)
-        tabs_layout.addWidget(exercise_tab)
-        tabs_layout.setAlignment(QtCore.Qt.AlignLeft)     
-        tabs_layout.setContentsMargins(0,0,0,0)
+        tabs_layout.addWidget(dictionary_tab, alignment=QtCore.Qt.AlignLeft)
+        tabs_layout.addWidget(exercise_tab, alignment=QtCore.Qt.AlignLeft)
+        tabs_layout.addWidget(settings_button, alignment=QtCore.Qt.AlignRight)    
+        tabs_layout.setContentsMargins(0,0,15,0)
         tabs_layout.setSpacing(0)
+        #### END
 
         # Create side-menu layout that will contain tabs and stackedLayout
         side_layout = QtWidgets.QVBoxLayout()
@@ -280,7 +421,7 @@ class MainWindow(QMainWindow):
         page1 = QtWidgets.QWidget()
         page1.setFixedWidth(350)
         page1.setObjectName("page1")
-        page1.setStyleSheet('#page1 {border: 2px solid; border-color: #121212; border-radius: 3px; background-color: #1E1E1E;}')   
+        page1.setStyleSheet('#page1 {border: 2px solid; border-color: #121212; border-radius: 5px; background-color: #1E1E1E;}')   
         page1Layout = QtWidgets.QVBoxLayout()
         page1Layout.setAlignment(QtCore.Qt.AlignTop)
         page1Layout.addItem(QtWidgets.QSpacerItem(2, 24, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
@@ -306,32 +447,20 @@ class MainWindow(QMainWindow):
             new_word = QtWidgets.QLabel(word)
             new_word.setMouseTracking(True)
             new_word.setFont(QtGui.QFont(families[0]))
-            ###
             new_word.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
-            ###
             row.setAlignment(new_word, QtCore.Qt.AlignCenter)
             equals = QtWidgets.QLabel("=")
             equals.setObjectName('equals')
-            ###
             equals.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
-            ###  
             size3 = (24, 45)
-            ###
             equals.setFixedSize(*size3)
-            ###
             equals.setSizePolicy( QtWidgets.QSizePolicy.Policy.Minimum,  QtWidgets.QSizePolicy.Policy.Fixed)
-            ###
             equals.setAlignment(QtCore.Qt.AlignCenter)
-            ###
             row.setAlignment(equals, QtCore.Qt.AlignCenter)
             word_translation = QtWidgets.QLabel(translation)
-            ###
             word_translation.setFont(QtGui.QFont(families[0])) 
-            ###
             word_translation.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
             word_translation.setBuddy(equals)
-            
-            ###
             word_translation.installEventFilter(self)
             row.setAlignment(word_translation, QtCore.Qt.AlignCenter)
             row.addWidget(new_word)
@@ -351,7 +480,7 @@ class MainWindow(QMainWindow):
         page2 = QtWidgets.QWidget()
         page2.setFixedWidth(350)
         page2.setObjectName("page2")
-        page2.setStyleSheet('#page2 {border: 2px solid; border-color: #121212; border-radius: 3px; background-color: #1E1E1E;}')
+        page2.setStyleSheet('#page2 {border: 2px solid; border-color: #121212; border-radius: 5px; background-color: #1E1E1E;}')
         page2Layout = QtWidgets.QVBoxLayout()
         page2Layout.setAlignment(QtCore.Qt.AlignTop)
         spacer1 = QtWidgets.QSpacerItem(2, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -402,8 +531,14 @@ class MainWindow(QMainWindow):
         logo = QtWidgets.QLabel()
         #logo.setPicture( QtGui.QIcon('./Documents/GitHub/LangFlix/front_end/logo.png'))
         pixmap3 = QtGui.QPixmap('./Documents/GitHub/LangFlix/front_end/logo.png')
+        #### START
+        logo.setFixedSize(50,50)
+        logo.setScaledContents(True)
+        #### END
         logo.setPixmap(pixmap3)
-        logo.setAlignment(QtCore.Qt.AlignCenter)
+        #### START
+        #logo.setAlignment(QtCore.Qt.AlignCenter)
+        #### END
         welcomeText = QtWidgets.QLabel(" Welcome to LangFlix –")
         welcomeText.setAlignment(QtCore.Qt.AlignCenter)
         welcomeText.setStyleSheet('QLabel {color: #CACACA; font-size: 22px; font-weight: 650; background-color: #171717;}')
@@ -495,7 +630,7 @@ class MainWindow(QMainWindow):
         def switchToMain():
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
-            print(self.CEFRlevel)
+         
         setLevel_button.clicked.connect(switchToMain)
 
         # Wrapping the levels page in layouts
@@ -511,7 +646,9 @@ class MainWindow(QMainWindow):
         c_layout.addWidget(c1)
         c_layout.addWidget(c2)
         c_layout.setContentsMargins(89,0,89,0)
-        levelsLayout.addWidget(logo)
+        #### START
+        levelsLayout.addWidget(logo, alignment=QtCore.Qt.AlignCenter)
+        #### END
         levelsLayout.addWidget(welcomeText)
         levelsLayout.addItem(QtWidgets.QSpacerItem(2, 3, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
         levelsLayout.addWidget(welcomeText2)
