@@ -294,7 +294,7 @@ class Video(QtWidgets.QWidget):
          if self.player.is_playing():
              if self.subs_are_dual:
                  self.make_dual_subs()
-                 #self.player.video_set_subtitle_file("subs_cleaned_dual.srt")
+                 self.player.video_set_subtitle_file("subs_cleaned_dual.srt")
              else:
                  if self.appOnToggle.isChecked():
                     self.player.video_set_subtitle_file("subs_cleaned.srt")
