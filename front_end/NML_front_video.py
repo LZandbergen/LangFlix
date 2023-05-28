@@ -14,6 +14,46 @@ from cefr_to_zipf import cefr_to_zipf_func
 import json
 from deep_translator import GoogleTranslator
 
+#### START
+from py_toggle import PyToggle
+
+def hex2QColor(c):
+    """Convert Hex color to QColor"""
+    r=int(c[0:2],16)
+    g=int(c[2:4],16)
+    b=int(c[4:6],16)
+    return QtGui.QColor(r,g,b)
+
+class HintMessageBox(QtWidgets.QMessageBox):
+    def __init__(self):
+        super().__init__()
+        
+        def mouseClickEvent(self, event):
+            self.close()
+
+class SettingsDialog(QtWidgets.QDialog):
+    def __init__(self, parent):
+        super().__init__(parent, QtCore.Qt.FramelessWindowHint)
+
+        self.activateWindow()
+        self.setGeometry(960, 78, 200, 100)
+        self.setStyleSheet("QDialog {background-color: #1E1E1E; border: 2px solid; border-radius: 5px; border-color: #121212;}")
+
+        self.backgroundColor = hex2QColor("1E1E1E")
+        self.foregroundColor = hex2QColor("1E1E1E")
+        self.borderRadius = 5
+        def paintEvent(self, event):
+            # get current window size
+            s = self.size()
+            qp = QtGui.QPainter()
+            qp.begin(self)
+            qp.setRenderHint(QtGui.QPainter.Antialiasing, True)
+            qp.setPen(self.foregroundColor)
+            qp.setBrush(self.backgroundColor)
+            qp.drawRoundedRect(0, 0, s.width(), s.height(),
+                            self.borderRadius, self.borderRadius)
+            qp.end()
+#### END
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -35,24 +75,20 @@ class MainWindow(QMainWindow):
         translator = GoogleTranslator(source='fr', target='en')
 
         # create video window   
-        #self.video = QtWidgets.QWidget()
         self.video = Video(episode = 'fr_ep1')# video screen + player button toolbar
-        #self.video.installEventFilter(self)
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
-
-        print(self.video.appOnToggle.isChecked())
 
         with open('translations_FRENCH_Detox_S01E01_Dict.json', encoding='utf-8') as json_file:
             translation_dict = json.load(json_file)
 
         with open('FRENCH_Detox_S01E01_Dict_tran.json', encoding='utf-8') as json_file:
             translation_dict.update(json.load(json_file))
-
-        #QtCore.QObject.connect(self.video, self.video.cue_ex_sig, self, SIGNAL(generateExercise))
         
+        self.appIsOn = True
+
         def switchAppOff():
             if self.video.appOnToggle.isChecked():
-                self.dict_hide_setting = False
+                self.appIsOn = True
                 self.video.appOnToggle.setStyleSheet("""QPushButton
                                       {background-color: lightblue; 
                                        color: white;
@@ -64,7 +100,7 @@ class MainWindow(QMainWindow):
                 self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
                 self.video.cue_app_on.emit()
             else:
-                self.dict_hide_setting = True
+                self.appIsOn = False
                 self.video.appOnToggle.setStyleSheet("""QPushButton
                                       {background-color: grey; 
                                        color: white;
@@ -99,6 +135,13 @@ class MainWindow(QMainWindow):
                         {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                     QRadioButton::indicator::checked
                         {image: url(front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                 '''
+        style2 =  '''QRadioButton 
+                        {padding-left: 12px; color: #D9D9D9; font-weight: 700; font-size: 12px; background-color: #1E1E1E;}
+                    QRadioButton::indicator::unchecked
+                        {border-radius: 6px; border: 1.5px solid; width: 9px; height: 9px; border-color: black;}
+                    QRadioButton::indicator::checked
+                        {image: url(front_end/RadioButton (1).png); width: 13px; height: 13px;}
                  '''
         r_button1 = QtWidgets.QRadioButton()
         r_button1.setStyleSheet(style)
@@ -159,6 +202,10 @@ class MainWindow(QMainWindow):
         #cor_incor_text.setFont(QtGui.QFont(families[0]))
         cor_incor_icon = QtWidgets.QLabel()
         cor_incor_icon.setStyleSheet('QLabel {background-color: #1E1E1E;}')
+        #### START
+        cor_incor_icon.setFixedSize(16,16)
+        cor_incor_icon.setScaledContents(True)
+        #### END
         #QtGui.QIcon(path.join("front_end", "tab_image.png"))
         cor_incor_layout = QtWidgets.QHBoxLayout()
         cor_incor_layout.setAlignment(QtCore.Qt.AlignCenter)
@@ -291,26 +338,20 @@ class MainWindow(QMainWindow):
         self.dual_subs_setting = False
 
         def hideDictionary():
-            if self.dict_hide_setting:
-                grid.removeItem(side_layout)
-                self.showLayoutChildren(layout = side_layout, show = False)
-            else:
+            if self.dict_hide_setting or not self.appIsOn:
+                if grid.count() == 2:
+                    grid.removeItem(side_layout)
+                    self.showLayoutChildren(layout = side_layout, show = False)
+                settings_button.setHidden(False)
+            elif not self.dict_hide_setting or self.appIsOn:
                 if grid.count() == 1:
                     grid.addItem(side_layout)
-                '''
-                stackedLayout.setCurrentIndex(1)
-                dictionary_tab.setHidden(False)
-                dictionary_tab.setVisible(True)
-                dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image1.png"); text-align: center; background-position: center right;}')
-                exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
-                '''
                 switchToExercise()
                 exercise_tab.setHidden(True)
                 dictionary_tab.setHidden(False)
+                settings_button.setHidden(False)
                 switchToDict()
         
-                
-
         self.video.cue_app_on.connect(hideDictionary)
         self.video.cue_app_off.connect(hideDictionary)
 
@@ -339,7 +380,7 @@ class MainWindow(QMainWindow):
                                         color: white; 
                                         font-weight: 800; 
                                         font-size: 16px; 
-                                        image: url("./Downloads/LangFlix/front_end/tab_image1.png"); 
+                                        image: url("front_end/tab_image1.png"); 
                                         text-align: center; 
                                         background-position: center right;}
                                         QPushButton::hover
@@ -355,7 +396,7 @@ class MainWindow(QMainWindow):
                                         color: white; 
                                         font-weight: 800; 
                                         font-size: 16px; 
-                                        image: url("./Downloads/LangFlix/front_end/tab_image2.png"); 
+                                        image: url("front_end/tab_image2.png"); 
                                         text-align: center; 
                                         background-position: center left;}
                                         QPushButton::hover
@@ -370,6 +411,114 @@ class MainWindow(QMainWindow):
         tabs_layout.setAlignment(QtCore.Qt.AlignLeft)
         tabs_layout.setContentsMargins(0,0,0,0)
         tabs_layout.setSpacing(0)
+
+
+        #### START
+        settings_button = QtWidgets.QPushButton('')
+        settings_button.setStyleSheet('''QPushButton 
+                                    {border: 0px; 
+                                    width: 20px;
+                                    image: url("front_end/settings.png");} 
+                                    QPushButton::hover
+                                    {image: url("front_end/settings_hover.png");
+                                }''')
+        
+        # Create text of the settings
+        setting1Header = QtWidgets.QLabel('Hide dictionary')
+        setting1Header.setStyleSheet('QLabel {padding-left: 10px; color: #FEFEFE; font-size: 12px; font-weight: 780; background-color: #1E1E1E;}')
+        setting1Text = QtWidgets.QLabel('Watch video in full screen with no dictionary')
+        setting1Text.setStyleSheet('QLabel {padding-left: 10px; padding-right: 23px; color: #D9D9D9; font-size: 12px; font-weight: 700; background-color: #1E1E1E;}')
+        setting2Header = QtWidgets.QLabel('Double subtitles')
+        setting2Header.setStyleSheet('QLabel {padding-left: 10px; color: #FEFEFE; font-size: 12px; font-weight: 780; background-color: #1E1E1E;}')
+        setting2Text = QtWidgets.QLabel('Show subtitles in both English and your\nlanguage')
+        setting2Text.setStyleSheet('QLabel {padding-left: 10px; color: #D9D9D9; font-size: 12px; font-weight: 700; background-color: #1E1E1E;}')
+        setting3Header = QtWidgets.QLabel('Translation in dictionary')
+        setting3Header.setStyleSheet('QLabel {padding-left: 10px; color: #FEFEFE; font-size: 12px; font-weight: 780; background-color: #1E1E1E;}')
+        # Hovering options buttons for settings
+        option_hover = QtWidgets.QRadioButton('On hover')
+        option_hover.setStyleSheet(style2)
+        option_hover.setChecked(True)
+        option_always = QtWidgets.QRadioButton('Always')
+        option_always.setStyleSheet(style2)
+        def setHover():
+            self.display_type = "Hover"
+        def setAlways():
+            self.display_type = "Always"
+        option_hover.clicked.connect(setHover)
+        option_always.clicked.connect(setAlways)
+        # Toggles for settings
+        toggle1 = PyToggle()
+        toggle1.setStyleSheet('QCheckBox {padding-right: 10px;}')
+        toggle2 = PyToggle()
+        toggle2.setStyleSheet('QCheckBox {padding-right: 10px;}')
+        def hideDict():
+            if toggle1.checkState() == QtCore.Qt.Checked:
+                self.dict_hide_setting = True
+            else:
+                self.dict_hide_setting = False
+            hideDictionary()
+
+        def setDoubleSubs():
+            if toggle2.checkState() == QtCore.Qt.Checked:
+                self.video.subs_are_dual = True
+            else:
+                self.video.subs_are_dual = False
+            self.video.set_subtitles()
+
+        toggle1.clicked.connect(hideDict)
+        toggle2.clicked.connect(setDoubleSubs)
+        # Add all settings components in a layout
+        separator = QtWidgets.QFrame()
+        separator.setFrameShape(QtWidgets.QFrame.HLine)
+        separator.setFrameShadow(QtWidgets.QFrame.Plain)
+        separator.setStyleSheet('QFrame {color: #252525; background-color: #1E1E1E;}')
+        separator2 = QtWidgets.QFrame()
+        separator2.setFrameShape(QtWidgets.QFrame.HLine)
+        separator2.setFrameShadow(QtWidgets.QFrame.Plain)
+        separator2.setStyleSheet('QFrame {color: #252525; background-color: #1E1E1E;}')
+        setting1_layout = QtWidgets.QHBoxLayout()
+        setting1_layout.setContentsMargins(0,0,12,0)
+        setting1_layout.addWidget(setting1Header)
+        setting1_layout.addWidget(toggle1)
+        setting2_layout = QtWidgets.QHBoxLayout()
+        setting2_layout.setContentsMargins(0,0,12,0)
+        setting2_layout.addWidget(setting2Header)
+        setting2_layout.addWidget(toggle2)
+        settingsScreen = QtWidgets.QVBoxLayout()
+        settingsScreen.setContentsMargins(2,0,2,0)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 12, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addLayout(setting1_layout)
+        settingsScreen.addWidget(setting1Text)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 5, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addWidget(separator)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 3, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addLayout(setting2_layout)
+        settingsScreen.addWidget(setting2Text)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 5, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addWidget(separator2)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 3, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settingsScreen.addWidget(setting3Header)
+        settingsScreen.addWidget(option_hover)
+        settingsScreen.addWidget(option_always)
+        settingsScreen.addItem(QtWidgets.QSpacerItem(2, 13, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+        settings = SettingsDialog(self)
+        settings.setLayout(settingsScreen)
+        self.opened = True
+        def showSettings():
+            if self.opened:
+                settings.show()
+                self.opened = False
+            else:
+                settings.hide()
+                self.opened = True
+        settings_button.clicked.connect(showSettings)
+        tabs_layout = QtWidgets.QHBoxLayout()
+        tabs_layout.addWidget(dictionary_tab, alignment=QtCore.Qt.AlignLeft)
+        tabs_layout.addWidget(exercise_tab, alignment=QtCore.Qt.AlignLeft)
+        tabs_layout.addWidget(settings_button, alignment=QtCore.Qt.AlignRight)    
+        tabs_layout.setContentsMargins(0,0,15,0)
+        tabs_layout.setSpacing(0)
+        #### END
 
         # Create side-menu layout that will contain tabs and stackedLayout
         side_layout = QtWidgets.QVBoxLayout()
@@ -388,7 +537,7 @@ class MainWindow(QMainWindow):
             rb_text2.setText(word2)
             rb_text3.setText(word3)
             self.correct_word = cor_word
-            #switchToExercise()
+
         # connect the cue exercise signal to the switchToExercise function, because they happen in different threads
         self.video.cue_ex_sig.connect(switchToExercise)
 
@@ -411,59 +560,10 @@ class MainWindow(QMainWindow):
         page1Layout.addLayout(buttons_stackedLayout)
         page1.setLayout(page1Layout)
         stackedLayout.addWidget(page1)
-        '''
-        # Generate text for the exercise
-        generateExercise("Sentence with 'quotation' marks.", "word1", "word2", "word3", "word1")
-        '''
 
         self.display_type = 'Hover'
 
         # Function to add a new word to dictionary
-        '''
-        def addWordToDict(word, translation):
-            row = QtWidgets.QHBoxLayout()
-            row.setAlignment(QtCore.Qt.AlignLeft)
-            new_word = QtWidgets.QLabel(word)
-        '''
-        '''
-            new_word.setFont(QtGui.QFont(families[0]))
-            new_word.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; padding-right: 100px; width = 100; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
-            equals = QtWidgets.QLabel("=")
-            equals.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
-            word_translation = QtWidgets.QLabel(translation)
-            word_translation.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 100px; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
-            word_translation.setFont(QtGui.QFont(families[0])) 
-            row.addWidget(new_word)
-            row.addWidget(equals)
-            row.addWidget(word_translation)
-            row.setSpacing(0)
-            page2Layout.addLayout(row)
-        '''
-        '''
-            new_word.setMouseTracking(True)
-            new_word.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
-            row.setAlignment(new_word, QtCore.Qt.AlignCenter)
-            equals = QtWidgets.QLabel("=")
-            equals.setObjectName('equals')
-            equals.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
-            size3 = (24, 45)
-            equals.setFixedSize(*size3)
-            equals.setSizePolicy( QtWidgets.QSizePolicy.Policy.Minimum,  QtWidgets.QSizePolicy.Policy.Fixed)
-            equals.setAlignment(QtCore.Qt.AlignCenter)
-            row.setAlignment(equals, QtCore.Qt.AlignCenter)
-            word_translation = QtWidgets.QLabel(translation)
-            word_translation.setFont(QtGui.QFont(families[0])) 
-            word_translation.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
-            word_translation.setBuddy(equals)
-            word_translation.installEventFilter(self)
-            row.setAlignment(word_translation, QtCore.Qt.AlignCenter)
-            row.addWidget(new_word)
-            row.addWidget(equals)
-            row.addWidget(word_translation)
-            row.setSpacing(0)
-            page2Layout.addLayout(row)
-        '''
-
         def addWordToDict(word, translation):
             row = QtWidgets.QHBoxLayout()
             new_word = QtWidgets.QLabel(word)
@@ -511,18 +611,8 @@ class MainWindow(QMainWindow):
         page2Layout = QtWidgets.QVBoxLayout()
         page2Layout.setAlignment(QtCore.Qt.AlignTop)
         spacer1 = QtWidgets.QSpacerItem(2, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        #word_1 = QtWidgets.QLabel("word_1")
-        #word_1.setFont(QtGui.QFont(families[0]))
-        #word_1.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; height: 30; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
-        #word_2 = QtWidgets.QLabel("word_2")
-        #word_2.setFont(QtGui.QFont(families[0]))
-        #word_2.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; padding-left: 16px; border-radius: 8px; color: #CACACA; font-weight: 700; font-size: 15px; background-color: #171717;}')
         page2Layout.addItem(spacer1)
         page2Layout.setSpacing(2)
-        #page2Layout.addWidget(word_1)
-        #page2Layout.addWidget(word_2)
-        #addWordToDict("word3","trans")
-        #addWordToDict("word4word4word4","tran")
         page2.setLayout(page2Layout)
         stackedLayout.addWidget(page2)
 
@@ -532,10 +622,9 @@ class MainWindow(QMainWindow):
         side_layout.setSpacing(0)
         
         # Main grid with all stuff (side layout, video, subtitles)
-        grid = QtWidgets.QHBoxLayout()#QGridLayout()
-        grid.addWidget(self.video, 8)#addWidget(self.video)#, 0, 0)
-        grid.addLayout(side_layout, 2)#, 0, 1)
-        #grid.addWidget(subtitles, 1, 0, 1, 2)
+        grid = QtWidgets.QHBoxLayout()
+        grid.addWidget(self.video, 8)
+        grid.addLayout(side_layout, 2)
 
         # Put the grid in a container
         vidWindow = QtWidgets.QWidget()
@@ -555,8 +644,12 @@ class MainWindow(QMainWindow):
         final_levelsLayout.addWidget(levelsWidget)
         logo = QtWidgets.QLabel()
         pixmap3 = QtGui.QPixmap('front_end/logo.png')
+        #### START
+        logo.setFixedSize(50,50)
+        logo.setScaledContents(True)
+        #### END
         logo.setPixmap(pixmap3)
-        logo.setAlignment(QtCore.Qt.AlignCenter)
+        #logo.setAlignment(QtCore.Qt.AlignCenter)
         welcomeText = QtWidgets.QLabel(" Welcome to LangFlix –")
         welcomeText.setAlignment(QtCore.Qt.AlignCenter)
         welcomeText.setStyleSheet('QLabel {color: #CACACA; font-size: 22px; font-weight: 650; background-color: #171717;}')
@@ -626,7 +719,6 @@ class MainWindow(QMainWindow):
                                     }''')
             level.clicked.connect(toggle)
             level.setCheckable(True)
-            #level.setSizePolicy( QtWidgets.QSizePolicy.Policy.Minimum,  QtWidgets.QSizePolicy.Policy.Fixed)
 
         # Button for proceeding to the video
         setLevel_button = QtWidgets.QPushButton("Apply")
@@ -648,7 +740,6 @@ class MainWindow(QMainWindow):
         def switchToMain():
             levelsToMain_stackedLayout.setCurrentIndex(1)
             self.CEFRlevel = [btn.text() for btn in btn_grp.buttons() if btn.isChecked()]
-            #self.video.zipf_start = self.CEFRlevel # set cefr variable of the video object
             self.video.set_zipf(cefr_to_zipf_func(self.CEFRlevel[0]))
             
         setLevel_button.clicked.connect(switchToMain)
@@ -667,7 +758,10 @@ class MainWindow(QMainWindow):
         c_layout.addWidget(c1)
         c_layout.addWidget(c2)
         c_layout.setContentsMargins(89,0,89,0)
-        levelsLayout.addWidget(logo)
+        #### START
+        levelsLayout.addWidget(logo, alignment=QtCore.Qt.AlignCenter)
+        #### END
+        #levelsLayout.addWidget(logo)
         levelsLayout.addWidget(welcomeText)
         levelsLayout.addItem(QtWidgets.QSpacerItem(2, 3, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
         levelsLayout.addWidget(welcomeText2)
@@ -694,8 +788,6 @@ class MainWindow(QMainWindow):
         #state of interface at start of the app
         switchToDict()
         exercise_tab.setHidden(True)
-        #dict_hide_setting = True
-        #hideDictionary()
 
         # function for triggering events connected to video time
         def react_to_time_change(indices):
@@ -728,22 +820,6 @@ class MainWindow(QMainWindow):
                 word_options = target_word_data[3][1:-1].split(', ') #list of answer options
                 if len(word_options) == 1: word_options.append('')
                 sentence = re.sub(r''+target_word_data[0], '_____', self.video.subs_cur[ind].text) # sentence in English
-                '''
-                l2_sub = None
-                sub = self.video.subs_cur[ind]
-                sub_time = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
-                                seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
-                up_time_bound = sub_time + timedelta(microseconds= 3*10**6)
-                low_time_bound = sub_time - timedelta(microseconds= 3*10**6)
-                for sub in self.video.subs_l2: 
-                    stime = timedelta(hours=sub.start.hours, minutes=sub.start.minutes, 
-                                seconds=sub.start.seconds, microseconds=sub.start.milliseconds * 1000)
-                    if stime >= low_time_bound and stime <= up_time_bound:
-                        l2_sub = sub
-                        break
-                sentence = re.sub(r''+target_word_data[1], '_____', l2_sub.text)
-                print(sentence)
-                '''
                 #words = [target_word_data[1]] 
                 word_options.append(target_word_data[1])
                 random.shuffle(word_options) # shuffle word order
@@ -795,54 +871,21 @@ class MainWindow(QMainWindow):
 
     # function for triggering interface events 
     def eventFilter(self, source, event):
-        if source == self.video:
+        if self.display_type == 'Hover':
             if event.type() == QtCore.QEvent.Enter:
-                if self.video.video_layout.count()==1:
-                    self.video.video_layout.addItem(self.video.video_menuBar)
-                    self.video.video_menuBar.setEnabled(True)
-                    self.showLayoutChildren(layout = self.video.video_menuBar, show = True)
+                source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
+                source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
             elif event.type() == QtCore.QEvent.Leave:
-                if self.video.video_layout.count()==2:
-                    self.video.video_layout.removeItem(self.video.video_menuBar)
-                    self.video.video_menuBar.setEnabled(False)
-                    self.showLayoutChildren(layout = self.video.video_menuBar, show = False)
-        else:
-            if self.display_type == 'Hover':
-                if event.type() == QtCore.QEvent.Enter:
-                    source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
-                    source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
-                elif event.type() == QtCore.QEvent.Leave:
-                    source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #171717; font-weight: 800; font-size: 15px; background-color: #171717;}')
-                    source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #171717; font-weight: 800; font-size: 15px; background-color: #171717;}')
-            elif self.display_type == "Always":
+                source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #171717; font-weight: 800; font-size: 15px; background-color: #171717;}')
+                source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #171717; font-weight: 800; font-size: 15px; background-color: #171717;}')
+        elif self.display_type == "Always":
+            if event.type() == QtCore.QEvent.Enter or event.type() == QtCore.QEvent.Leave:
                 source.setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
                 source.buddy().setStyleSheet('QLabel {padding: 12px, 12px, 0px, 0px; border-radius: 0px; height: 30; color: #CACACA; font-weight: 800; font-size: 15px; background-color: #171717;}')
 
         return super().eventFilter(source, event)
-         
-            
-    """
-        if qApp.activePopupWidget() is None:
-            if event.type() == QtCore.QEvent.MouseMove:
-                if self.video_menuBar.isHidden():
-                    rect = self.gemetry()
-                    rect.setHeight(60)
-                    
-                    if rect.contains(event.globalPos()):
-                        self.video_menuBar.show()
-                else:
-                    rect = QtCore.QRect(
-                        self.video_menuBar.mapToGlobal(QtWidgets.QPoint(0, 0)),
-                        self.video_menuBar.size()
-                    )
-                    if not rect.contains(event.globalPos()):
-                        self.video_menuBar.hide()
-            elif event.type() == QtCore.QEvent.Leave:
-                self.video_menuBar.hide()
-    """
-    
 
-
+# App initialized
 vlcApp = QtWidgets.QApplication([])
 
 window = MainWindow()
