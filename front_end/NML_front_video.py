@@ -74,16 +74,36 @@ class MainWindow(QMainWindow):
 
         translator = GoogleTranslator(source='fr', target='en')
 
-        # create video window   
-        self.video = Video(episode = 'fr_ep1')# video screen + player button toolbar
+        # create video window  
+        episode = 'de_ep2'
+        self.video = Video(episode = episode) # video screen + player button toolbar
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
 
-        with open('translations_FRENCH_Detox_S01E01_Dict.json', encoding='utf-8') as json_file:
+        if episode == "fr_ep1":
+            str1 = '../translations_FRENCH_Detox_S01E01_Dict.json'
+            str2 = '../FRENCH_Detox_S01E01_Dict_tran.json'
+        elif episode == "fr_ep2":
+            str1 = '../translations_FRENCH_Detox_S01E02_Dict.json'
+            str2 = '../FRENCH_Detox_S01E02_Dict_tran.json'
+        elif episode == "sp_ep1":
+            str1 = '../translations_SPANISH_Machos_Alpha_S01E01_Dict.json'
+            str2 = '../SPANISH_Machos_Alpha_S01E01_Dict_tran.json'
+        elif episode == "sp_ep2":
+            str1 = '../translations_SPANISH_Machos_Alpha_S01E02_Dict.json'
+            str2 = '../SPANISH_Machos_Alpha_S01E02_Dict_tran.json'
+        elif episode == "de_ep1":
+            str1 = '../translations_GERMAN_Drugs_Online_S01E01_Dict.json'
+            str2 = '../GERMAN_Drugs_Online_S01E01_Dict_tran.json'
+        elif episode == "de_ep2":
+            str1 = '../translations_GERMAN_Drugs_Online_S01E02_Dict.json'
+            str2 = '../GERMAN_Drugs_Online_S01E02_Dict_tran.json'
+
+        with open(str1, encoding='utf-8') as json_file:
             translation_dict = json.load(json_file)
 
-        with open('FRENCH_Detox_S01E01_Dict_tran.json', encoding='utf-8') as json_file:
+        with open(str2, encoding='utf-8') as json_file:
             translation_dict.update(json.load(json_file))
-        
+            
         self.appIsOn = True
 
         def switchAppOff():
