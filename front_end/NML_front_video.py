@@ -264,9 +264,9 @@ class MainWindow(QMainWindow):
                     cor_incor_icon.setPixmap(pixmap)
                     cor_incor_icon.setHidden(False)
             buttons_stackedLayout.setCurrentIndex(1)
-            rb_text1.setText(rb_text1.text() + ' = ' + translator.translate(rb_text1.text()))#translation_dict[rb_text1.text()].lower())
-            rb_text2.setText(rb_text2.text() + ' = ' + translator.translate(rb_text2.text()))#translation_dict[rb_text2.text()].lower())
-            rb_text3.setText(rb_text3.text() + ' = ' + translator.translate(rb_text3.text()))#translation_dict[rb_text3.text()].lower())
+            rb_text1.setText(rb_text1.text() + ' = ' + self.answer_opt_transl[rb_text1.text()])#translator.translate(rb_text1.text()))#translation_dict[rb_text1.text()].lower())
+            rb_text2.setText(rb_text2.text() + ' = ' + self.answer_opt_transl[rb_text2.text()])#translator.translate(rb_text2.text()))#translation_dict[rb_text2.text()].lower())
+            rb_text3.setText(rb_text3.text() + ' = ' + self.answer_opt_transl[rb_text3.text()])#translator.translate(rb_text3.text()))#translation_dict[rb_text3.text()].lower())
             self.video.num_correct_ex.append(is_correct)
             self.video.adjust_difficulty()
             self.video.choose_ex_ind(self.video.cur_ex_ind)
@@ -843,8 +843,10 @@ class MainWindow(QMainWindow):
                 #words = [target_word_data[1]] 
                 word_options.append(target_word_data[1])
                 random.shuffle(word_options) # shuffle word order
-                for word in word_options:
-                    self.answer_opt_transl[word] = translator.translate(word).lower() 
+                for i in range(len(word_options)):
+                    if episode[:2] == 'de':
+                        word_options[i] = word_options[i].capitalize()
+                    self.answer_opt_transl[word_options[i]] = translator.translate(word_options[i])
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
                 self.video.ind_to_stop_at_stack.pop(0)
