@@ -381,7 +381,7 @@ No, no!
 
 85
 00:04:39,800 --> 00:04:41,320
-No, no! No!###no:non:6.08:[fois, -là]###
+No, no! No!###no:non:6.08:[fois, là]###
 
 86
 00:04:41,400 --> 00:04:42,560
@@ -405,7 +405,7 @@ No! No! No! No!###No:non:6.08:[monde, fois]###
 90
 00:04:49,920 --> 00:04:52,560
 - No...
-- [alarm beeps]###No:non:6.08:[fois, -là]###
+- [alarm beeps]###No:non:6.08:[fois, là]###
 
 91
 00:04:53,880 --> 00:04:55,320
@@ -562,7 +562,7 @@ See you later.
 
 124
 00:06:26,200 --> 00:06:27,960
-♪ In your world ♪###world:monde:5.96:[-là, ton]###
+♪ In your world ♪###world:monde:5.96:[là, ton]###
 
 125
 00:06:28,520 --> 00:06:30,600
@@ -570,7 +570,7 @@ See you later.
 
 126
 00:06:30,680 --> 00:06:32,640
-♪ There's a problem ♪###problem:problème:5.41:[ah, rue]###
+♪ There's a problem ♪###problem:problème:5.41:[plein, rue]###
 
 127
 00:06:33,320 --> 00:06:37,040
