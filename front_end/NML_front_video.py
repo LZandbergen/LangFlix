@@ -72,13 +72,13 @@ class MainWindow(QMainWindow):
         families = []
         for id in [id1, id2, id3]: families.append(QtGui.QFontDatabase.applicationFontFamilies(id)) 
 
-        translator = GoogleTranslator(source='fr', target='en')
-
         # create video window  
         episode = 'de_ep2'
         self.video = Video(episode = episode) # video screen + player button toolbar
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
-
+        
+        translator = GoogleTranslator(source=episode[:2], target='en')
+        '''
         if episode == "fr_ep1":
             str1 = '../translations_FRENCH_Detox_S01E01_Dict.json'
             str2 = '../FRENCH_Detox_S01E01_Dict_tran.json'
@@ -103,7 +103,7 @@ class MainWindow(QMainWindow):
 
         with open(str2, encoding='utf-8') as json_file:
             translation_dict.update(json.load(json_file))
-            
+        '''
         self.appIsOn = True
 
         def switchAppOff():
@@ -264,12 +264,12 @@ class MainWindow(QMainWindow):
                     cor_incor_icon.setPixmap(pixmap)
                     cor_incor_icon.setHidden(False)
             buttons_stackedLayout.setCurrentIndex(1)
-            rb_text1.setText(rb_text1.text() + ' = ' + translator.translate(rb_text1.text()).lower())#translation_dict[rb_text1.text()].lower())
-            rb_text2.setText(rb_text2.text() + ' = ' + translator.translate(rb_text2.text()).lower())#translation_dict[rb_text2.text()].lower())
-            rb_text3.setText(rb_text3.text() + ' = ' + translator.translate(rb_text3.text()).lower())#translation_dict[rb_text3.text()].lower())
+            rb_text1.setText(rb_text1.text() + ' = ' + translator.translate(rb_text1.text()))#translation_dict[rb_text1.text()].lower())
+            rb_text2.setText(rb_text2.text() + ' = ' + translator.translate(rb_text2.text()))#translation_dict[rb_text2.text()].lower())
+            rb_text3.setText(rb_text3.text() + ' = ' + translator.translate(rb_text3.text()))#translation_dict[rb_text3.text()].lower())
             self.video.num_correct_ex.append(is_correct)
             self.video.adjust_difficulty()
-            self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+            self.video.choose_ex_ind(self.video.cur_ex_ind)
         submit_button.clicked.connect(checkAnswer)                             
 
 
@@ -301,7 +301,7 @@ class MainWindow(QMainWindow):
                 exercise_tab.setHidden(True)
                 self.video.play_button.setEnabled(True)
                 self.video.player.play()
-                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+                self.video.choose_ex_ind(self.video.cur_ex_ind)
         skip_button.clicked.connect(skip) 
 
         # Styling Continue button
@@ -876,7 +876,7 @@ class MainWindow(QMainWindow):
                 self.video.cur_ex_ind+=1
                 #compute one exercise in advance
                 self.video.ind_to_stop_at_stack.pop(0)
-                self.video.choose_ex_ind(self.video.sub_ind_for_ex[self.video.cur_ex_ind])
+                self.video.choose_ex_ind(self.video.cur_ex_ind)
 
     # function for showing and hiding screen elements
     def showLayoutChildren(self, layout, show = True):

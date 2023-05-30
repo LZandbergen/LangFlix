@@ -2151,7 +2151,7 @@ More bread crumbs, guys.
 477
 00:21:19,400 --> 00:21:20,400
 - [grunts]
-- No. Cut!###No:non:6.08:[-là, monde]###
+- No. Cut!###No:non:6.08:[là, monde]###
 
 478
 00:21:20,440 --> 00:21:22,296
@@ -2203,7 +2203,7 @@ This is for you.
 488
 00:21:45,200 --> 00:21:47,280
 - Are you shitting me?
-- No, it's the latest one.###No:non:6.08:[vie, -là]###
+- No, it's the latest one.###No:non:6.08:[vie, là]###
 
 489
 00:21:47,360 --> 00:21:50,000
@@ -2378,7 +2378,7 @@ And Audrey, uh, just so I know.
 526
 00:23:06,320 --> 00:23:09,320
 Are we whispering on account of Pablo
-or because of my selfish brother?###brother:frère:5.18:[sorte, h]###
+or because of my selfish brother?###brother:frère:5.18:[sorte, train]###
 
 527
 00:23:09,400 --> 00:23:12,560

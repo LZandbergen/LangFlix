@@ -129,22 +129,22 @@ class Video(QtWidgets.QWidget):
 
         series_dict = {'fr_ep1': {'vid': "../shows/French/S01E01 Are We Shtty.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt", 
-                                  'sub_l2': "../subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt"},
+                                  'sub_l2': "../subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt"},
                        'fr_ep2': {'vid': "../shows/French/FRENCH_Détox.Off_The_Hook.S01E02.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E02.srt", 
-                                  'sub_l2': "../subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E02.srt"},
-                       'sp_ep1': {'vid': "../shows/Spanish/Machos alfa S01E01 In decostruzione DLMux 1080p E-AC3+AC3 ITA SPA SUBS.mkv", 
+                                  'sub_l2': "../subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt"},
+                       'es_ep1': {'vid': "../shows/Spanish/Machos alfa S01E01 In decostruzione DLMux 1080p E-AC3+AC3 ITA SPA SUBS.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_SPANISH_Machos.Alfa.English.S01E01.srt", 
-                                  'sub_l2': "../subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
-                       'sp_ep2': {'vid': "../shows/Spanish/SPANISH_Machos.Alfa_S01E02.mkv", 
+                                  'sub_l2': "../subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
+                       'es_ep2': {'vid': "../shows/Spanish/SPANISH_Machos.Alfa_S01E02.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_SPANISH_Machos.Alfa.English.S01E02.srt", 
-                                  'sub_l2': "../subtitles/MODIFIED_SPANISH_Machos.Alfa.Spanish.S01E02.srt"},
+                                  'sub_l2': "../subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt"},
                        'de_ep1': {'vid': "../shows/German/How.To.Sell.Drugs.Online.Fast.S01E01.720p.NF.WEBRip.x264-GalaxyTV.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", 
-                                  'sub_l2': "../subtitles/MODIFIED_GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"},
+                                  'sub_l2': "../subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"},
                        'de_ep2': {'vid': "../shows/German/GERMAN_How.To.Sell.Drugs.Online.Fast_S01E02.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.English.srt", 
-                                  'sub_l2': "../subtitles/MODIFIED_GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt"}}
+                                  'sub_l2': "../subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt"}}
 
         self.zipf_start = -1 # user's CEFR level (as Zipf frequency) at the start of app use
         self.zipf_cur = self.zipf_start # user's current language level
@@ -316,9 +316,9 @@ class Video(QtWidgets.QWidget):
 
      # function that maps the play button to the video play/pause functions. Also sets the video audio track
      def play_video(self):
-        if "fr" in self.episode or "sp_ep2" in self.episode:
+        if "fr" in self.episode or "es_ep2" in self.episode:
             self.player.audio_set_track(3)
-        if "sp_ep1" in self.episode:
+        if "es_ep1" in self.episode:
             self.player.audio_set_track(2)
         if self.player.is_playing():
             self.player.pause()
@@ -395,18 +395,23 @@ class Video(QtWidgets.QWidget):
          self.subs_l1.save("subs_cleaned_no_ex.srt", encoding='utf-8')
          print(self.sub_ind_for_ex)
          self.num_exercises = len(self.sub_ind_for_ex) # update number of exercises to the number of possible exercises
-         self.choose_ex_ind(self.sub_ind_for_ex[0])
+         self.choose_ex_ind(0)
              
      # function that chooses the subtitle for the next exercise
-     def choose_ex_ind(self, ind_list):
-         try:
-            ind = min(ind_list, key = lambda x: abs(self.zipf_cur - float(self.get_word_data_from_sub(x)[0][2])))
+     def choose_ex_ind(self, ex_ind):
+         if len(self.sub_ind_for_ex[ex_ind])!=0:
+            ind = min(self.sub_ind_for_ex[ex_ind], key = lambda x: abs(self.zipf_cur - float(self.get_word_data_from_sub(x)[0][2])))
             self.ind_to_stop_at_stack.append(ind)
             if self.cur_ex_ind % 3 == 0: # do exercise type 1 every 3 exercises
                 word_data = self.get_word_data_from_sub(ind)[0]
                 self.subs_cur[ind].text = re.sub(word_data[0], '<font color=#00D1FF weight=750><b>'+word_data[0]+'</b></font>', self.subs_cur[ind].text)
                 self.subs_cur.save("subs_cleaned.srt", encoding='utf-8')
-         except: return
+         else:
+             try: 
+                 self.choose_ex_ind(ex_ind+1)
+             except:
+                 return 
+                 
 
      # function that extracts the data between ### in the 'modified' subtitle file
      def get_word_data_from_sub(self, ind):
@@ -433,8 +438,10 @@ class Video(QtWidgets.QWidget):
          print('old zipf', self.zipf_cur)
          if self.num_correct_ex[-1] == 1:
              self.zipf_cur += -0.1 * 2 ** (len(list(itertools.takewhile(lambda x: x == 1, self.num_correct_ex[::-1]))) - 1)
+             self.zipf_cur = max(0, self.zipf_cur)
          else:
              self.zipf_cur += 0.1 * 2 ** (len(list(itertools.takewhile(lambda x: x == 0, self.num_correct_ex[::-1]))) - 1)
+             self.zipf_cur = min(self.zipf_cur, 7)
          
          if (np.asarray(self.num_correct_ex).all() or not np.asarray(self.num_correct_ex).any()) and len(self.num_correct_ex) == 3: 
              self.num_correct_ex = []
