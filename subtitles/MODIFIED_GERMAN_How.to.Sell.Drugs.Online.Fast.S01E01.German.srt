@@ -1209,7 +1209,7 @@ from our relationship.###break:pause:4.63:[lachen, bus]###
 272
 00:20:09,485 --> 00:20:13,445
 She's suddenly into party drugs and a
-guy who's way better-looking than me.###drugs:drogen:4.55:[oben-ohne-fotos, radio]###
+guy who's way better-looking than me.###drugs:drogen:4.55:[farben, radio]###
 
 273
 00:20:14,805 --> 00:20:16,765
@@ -1420,7 +1420,7 @@ You know your son.###son:sohn:5.22:[minuten, abend]###
 320
 00:24:05,765 --> 00:24:08,565
 We're going to Lisa's party.
-We'll supply all the drugs,###drugs:drogen:4.55:[drogen, farben]###
+We'll supply all the drugs,###drugs:drogen:4.55:[radio, farben]###
 
 321
 00:24:08,645 --> 00:24:11,205
