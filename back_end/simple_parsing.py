@@ -74,9 +74,6 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, distractor_file=Fa
                 # Search for subtitles in foreign file around that time
                 subs = x_subs.slice(starts_after=en_sub.start -
                                     2000, ends_before=en_sub.end + 2000)
-                
-                # if not is_word_spoken(subs, x_word):
-                #     print(f"word:{en_word_str}, translation:{x_word}, x_subs_index: {[item.index for item in subs]}")
 
                 # Adds a word with its frequency to the dictionary if it is an actual translation
                 if (en_word_str != "unknown" and len(x_word) > 1 and
@@ -106,13 +103,10 @@ def process_subtitles(x_subs, en_subs, language_abbreviation, distractor_file=Fa
     return word_freq_dict, noun_translations, word_translation_dict
     
 def main():
-    # x_location = "subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"
-    # en_location = "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt"
-    # foreign_language = "de"
 
-    files_list = [#["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr", "FRENCH_Detox_S01E01_Dict_tran.json"],
-        #["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E02.srt", "fr", "FRENCH_Detox_S01E02_Dict_tran.json"],
-        #["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de", "GERMAN_Drugs_Online_S01E01_Dict_tran.json"],
+    files_list = [["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E01.srt", "fr", "FRENCH_Detox_S01E01_Dict_tran.json"],
+        ["subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt", "subtitles/FRENCH_Détox_Off.the.Hook.English.S01E02.srt", "fr", "FRENCH_Detox_S01E02_Dict_tran.json"],
+        ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E01.English.srt", "de", "GERMAN_Drugs_Online_S01E01_Dict_tran.json"],
         ["subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt", "subtitles/GERMAN_How.To.Sell.Drugs.Online.Fast.S01E02.English.srt", "de", "GERMAN_Drugs_Online_S01E02_Dict_tran.json"],
         ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E01.srt", "es", "SPANISH_Machos_Alpha_S01E01_Dict_tran.json"],
         ["subtitles/SPANISH_Machos.Alfa.Spanish.S01E02.srt", "subtitles/SPANISH_Machos.Alfa.English.S01E02.srt", "es", "SPANISH_Machos_Alpha_S01E02_Dict_tran.json"]]
@@ -123,7 +117,6 @@ def main():
 
         save_location = en_location.split("/")[1]
 
-        # foreign_language = 'es'
         x_subs, en_subs = load_subtitles(x_location, en_location) #x refers to the foreign language
         word_freq_dict, noun_translations, word_translation_dict = process_subtitles(x_subs, en_subs, foreign_language, distractor_file=distractor_file, save_file=f"subtitles/MODIFIED_{save_location}")
         

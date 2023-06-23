@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("LangFlix")
-        self.setWindowIcon(QtGui.QIcon('front_end/logo.png'))
+        self.setWindowIcon(QtGui.QIcon('Icons/logo.png'))
         self.setMinimumSize(QtCore.QSize(600, 300))
         self.setStyleSheet("""background-color: #171717;""")
         
@@ -73,37 +73,11 @@ class MainWindow(QMainWindow):
         for id in [id1, id2, id3]: families.append(QtGui.QFontDatabase.applicationFontFamilies(id)) 
 
         # create video window  
-        episode = 'de_ep2'
+        episode = 'fr_ep1'
         self.video = Video(episode = episode) # video screen + player button toolbar
         self.video.videoEventManager.event_attach(vlc.EventType.MediaPlayerPositionChanged, lambda x: react_to_time_change(self.video.ind_to_stop_at_stack)) 
         
         translator = GoogleTranslator(source=episode[:2], target='en')
-        '''
-        if episode == "fr_ep1":
-            str1 = '../translations_FRENCH_Detox_S01E01_Dict.json'
-            str2 = '../FRENCH_Detox_S01E01_Dict_tran.json'
-        elif episode == "fr_ep2":
-            str1 = '../translations_FRENCH_Detox_S01E02_Dict.json'
-            str2 = '../FRENCH_Detox_S01E02_Dict_tran.json'
-        elif episode == "sp_ep1":
-            str1 = '../translations_SPANISH_Machos_Alpha_S01E01_Dict.json'
-            str2 = '../SPANISH_Machos_Alpha_S01E01_Dict_tran.json'
-        elif episode == "sp_ep2":
-            str1 = '../translations_SPANISH_Machos_Alpha_S01E02_Dict.json'
-            str2 = '../SPANISH_Machos_Alpha_S01E02_Dict_tran.json'
-        elif episode == "de_ep1":
-            str1 = '../translations_GERMAN_Drugs_Online_S01E01_Dict.json'
-            str2 = '../GERMAN_Drugs_Online_S01E01_Dict_tran.json'
-        elif episode == "de_ep2":
-            str1 = '../translations_GERMAN_Drugs_Online_S01E02_Dict.json'
-            str2 = '../GERMAN_Drugs_Online_S01E02_Dict_tran.json'
-
-        with open(str1, encoding='utf-8') as json_file:
-            translation_dict = json.load(json_file)
-
-        with open(str2, encoding='utf-8') as json_file:
-            translation_dict.update(json.load(json_file))
-        '''
         self.appIsOn = True
 
         def switchAppOff():
@@ -154,14 +128,14 @@ class MainWindow(QMainWindow):
                     QRadioButton::indicator::unchecked
                         {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                     QRadioButton::indicator::checked
-                        {image: url(front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                        {image: url(Icons/RadioButton.png); width: 14px; height: 14px;}
                  '''
         style2 =  '''QRadioButton 
                         {padding-left: 12px; color: #D9D9D9; font-weight: 700; font-size: 12px; background-color: #1E1E1E;}
                     QRadioButton::indicator::unchecked
                         {border-radius: 6px; border: 1.5px solid; width: 9px; height: 9px; border-color: black;}
                     QRadioButton::indicator::checked
-                        {image: url(front_end/RadioButton (1).png); width: 13px; height: 13px;}
+                        {image: url(Icons/RadioButton.png); width: 13px; height: 13px;}
                  '''
         r_button1 = QtWidgets.QRadioButton()
         r_button1.setStyleSheet(style)
@@ -254,7 +228,7 @@ class MainWindow(QMainWindow):
                                         QRadioButton::indicator::unchecked
                                             {border-radius: 7px; border: 1.5px solid; width: 10px; height: 10px; border-color: black;}
                                         QRadioButton::indicator::checked
-                                            {image: url(front_end/RadioButton (1).png); width: 14px; height: 14px;}
+                                            {image: url(Icons/RadioButton.png); width: 14px; height: 14px;}
                                     ''')
                     break
                 else: 
@@ -264,9 +238,9 @@ class MainWindow(QMainWindow):
                     cor_incor_icon.setPixmap(pixmap)
                     cor_incor_icon.setHidden(False)
             buttons_stackedLayout.setCurrentIndex(1)
-            rb_text1.setText(rb_text1.text() + ' = ' + self.answer_opt_transl[rb_text1.text()])#translator.translate(rb_text1.text()))#translation_dict[rb_text1.text()].lower())
-            rb_text2.setText(rb_text2.text() + ' = ' + self.answer_opt_transl[rb_text2.text()])#translator.translate(rb_text2.text()))#translation_dict[rb_text2.text()].lower())
-            rb_text3.setText(rb_text3.text() + ' = ' + self.answer_opt_transl[rb_text3.text()])#translator.translate(rb_text3.text()))#translation_dict[rb_text3.text()].lower())
+            rb_text1.setText(rb_text1.text() + ' = ' + self.answer_opt_transl[rb_text1.text()])
+            rb_text2.setText(rb_text2.text() + ' = ' + self.answer_opt_transl[rb_text2.text()])
+            rb_text3.setText(rb_text3.text() + ' = ' + self.answer_opt_transl[rb_text3.text()])
             self.video.num_correct_ex.append(is_correct)
             self.video.adjust_difficulty()
             self.video.choose_ex_ind(self.video.cur_ex_ind)
@@ -379,7 +353,7 @@ class MainWindow(QMainWindow):
         def switchToDict():
             #dictionary_tab.moveToThread(tabs_layout.thread())
             stackedLayout.setCurrentIndex(1)
-            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image1.png"); text-align: center; background-position: center right;}')
+            dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("Icons/tab_image1.png"); text-align: center; background-position: center right;}')
             exercise_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
         
         def switchToExercise():
@@ -389,7 +363,7 @@ class MainWindow(QMainWindow):
             stackedLayout.setCurrentIndex(0)
             exercise_tab.setHidden(False)
             exercise_tab.setVisible(True)
-            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("front_end/tab_image2.png"); text-align: center; background-position: center left;}')
+            exercise_tab.setStyleSheet('QPushButton {border: 0px; color: white; font-weight: 800; font-size: 16px; image: url("Icons/tab_image2.png"); text-align: center; background-position: center left;}')
             dictionary_tab.setStyleSheet('QPushButton {border: 0px; color: #A7A7A7; font-weight: 800; font-size: 16px;} QPushButton::hover {color: #CACACA;}')
 
         # Create and connect tabs to switch between pages
@@ -400,7 +374,7 @@ class MainWindow(QMainWindow):
                                         color: white; 
                                         font-weight: 800; 
                                         font-size: 16px; 
-                                        image: url("front_end/tab_image1.png"); 
+                                        image: url("Icons/tab_image1.png"); 
                                         text-align: center; 
                                         background-position: center right;}
                                         QPushButton::hover
@@ -416,7 +390,7 @@ class MainWindow(QMainWindow):
                                         color: white; 
                                         font-weight: 800; 
                                         font-size: 16px; 
-                                        image: url("front_end/tab_image2.png"); 
+                                        image: url("Icons/tab_image2.png"); 
                                         text-align: center; 
                                         background-position: center left;}
                                         QPushButton::hover
@@ -438,9 +412,9 @@ class MainWindow(QMainWindow):
         settings_button.setStyleSheet('''QPushButton 
                                     {border: 0px; 
                                     width: 20px;
-                                    image: url("front_end/settings.png");} 
+                                    image: url("Icons/settings.png");} 
                                     QPushButton::hover
-                                    {image: url("front_end/settings_hover.png");
+                                    {image: url("Icons/settings_hover.png");
                                 }''')
         
         # Create text of the settings
@@ -663,7 +637,7 @@ class MainWindow(QMainWindow):
         final_levelsLayout.setAlignment(QtCore.Qt.AlignCenter)
         final_levelsLayout.addWidget(levelsWidget)
         logo = QtWidgets.QLabel()
-        pixmap3 = QtGui.QPixmap('front_end/logo.png')
+        pixmap3 = QtGui.QPixmap('Icons/logo.png')
         #### START
         logo.setFixedSize(50,50)
         logo.setScaledContents(True)

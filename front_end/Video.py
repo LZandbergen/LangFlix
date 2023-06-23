@@ -129,10 +129,10 @@ class Video(QtWidgets.QWidget):
 
         series_dict = {'fr_ep1': {'vid': "../shows/French/S01E01 Are We Shtty.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E01.srt", 
-                                  'sub_l2': "../subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt"},
+                                  'sub_l2': "../subtitles/FRENCH_Détox_Off.the.Hook.French.S01E01.srt"},
                        'fr_ep2': {'vid': "../shows/French/FRENCH_Détox.Off_The_Hook.S01E02.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_FRENCH_Détox_Off.the.Hook.French.S01E02.srt", 
-                                  'sub_l2': "../subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt"},
+                                  'sub_l2': "../subtitles/FRENCH_Détox_Off.the.Hook.French.S01E02.srt"},
                        'es_ep1': {'vid': "../shows/Spanish/Machos alfa S01E01 In decostruzione DLMux 1080p E-AC3+AC3 ITA SPA SUBS.mkv", 
                                   'sub_l1': "../subtitles/MODIFIED_SPANISH_Machos.Alfa.English.S01E01.srt", 
                                   'sub_l2': "../subtitles/SPANISH_Machos.Alfa.Spanish.S01E01.srt"},
@@ -143,7 +143,7 @@ class Video(QtWidgets.QWidget):
                                   'sub_l1': "../subtitles/MODIFIED_GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt", 
                                   'sub_l2': "../subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E01.German.srt"},
                        'de_ep2': {'vid': "../shows/German/GERMAN_How.To.Sell.Drugs.Online.Fast_S01E02.mkv", 
-                                  'sub_l1': "../subtitles/MODIFIED_GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.English.srt", 
+                                  'sub_l1': "../subtitles/MODIFIED_GERMAN_How.To.Sell.Drugs.Online.Fast.S01E02.English.srt", 
                                   'sub_l2': "../subtitles/GERMAN_How.to.Sell.Drugs.Online.Fast.S01E02.German.srt"}}
 
         self.zipf_start = -1 # user's CEFR level (as Zipf frequency) at the start of app use
@@ -201,8 +201,8 @@ class Video(QtWidgets.QWidget):
         self.volume_slider.valueChanged.connect(self.change_volume)
 
         #volume button 
-        self.volumeButtonIcons = [QtGui.QIcon("icons8-speaker-50.png"),
-                                QtGui.QIcon("icons8-no-speaker-50.png")]
+        self.volumeButtonIcons = [QtGui.QIcon("Icons/icons8-speaker-50.png"),
+                                QtGui.QIcon("Icons/icons8-no-speaker-50.png")]
                                 
         self.volume_button = QtWidgets.QPushButton()
         self.base_width = self.volume_button.size().width()
@@ -212,8 +212,8 @@ class Video(QtWidgets.QWidget):
         self.volume_button.setStyleSheet("""border-style: solid;""")
 
         #play/pause button
-        self.playButtonIcons = [QtGui.QIcon("icons8-pause-50.png"),
-                                QtGui.QIcon("icons8-play-50.png")]
+        self.playButtonIcons = [QtGui.QIcon("Icons/icons8-pause-50.png"),
+                                QtGui.QIcon("Icons/icons8-play-50.png")]
         
         self.play_button = QtWidgets.QPushButton()
         self.play_button.setCheckable(True)
@@ -254,7 +254,7 @@ class Video(QtWidgets.QWidget):
         self.time_slider.sliderPressed.connect(self.on_time_slider_pressed)
         self.time_slider.sliderMoved.connect(self.change_video_pos)
         self.time_slider.sliderReleased.connect(self.on_time_slider_released)
-        self.time_slider.setStyleSheet(slider_style)
+        self.time_slider.setStyleSheet(slider_style_hover)
         self.time_slider.installEventFilter(self)
 
         # group all of the video buttons together in the HBox layout
@@ -348,7 +348,7 @@ class Video(QtWidgets.QWidget):
 
      # function that controls slider appearance when it is released
      def on_time_slider_released(self):
-         self.time_slider.setStyleSheet(slider_style)
+         self.time_slider.setStyleSheet(slider_style_hover)
          self.player.play()
 
      '''
