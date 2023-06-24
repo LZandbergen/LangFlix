@@ -21,3 +21,8 @@ The front_end consists of three files. `cefr_to_zipf.py` converts the CEFR level
 
 Finally, there is `Video.py`. This file is used to create the video player. It is used by `NML_front_video.py`. There is no need to call it seperately. It uses the VLC package to create the video player.
 
+To get the video playback working properly, you need a video as well of course. We can not upload this video to Github, so here is the solution.
+Until July  16th, you can download a zip file containing a shortened version of the first French episode at :
+Place this folder into the LangFlix folder and extract the files. You should end up with a file structure like: LangFlix\shows\French\ where the mp4 and srt file are in that folder.
+If you are too late with the download, or any issues occur, send an email to lars.zandbergen@ru.nl who will try to help.
+
