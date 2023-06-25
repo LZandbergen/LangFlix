@@ -14,7 +14,7 @@ To make it easy to inspect the app, we have created a short demo version for Win
 2. Extract the Zip file you just downloaded. Find a suitable location, we recommend selecting the option to extract to a new folder.
 3. Navigate into the NML_front_video folder, and find NML_front_video.exe
    It is possible a pop-up will show up saying the file may not be safe. Or maybe your Anti-virus will block the file. Please try to solve the issue
-4. LangFlix should be started, we usually test at level B2 since we know the exercises show up. An exercise should show up around 2:40 minutes into the video, so don't be alarmed if it takes a while.
+4. LangFlix should be started and since it is intended for intermediate learners, we suggest testing with level B1 or B2. An exercise should show up around 2:40 minutes into the video, so don't be alarmed if it takes a while.
 5. Enjoy using LangFlix, skip around, see your personal dictionary, change settings and if you want you can disable Langflix with the LangFlix button if you prefer to watch 10 minutes of a random French show.
 6. After ten minutes the show should end, we kept the preview short to save on storage space.
 
